@@ -1603,7 +1603,7 @@ else:
     coin_map = {option: (name, symbol, coin_id) for option, (name, symbol, coin_id, _) in zip(coin_options, coins_data)}
     
     # Add search functionality for coins
-    search_term = st.sidebar.text_input("🔍 Search Coins", placeholder="Type to search...", help="Search by coin name or symbol")
+    search_term = st.sidebar.text_input("Search Coins", placeholder="Type to search...", help="Search by coin name or symbol")
     
     # Filter coins based on search term
     if search_term:
@@ -1612,8 +1612,8 @@ else:
         filtered_options = coin_options
     
     # Coin selection outside form for dynamic price updates
-    selected_coin_option = st.sidebar.selectbox("🔍 Select Coin", options=filtered_options, help="Coins ordered by market cap")
-    
+    selected_coin_option = st.sidebar.selectbox("Select Coin", options=filtered_options, help="Coins ordered by market cap")
+
     default_price = 0.01
     current_coin_price = 0.01
     if selected_coin_option:
