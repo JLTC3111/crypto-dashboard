@@ -65,7 +65,8 @@ def get_icon(icon_name: str, library: str = "lucide", size: int = 16, color: str
     """
     icons = {
         "lucide": {
-            "lowBattery": f'<svg width="64px" height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.65 17H3C2.72 17 2.5 16.78 2.5 16.5V8.5C2.5 8.22 2.72 8 3 8H17.65C17.93 8 18.15 8.22 18.15 8.5V16.5C18.15 16.78 17.92 17 17.65 17Z" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M20.38 10.81H21C21.28 10.81 21.5 11.03 21.5 11.31V13.69C21.5 13.97 21.28 14.19 21 14.19H20.38" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4.72998 10.25V14.75" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round"></path> </g></svg>',
+            "unique": f'<svg height="{size}" width="{size}" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="{color}"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{{fill:{color};}} </style> <g> <path class="st0" d="M406.014,87.606c-34.412-19.714-78.033-31.809-124.787-35.051V14.451C281.227,6.469,269.931,0,255.996,0 c-13.934,0-25.231,6.469-25.231,14.451v38.104c-46.746,3.242-90.368,15.337-124.779,35.051 C60.22,113.818,35.018,150.49,35.018,190.862v88.486c0,31.78,15.97,61.001,42.72,78.171l159.01,102.028v41.426 c0,6.092,8.621,11.028,19.248,11.028s19.248-4.936,19.248-11.028v-41.418l159.009-102.035 c26.757-17.17,42.728-46.392,42.728-78.171v-88.486C476.982,150.49,451.779,113.818,406.014,87.606z M255.996,172.246 c13.935,0,25.231-6.469,25.231-14.45V134.36c25.558,5.764,43.665,19.997,43.665,36.687c0,21.792-30.842,39.464-68.896,39.464 c-38.046,0-68.888-17.672-68.888-39.464c0-16.682,18.107-30.915,43.658-36.687v23.435 C230.765,165.777,242.062,172.246,255.996,172.246z M447.266,279.348c0,21.509-10.947,41.543-29.055,53.166L255.996,436.598 L93.788,332.514c-18.107-11.623-29.054-31.656-29.054-53.166v-31.046c2.348,2.595,4.732,5.176,7.341,7.632 c19.626,18.478,46.398,33.314,77.836,43.68c31.446,10.358,67.602,16.202,106.084,16.202c58.654-0.029,111.87-13.513,151.29-36.054 c15.737-9.021,29.251-19.532,39.98-31.381V279.348z M447.266,207.05c-4.121,11.318-11.725,22.388-22.629,32.667 c-16.522,15.606-40.532,29.199-69.52,38.729c-28.989,9.552-62.899,15.091-99.12,15.091c-55.186,0.029-105.03-12.917-140.212-33.11 c-17.598-10.075-31.482-21.916-40.75-34.484c-4.528-6.142-7.96-12.437-10.3-18.842v-16.238 c0-55.608,72.333-101.504,166.031-108.585v18.529c-61.779,6.768-108.49,37.835-108.49,75.198 c0,42.313,59.868,76.601,133.721,76.601c73.86,0,133.728-34.288,133.728-76.601c0-37.362-46.711-68.43-108.497-75.198V82.278 c93.705,7.073,166.039,52.977,166.039,108.585V207.05z"></path> </g> </g></svg>',
+            "lowBattery": f'<svg width="{size}" height="{size}" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.65 17H3C2.72 17 2.5 16.78 2.5 16.5V8.5C2.5 8.22 2.72 8 3 8H17.65C17.93 8 18.15 8.22 18.15 8.5V16.5C18.15 16.78 17.92 17 17.65 17Z" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M20.38 10.81H21C21.28 10.81 21.5 11.03 21.5 11.31V13.69C21.5 13.97 21.28 14.19 21 14.19H20.38" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4.72998 10.25V14.75" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round"></path> </g></svg>',
             "bullseye": f'<svg width="{size}" height="{size}" viewBox="0 0 73 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>design-and-ux/hit-targets</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="design-and-ux/hit-targets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="container" transform="translate(2.000000, 2.000000)" fill="#FFFFFF" fill-rule="nonzero" stroke="#1F2F3B" stroke-width="2"> <rect id="mask" x="-1" y="-1" width="71" height="71" rx="14"> </rect> </g> <g id="target-(1)" transform="translate(10.000000, 10.000000)" fill-rule="nonzero"> <path d="M48.3750352,23.7374297 L51.7500352,23.7374297 C50.2875,12.4873945 41.3999648,3.59996484 30.2624648,2.13753516 L30.2624648,5.51253516 C39.6000352,6.97507031 47.0249297,14.3999648 48.3750352,23.7374297 Z M30.2625703,48.3750352 L30.2625703,51.7500352 C41.4000703,50.2875 50.4001406,41.3999648 51.7501406,30.2624648 L48.3751406,30.2624648 C47.0249297,39.6000352 39.6000352,47.0249297 30.2625703,48.3750352 Z M5.62496484,30.2625703 L2.24996484,30.2625703 C3.7125,41.5126055 12.6000352,50.4000352 23.7375352,51.7501406 L23.7375352,48.3751406 C14.3999648,47.0249297 6.97507031,39.6000352 5.62496484,30.2625703 Z M2.24996484,23.7374297 L5.62496484,23.7374297 C7.0875,14.3998594 14.3999648,6.97485937 23.7375352,5.62485937 L23.7375352,2.24996484 C12.6000352,3.7125 3.7125,12.6000352 2.24996484,23.7374297 Z" id="Shape" fill="#CDD6E0"> </path> <path d="M39.4875,23.7374297 L42.9750352,23.7374297 C41.6250352,17.4374648 36.5625352,12.3748594 30.2625703,11.1373945 L30.2625703,14.6249297 C34.7625,15.7500703 38.2499297,19.2375 39.4875,23.7374297 Z M30.2625703,39.4875 L30.2625703,42.9750352 C36.5625352,41.6250352 41.6251406,36.5625352 42.8626055,30.2625703 L39.3750703,30.2625703 C38.2499297,34.7625 34.7625,38.2499297 30.2625703,39.4875 Z M14.5125,30.2625703 L11.0249648,30.2625703 C12.3749648,36.5625352 17.4374648,41.6251406 23.7374297,42.8626055 L23.7374297,39.3750703 C19.2375,38.2499297 15.7500703,34.7625 14.5125,30.2625703 Z M11.1375,23.7374297 L14.6250352,23.7374297 C15.7500703,19.2373945 19.3500352,15.7498594 23.8500703,14.5123945 L23.8500703,11.0249648 C17.4374648,12.3750703 12.3750703,17.4374648 11.1375,23.7374297 Z" id="Shape" fill="#F2F2F2"> </path> <polygon id="Shape" fill="#40596B" points="54 25.4250352 28.5749648 25.4250352 28.5749648 0 25.4250352 0 25.4250352 25.4250352 0 25.4250352 0 28.5749648 25.4250352 28.5749648 25.4250352 54 28.5749648 54 28.5749648 28.5749648 54 28.5749648"> </polygon> <circle id="Oval" fill="#FF7058" cx="27.0005273" cy="27.0005273" r="5.7375"> </circle> </g> </g> </g></svg>',
             "money": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11.7255 17.1019C11.6265 16.8844 11.4215 16.7257 11.1734 16.6975C10.9633 16.6735 10.7576 16.6285 10.562 16.5636C10.4743 16.5341 10.392 16.5019 10.3158 16.4674L10.4424 16.1223C10.5318 16.1622 10.6239 16.1987 10.7182 16.2317L10.7221 16.2331L10.7261 16.2344C11.0287 16.3344 11.3265 16.3851 11.611 16.3851C11.8967 16.3851 12.1038 16.3468 12.2629 16.2647L12.2724 16.2598L12.2817 16.2544C12.5227 16.1161 12.661 15.8784 12.661 15.6021C12.661 15.2955 12.4956 15.041 12.2071 14.9035C12.062 14.8329 11.8559 14.7655 11.559 14.6917C11.2545 14.6147 10.9987 14.533 10.8003 14.4493C10.6553 14.3837 10.5295 14.279 10.4161 14.1293C10.3185 13.9957 10.2691 13.7948 10.2691 13.5319C10.2691 13.2147 10.3584 12.9529 10.5422 12.7315C10.7058 12.5375 10.9381 12.4057 11.2499 12.3318C11.4812 12.277 11.6616 12.1119 11.7427 11.8987C11.8344 12.1148 12.0295 12.2755 12.2723 12.3142C12.4751 12.3465 12.6613 12.398 12.8287 12.4677L12.7122 12.8059C12.3961 12.679 12.085 12.6149 11.7841 12.6149C10.7848 12.6149 10.7342 13.3043 10.7342 13.4425C10.7342 13.7421 10.896 13.9933 11.1781 14.1318L11.186 14.1357L11.194 14.1393C11.3365 14.2029 11.5387 14.2642 11.8305 14.3322C12.1322 14.4004 12.3838 14.4785 12.5815 14.5651L12.5856 14.5669L12.5897 14.5686C12.7365 14.6297 12.8624 14.7317 12.9746 14.8805L12.9764 14.8828L12.9782 14.8852C13.0763 15.012 13.1261 15.2081 13.1261 15.4681C13.1261 15.7682 13.0392 16.0222 12.8604 16.2447C12.7053 16.4377 12.4888 16.5713 12.1983 16.6531C11.974 16.7163 11.8 16.8878 11.7255 17.1019Z" fill="#ffffff"></path> <path d="M11.9785 18H11.497C11.3893 18 11.302 17.9105 11.302 17.8V17.3985C11.302 17.2929 11.2219 17.2061 11.1195 17.1944C10.8757 17.1667 10.6399 17.115 10.412 17.0394C10.1906 16.9648 9.99879 16.8764 9.83657 16.7739C9.76202 16.7268 9.7349 16.6312 9.76572 16.5472L10.096 15.6466C10.1405 15.5254 10.284 15.479 10.3945 15.5417C10.5437 15.6262 10.7041 15.6985 10.8755 15.7585C11.131 15.8429 11.3762 15.8851 11.611 15.8851C11.8129 15.8851 11.9572 15.8628 12.0437 15.8181C12.1302 15.7684 12.1735 15.6964 12.1735 15.6021C12.1735 15.4929 12.1158 15.411 12.0004 15.3564C11.8892 15.3018 11.7037 15.2422 11.4442 15.1777C11.1104 15.0933 10.8323 15.0039 10.6098 14.9096C10.3873 14.8103 10.1936 14.6514 10.0288 14.433C9.86396 14.2096 9.78156 13.9092 9.78156 13.5319C9.78156 13.095 9.91136 12.7202 10.1709 12.4074C10.4049 12.13 10.7279 11.9424 11.1401 11.8447C11.2329 11.8227 11.302 11.7401 11.302 11.6425V11.2C11.302 11.0895 11.3893 11 11.497 11H11.9785C12.0862 11 12.1735 11.0895 12.1735 11.2V11.6172C12.1735 11.7194 12.2487 11.8045 12.3471 11.8202C12.7082 11.8777 13.0255 11.9866 13.2989 12.1469C13.3765 12.1924 13.4073 12.2892 13.3775 12.3756L13.0684 13.2725C13.0275 13.3914 12.891 13.4417 12.7812 13.3849C12.433 13.2049 12.1007 13.1149 11.7841 13.1149C11.4091 13.1149 11.2216 13.2241 11.2216 13.4425C11.2216 13.5468 11.2773 13.6262 11.3885 13.6809C11.4998 13.7305 11.6831 13.7851 11.9386 13.8447C12.2682 13.9192 12.5464 14.006 12.773 14.1053C12.9996 14.1996 13.1953 14.356 13.3602 14.5745C13.5291 14.7929 13.6136 15.0908 13.6136 15.4681C13.6136 15.8851 13.4879 16.25 13.2365 16.5628C13.0176 16.8354 12.7145 17.0262 12.3274 17.1353C12.2384 17.1604 12.1735 17.2412 12.1735 17.3358V17.8C12.1735 17.9105 12.0862 18 11.9785 18Z" fill="#ffffff"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M9.59235 5H13.8141C14.8954 5 14.3016 6.664 13.8638 7.679L13.3656 8.843L13.2983 9C13.7702 8.97651 14.2369 9.11054 14.6282 9.382C16.0921 10.7558 17.2802 12.4098 18.1256 14.251C18.455 14.9318 18.5857 15.6958 18.5019 16.451C18.4013 18.3759 16.8956 19.9098 15.0182 20H8.38823C6.51033 19.9125 5.0024 18.3802 4.89968 16.455C4.81587 15.6998 4.94656 14.9358 5.27603 14.255C6.12242 12.412 7.31216 10.7565 8.77823 9.382C9.1696 9.11054 9.63622 8.97651 10.1081 9L10.0301 8.819L9.54263 7.679C9.1068 6.664 8.5101 5 9.59235 5Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M13.2983 9.75C13.7125 9.75 14.0483 9.41421 14.0483 9C14.0483 8.58579 13.7125 8.25 13.2983 8.25V9.75ZM10.1081 8.25C9.69391 8.25 9.35812 8.58579 9.35812 9C9.35812 9.41421 9.69391 9.75 10.1081 9.75V8.25ZM15.9776 8.64988C16.3365 8.44312 16.4599 7.98455 16.2531 7.62563C16.0463 7.26671 15.5878 7.14336 15.2289 7.35012L15.9776 8.64988ZM13.3656 8.843L13.5103 9.57891L13.5125 9.57848L13.3656 8.843ZM10.0301 8.819L10.1854 8.08521L10.1786 8.08383L10.0301 8.819ZM8.166 7.34357C7.80346 7.14322 7.34715 7.27469 7.1468 7.63722C6.94644 7.99976 7.07791 8.45607 7.44045 8.65643L8.166 7.34357ZM13.2983 8.25H10.1081V9.75H13.2983V8.25ZM15.2289 7.35012C14.6019 7.71128 13.9233 7.96683 13.2187 8.10752L13.5125 9.57848C14.3778 9.40568 15.2101 9.09203 15.9776 8.64988L15.2289 7.35012ZM13.2209 8.10709C12.2175 8.30441 11.1861 8.29699 10.1854 8.08525L9.87486 9.55275C11.0732 9.80631 12.3086 9.81521 13.5103 9.57891L13.2209 8.10709ZM10.1786 8.08383C9.47587 7.94196 8.79745 7.69255 8.166 7.34357L7.44045 8.65643C8.20526 9.0791 9.02818 9.38184 9.88169 9.55417L10.1786 8.08383Z" fill="#ffffff"></path> </g></svg>',
             "price": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-signal-icon lucide-signal"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>',
@@ -101,7 +102,8 @@ def get_icon(icon_name: str, library: str = "lucide", size: int = 16, color: str
             "filter": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3"/></svg>',
             "shield": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
             "bar-chart": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
-            "pie-chart": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="m22 12-10-10v10z"/></svg>',
+            "line-chart": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0494 1.25H11.9506C11.2858 1.24997 10.7129 1.24994 10.2542 1.31161C9.76252 1.37771 9.29126 1.52677 8.90901 1.90901C8.52676 2.29126 8.3777 2.76252 8.31161 3.25416C8.24993 3.7129 8.24996 4.28577 8.25 4.95063L8.25 7.37804C8.01542 7.29512 7.76298 7.25001 7.5 7.25001H4.5C3.25736 7.25001 2.25 8.25737 2.25 9.50001V21.25H2C1.58579 21.25 1.25 21.5858 1.25 22C1.25 22.4142 1.58579 22.75 2 22.75H22C22.4142 22.75 22.75 22.4142 22.75 22C22.75 21.5858 22.4142 21.25 22 21.25H21.75V14.5C21.75 13.2574 20.7426 12.25 19.5 12.25H16.5C16.237 12.25 15.9846 12.2951 15.75 12.378L15.75 4.95064C15.75 4.28577 15.7501 3.71291 15.6884 3.25416C15.6223 2.76252 15.4732 2.29126 15.091 1.90902C14.7087 1.52677 14.2375 1.37771 13.7458 1.31161C13.2871 1.24994 12.7142 1.24997 12.0494 1.25ZM20.25 21.25V14.5C20.25 14.0858 19.9142 13.75 19.5 13.75H16.5C16.0858 13.75 15.75 14.0858 15.75 14.5V21.25H20.25ZM14.25 21.25V5.00001C14.25 4.2717 14.2484 3.80091 14.2018 3.45403C14.158 3.12873 14.0874 3.02677 14.0303 2.96967C13.9732 2.91258 13.8713 2.84197 13.546 2.79823C13.1991 2.7516 12.7283 2.75001 12 2.75001C11.2717 2.75001 10.8009 2.7516 10.454 2.79823C10.1287 2.84197 10.0268 2.91258 9.96967 2.96968C9.91258 3.02677 9.84197 3.12873 9.79823 3.45403C9.75159 3.80091 9.75 4.2717 9.75 5.00001V21.25H14.25ZM8.25 21.25V9.50001C8.25 9.08579 7.91421 8.75001 7.5 8.75001H4.5C4.08579 8.75001 3.75 9.08579 3.75 9.50001V21.25H8.25Z" fill="#1C274C"></path> </g></svg>',
+            "pie-chart": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12.75 3.75H12V12H20.25V11.25C20.25 7.10786 16.8921 3.75 12.75 3.75ZM13.5 10.5V5.29642C16.214 5.63486 18.3651 7.78596 18.7036 10.5H13.5ZM4.5 13.5C4.5 10.4403 6.79027 7.91549 9.75 7.54642V14.25H16.4536C16.0845 17.2097 13.5597 19.5 10.5 19.5C7.18629 19.5 4.5 16.8137 4.5 13.5ZM10.5 6C6.35786 6 3 9.35786 3 13.5C3 17.6421 6.35786 21 10.5 21C14.6421 21 18 17.6421 18 13.5V12.75H11.25V6H10.5Z" fill="#080341"></path> </g></svg>',
             "tag": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><circle cx="7" cy="7" r="3"/></svg>',
             "users": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 21-2-2m2-5a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>',
             "list": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
@@ -2320,383 +2322,14 @@ if not st.session_state.transactions.empty:
                 st.session_state.switch_to_import_export = False
             
             action_tab1, action_tab2, action_tab3, action_tab4, action_tab5 = st.tabs([
+                "✒️ Analytics",
                 "⚡ Quick Actions",
                 "🔍 Search & Filter", 
                 "🔄 Restructuring",
                 "🧩 Import/Export",
-                "✒️ Analytics"
             ])
-            
+
             with action_tab1:
-                # Make Quick Transaction Actions collapsible and collapsed by default
-                with st.expander("Review Restructured Transactions", expanded=False):
-                    # Build a dataframe of transactions marked as RESTRUCTURE_OUT or RESTRUCTURE_IN
-                    if 'transactions' in st.session_state and not st.session_state.transactions.empty:
-                        txn_df = st.session_state.transactions.copy()
-                        if 'Transaction_Type' not in txn_df.columns:
-                            txn_df['Transaction_Type'] = txn_df['Quantity'].apply(lambda x: 'RESTRUCTURE_OUT' if False else ('SELL' if x < 0 else 'BUY'))
-
-                        restructured_mask = txn_df['Transaction_Type'].isin(['RESTRUCTURE_OUT', 'RESTRUCTURE_IN'])
-                        restructured_df = txn_df[restructured_mask].copy()
-
-                        if restructured_df.empty:
-                            st.info('No restructured transactions found.')
-                        else:
-                            # Group by Restructure_Group for easier review
-                            if 'Restructure_Group' not in restructured_df.columns:
-                                restructured_df['Restructure_Group'] = None
-
-                            groups = restructured_df['Restructure_Group'].fillna('UNGROUPED').unique()
-                            for group in groups:
-                                with st.expander(f"Group: {group}", expanded=False):
-                                    group_df = restructured_df[restructured_df['Restructure_Group'].fillna('UNGROUPED') == group]
-                                    display_cols = ['ID'] if 'ID' in group_df.columns else group_df.columns.tolist()
-                                    display_cols += [c for c in ['Symbol', 'Quantity', 'Purchase_Price', 'Transaction_Type'] if c in group_df.columns]
-                                    st.dataframe(group_df[display_cols].reset_index(drop=True), use_container_width=True)
-
-                                    # Provide actions for each transaction in the group
-                                    for _, row in group_df.iterrows():
-                                        txn_id = row.get('transaction_id', row.get('ID'))
-                                        col1, col2 = st.columns([6,1])
-                                        with col1:
-                                            st.write(f"{row.get('Symbol','')}: {row.get('Quantity','')} @ ${row.get('Purchase_Price','')}")
-                                        with col2:
-                                            if st.button("✏️ Edit", key=f'review_edit_{txn_id}'):
-                                                st.session_state.edit_transaction_id = txn_id
-                                                st.session_state.scroll_to_edit = True
-                                                st.rerun()
-                    else:
-                        st.info('No transaction data loaded in session.')
-                
-                with st.expander("Quick Transaction Actions", expanded=False):
-                    # Add controls for number of transactions to show
-                    col1, col2 = st.columns([3, 1])
-                    with col1:
-                        if table_search_query and 'portfolio_df_filtered' in locals():
-                            st.info(f"Showing quick actions for search results: '{table_search_query}'")
-                            base_df = portfolio_df_filtered
-                        else:
-                            base_df = portfolio_df
-                    with col2:
-                        max_transactions = st.selectbox(
-                            "Show transactions:",
-                            options=[10, 25, 50, 100, "All"],
-                            index=1,  # Default to 25
-                            key="quick_edit_limit"
-                        )
-                    
-                    # Apply transaction limit
-                    if max_transactions == "All":
-                        action_filtered_df = base_df
-                    else:
-                        action_filtered_df = base_df.head(int(max_transactions))
-                    
-                    # Show transaction count info
-                    total_count = len(base_df)
-                    showing_count = len(action_filtered_df)
-                    if showing_count < total_count:
-                        st.caption(f"Showing {showing_count} of {total_count} transactions")
-                    else:
-                        st.caption(f"Showing all {total_count} transactions")
-                    
-                    if len(action_filtered_df) > 0:
-                        # Display transactions in a more compact format
-                        for idx, (_, row) in enumerate(action_filtered_df.iterrows()):
-                            with st.container():
-                                col1, col2, col3, col4 = st.columns([3, 2, 1, 1])
-                                
-                                with col1: 
-                                    quantity_val = row['Quantity']
-                                    profit_loss_val = row['Profit_Loss']
-                                    percentage_change_val = row['Percentage_Change']
-                                    coin_name_val = row['Coin_Name']
-                                    symbol_val = row['Symbol']
-                                    current_value_val = row['Current_Value']
-                                    id_val = row['ID']
-                                    
-                                    transaction_icon = "[SELL]" if quantity_val < 0 else "[BUY]"
-                                    transaction_type = "SELL" if quantity_val < 0 else "BUY"
-                                    transaction_color = DANGER_COLOR if quantity_val < 0 else SUCCESS_COLOR
-                                    
-                                    st.markdown(f"**{coin_name_val} ({symbol_val})** <span style='color: {transaction_color}; font-size: 1.1em;'>{transaction_icon}</span>", unsafe_allow_html=True)
-                                    
-                                    # Color-coded quantity display with icons
-                                    qty_icon = "[DOWN]" if quantity_val < 0 else "[UP]"
-                                    qty_style = f"color: {DANGER_COLOR}; font-weight: 600; font-style: italic" if quantity_val < 0 else f"color: {SUCCESS_COLOR}; font-weight: 600"
-                                    st.markdown(f"<span style='{qty_style}'>{qty_icon} Qty: {abs(quantity_val):.1f}</span> | P&L: {percentage_change_val:+.1f}%", unsafe_allow_html=True)
-                                
-                                with col2:
-                                    st.write(f"${current_value_val:,.2f}")
-                                    color = "[PROFIT]" if profit_loss_val >= 0 else "[LOSS]"
-                                    st.caption(f"{color} ${profit_loss_val:+,.2f}")
-                                
-                                with col3:
-                                    if st.button("[EDIT]", key=f"edit_quick_{id_val}", help=f"Edit {coin_name_val}"):
-                                        # Clear any existing edit state first to prevent duplicates
-                                        current_edit_id = st.session_state.edit_transaction_id
-                                        if current_edit_id != id_val:
-                                            st.session_state.edit_transaction_id = id_val
-                                            st.session_state.scroll_to_edit = True
-                                            st.rerun()
-                                
-                                with col4:
-                                    if st.button("[DELETE]", key=f"delete_quick_{id_val}", help=f"Delete {coin_name_val}"):
-                                        # Use the unique transaction_id for deleting
-                                        st.session_state.show_delete_confirm = id_val
-                                        st.rerun()
-                                
-                                st.divider()
-                    else:
-                        if table_search_query:
-                            st.info(f"No transactions found matching your search: '{table_search_query}'")
-                        else:
-                            st.info("No transactions available for quick actions.")
-            
-            with action_tab2:
-                st.markdown(display_icon_header('filter', 'Advanced Search & Filtering', 'lucide', 20, '#666666'), unsafe_allow_html=True)
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.markdown(f"### {get_icon('trending-up', 'lucide', 16, '#666666')} Performance Filter", unsafe_allow_html=True)
-                    st.markdown(display_icon_header('arrow-down', 'Min Return (%)', 'lucide', 16, '#666666'), unsafe_allow_html=True)
-                    min_return = st.number_input("", value=-100.0, step=1.0, label_visibility="collapsed")
-                    st.markdown(display_icon_header('arrow-up', 'Max Return (%)', 'lucide', 16, '#666666'), unsafe_allow_html=True)
-                    max_return = st.number_input("", value=1000.0, step=1.0, label_visibility="collapsed")
-                    
-                    if st.button("Apply Performance Filter"):
-                        filtered_perf = portfolio_df.copy()
-                        if min_return is not None:
-                            filtered_perf = filtered_perf[filtered_perf['Percentage_Change'] >= min_return]
-                        if max_return is not None:
-                            filtered_perf = filtered_perf[filtered_perf['Percentage_Change'] <= max_return]
-                        st.session_state.filtered_portfolio = filtered_perf
-                
-                with col2:
-                    st.markdown(f"### {get_icon('bar-chart', 'lucide', 16, '#666666')} Portfolio Statistics", unsafe_allow_html=True)
-                    if not portfolio_df.empty:
-                        stats = {
-                            'total_transactions': len(portfolio_df),
-                            'unique_coins': portfolio_df['Symbol'].nunique(),
-                            'total_investment': (portfolio_df['Quantity'] * portfolio_df['Purchase_Price']).sum(),
-                            'current_value': portfolio_df['Current_Value'].sum(),
-                            'total_pnl': portfolio_df['Profit_Loss'].sum(),
-                            'best_performer': portfolio_df.loc[portfolio_df['Percentage_Change'].idxmax(), 'Symbol'] if not portfolio_df.empty else 'N/A',
-                            'worst_performer': portfolio_df.loc[portfolio_df['Percentage_Change'].idxmin(), 'Symbol'] if not portfolio_df.empty else 'N/A',
-                            'avg_return': portfolio_df['Percentage_Change'].mean(),
-                            'portfolio_diversity': portfolio_df['Symbol'].nunique() / len(portfolio_df) if len(portfolio_df) > 0 else 0
-                        }
-                        stats['total_return_pct'] = (stats['total_pnl'] / stats['total_investment'] * 100) if stats['total_investment'] > 0 else 0
-                    
-                    if stats:
-                        st.markdown("""
-                        <style>
-                        .compact-metrics [data-testid="metric-container"] {
-                            background-color: rgba(28, 131, 225, 0.05);
-                            border: 1px solid rgba(28, 131, 225, 0.1);
-                            padding: 0.5rem;
-                            border-radius: 0.5rem;
-                            margin: 0.25rem 0;
-                        }
-                        .compact-metrics [data-testid="metric-container"] > div {
-                            width: fit-content;
-                            margin: auto;
-                        }
-                        .compact-metrics [data-testid="metric-container"] > div > div {
-                            font-size: 0.8rem;
-                            line-height: 1.2;
-                        }
-                        .compact-metrics [data-testid="metric-container"] label {
-                            font-size: 0.7rem !important;
-                            font-weight: 600 !important;
-                        }
-                        </style>
-                        """, unsafe_allow_html=True)
-                        with st.container():
-                            st.markdown('<div class="compact-metrics">', unsafe_allow_html=True)
-                            metric_row1_col1, metric_row1_col2 = st.columns(2)
-                            with metric_row1_col1:
-                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("list", "lucide", 16, "#666666")} Transactions</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["total_transactions"]}</div></div>', unsafe_allow_html=True)
-                            with metric_row1_col2:
-                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("coins", "lucide", 16, "#666666")} Unique Coins</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["unique_coins"]}</div></div>', unsafe_allow_html=True)
-                            metric_row2_col1, metric_row2_col2 = st.columns(2)
-                            with metric_row2_col1:
-                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("trending-up", "lucide", 16, "#22c55e")} Best Performer</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["best_performer"]}</div></div>', unsafe_allow_html=True)
-                            with metric_row2_col2:
-                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("trending-down", "lucide", 16, "#ef4444")} Worst Performer</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["worst_performer"]}</div></div>', unsafe_allow_html=True)
-                            metric_row3_col1, metric_row3_col2 = st.columns(2)
-                            with metric_row3_col1:
-                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("lowBattery", "lucide", 16, "#666666")} Average Return</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["avg_return"]:.1f}%</div></div>', unsafe_allow_html=True)
-                            with metric_row3_col2:
-                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("pie-chart", "lucide", 16, "#666666")} Diversity</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["portfolio_diversity"]:.1%}</div></div>', unsafe_allow_html=True)
-                            
-                            st.markdown('</div>', unsafe_allow_html=True)
-                
-                # Display filtered results
-                if 'filtered_portfolio' in st.session_state and not st.session_state.filtered_portfolio.empty:
-                    st.markdown(f"### {get_icon('filter', 'lucide', 20, '#666666')} Filtered Results", unsafe_allow_html=True)
-                    st.dataframe(st.session_state.filtered_portfolio[display_columns], use_container_width=True, hide_index=True)
-            
-            with action_tab3:
-                st.markdown(display_icon_header('tag', 'Mark Transactions for Restructuring', 'lucide', 18, '#666666'), unsafe_allow_html=True)
-                
-                # Choose restructuring type
-                restructure_type = st.radio(
-                    "Restructuring Type:",
-                    ["RESTRUCTURE_OUT", "RESTRUCTURE_IN"],
-                    format_func=lambda x: f"{x} (Selling/Exiting)" if x == "RESTRUCTURE_OUT" else f"{x} (Buying with proceeds)",
-                    help="Select whether these are assets you're selling (OUT) or buying (IN)",
-                    key="bulk_restructure_type_radio_tab"
-                )
-                
-                # Show all transactions for selection
-                transaction_options = []
-                for _, row in portfolio_df.iterrows():
-                    label = f"{row['Symbol']} - {row['Quantity']:+.2f} @ ${row['Purchase_Price']:.2f} ({row.get('Purchase_Date', 'Unknown Date')})"
-                    transaction_options.append((label, row.get('transaction_id', row.get('ID', f"row_{_}"))))
-                
-                selected_transactions = st.multiselect(
-                    f"Select transactions to mark as {restructure_type}:",
-                    options=[opt[1] for opt in transaction_options],
-                    format_func=lambda x: next(opt[0] for opt in transaction_options if opt[1] == x),
-                    key="restructure_multiselect_tab"
-                )
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    if st.button(f"Mark as {restructure_type}", type="primary", key=f"mark_as_{restructure_type.lower()}_tab"):
-                        if selected_transactions:
-                            success_count = 0
-                            error_count = 0
-                            
-                            # Generate a restructure group ID
-                            restructure_group = f"RESTR_BULK_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-                            
-                            for txn_id in selected_transactions:
-                                try:
-                                    # Update transaction in database
-                                    updates = {
-                                        'transaction_type': restructure_type,
-                                        'include_in_portfolio': True if restructure_type == 'RESTRUCTURE_IN' else False,
-                                        'restructure_group': restructure_group
-                                    }
-                                    
-                                    result = db.update_transaction(txn_id, st.session_state.user_id, updates)
-                                    if result:
-                                        success_count += 1
-                                    else:
-                                        error_count += 1
-                                except Exception as e:
-                                    st.error(f"Error updating transaction {txn_id}: {e}")
-                                    error_count += 1
-                            
-                            # Show results
-                            if success_count > 0:
-                                st.success(f"[SUCCESS] Successfully marked {success_count} transactions as {restructure_type}")
-                            if error_count > 0:
-                                st.error(f"[ERROR] Failed to update {error_count} transactions")
-                            
-                            # Refresh portfolio data and rerun to show changes immediately
-                            refresh_portfolio_data()
-                            st.rerun()
-                        else:
-                            st.warning("Please select at least one transaction to mark.")
-                
-                with col2:
-                    if st.button("[REFRESH] Refresh View", key="refresh_restructure_tab"):
-                        st.rerun()
-                
-                # Group creator
-                if st.session_state.get('show_group_creator', False):
-                    st.markdown("---")
-                    st.markdown(display_icon_header('users', 'Create Restructuring Group', 'lucide', 18, '#666666'), unsafe_allow_html=True)
-                    
-                    with st.form("restructuring_group_form_tab"):
-                        group_name = st.text_input("Group Name", placeholder="e.g., BTC-to-ETH-2024")
-                        group_description = st.text_area("Description", placeholder="Describe this restructuring...")
-                        
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            if st.form_submit_button(f"✚ Create Group", type="primary"):
-                                if group_name:
-                                    group_id = f"RESTR_{group_name}_{datetime.now().strftime('%Y%m%d')}"
-                                    if 'restructuring_groups' not in st.session_state:
-                                        st.session_state.restructuring_groups = {}
-                                    
-                                    st.session_state.restructuring_groups[group_id] = {
-                                        'name': group_name,
-                                        'description': group_description,
-                                        'created_date': datetime.now(),
-                                        'transactions': []
-                                    }
-                                    st.success(f"Created restructuring group: {group_id}")
-                                    st.session_state.show_group_creator = False
-                                    st.rerun()
-                                else:
-                                    st.error("Please enter a group name")
-                        
-                        with col2:
-                            if st.form_submit_button("✖ Cancel"):
-                                st.session_state.show_group_creator = False
-                                st.rerun()
-                
-                # Show transactions by type
-                st.markdown("---")
-                st.markdown(display_icon_header('list', 'Transactions by Type', 'lucide', 18, '#666666'), unsafe_allow_html=True)
-                
-                if 'Transaction_Type' in portfolio_df.columns:
-                    type_counts = portfolio_df['Transaction_Type'].value_counts()
-                    
-                    for txn_type, count in type_counts.items():
-                        type_emoji = {
-                            'BUY': '[BUY]', 'SELL': '[SELL]', 'RESTRUCTURE_OUT': '[OUT]', 
-                            'RESTRUCTURE_IN': '[IN]'
-                        }.get(str(txn_type), '[TXN]')
-                        
-                        with st.expander(f"{type_emoji} {txn_type} ({count} transactions)"):
-                            type_transactions = portfolio_df[portfolio_df['Transaction_Type'] == txn_type]
-                            display_cols = ['Symbol', 'Quantity', 'Purchase_Price', 'Purchase_Date']
-                            available_cols = [col for col in display_cols if col in type_transactions.columns]
-                            st.dataframe(type_transactions[available_cols], use_container_width=True)
-                else:
-                    st.info("No portfolio data available for restructuring management.")
-            
-            with action_tab4:
-                st.markdown(f'<div style="color: #0066cc; background-color: #eff6ff; padding: 8px; border-radius: 4px; border: 1px solid #bfdbfe;">{get_icon("rocket", "lucide", 16, "#0066cc")} **Import & Export functionality has moved!**</div>', unsafe_allow_html=True)
-                st.markdown("""
-                The import and export features are now available at the bottom of this page 
-                in the dedicated **"Import & Export Portfolio"** section.
-                
-                **Benefits of the new location:**
-                - {get_icon('check', 'lucide', 14, '#22c55e')} Always accessible, even with an empty portfolio
-                - {get_icon('check', 'lucide', 14, '#22c55e')} Better file upload handling  
-                - {get_icon('check', 'lucide', 14, '#22c55e')} Enhanced debugging and error reporting
-                - {get_icon('check', 'lucide', 14, '#22c55e')} Download templates anytime
-                
-                {get_icon('arrow-down', 'lucide', 16, '#666666')} **Scroll down to the "Import & Export Portfolio" section below to:**
-                - Import your CSV files
-                - Download templates
-                - Export your current portfolio
-                """)
-                
-                # Quick export button for convenience
-                if not st.session_state.transactions.empty:
-                    st.markdown("---")
-                    st.markdown(display_icon_header('link', 'Quick Export (Convenience)', 'lucide', 18, '#666666'), unsafe_allow_html=True)
-                    portfolio_df = st.session_state.transactions.copy()
-                    csv_data = portfolio_df.to_csv(index=False)
-                    current_date = datetime.now().strftime('%Y%m%d')
-                    
-                    st.download_button(
-                        f"📥 Quick Export CSV ({len(portfolio_df)} records)",
-                        csv_data,
-                        file_name=f"crypto_portfolio_quick_{current_date}.csv",
-                        mime="text/csv",
-                        help="Quick export from this tab",
-                        key=f"quick_csv_export_{current_date}"
-                    )
-            
-            with action_tab5:
                 # Calculate holdings chart data
                 portfolio_holdings_df = st.session_state.transactions.copy()
                 portfolio_holdings_df = restructuring_manager.apply_restructuring_rules(portfolio_holdings_df, calculation_type='holdings')
@@ -2709,8 +2342,8 @@ if not st.session_state.transactions.empty:
                 
                 # Holdings Distribution Chart (uses holdings calculation - includes RESTRUCTURE_IN, excludes RESTRUCTURE_OUT)
                 if len(holdings_chart_data) > 0:
-                    st.markdown(f"### {get_icon('pie-chart', 'lucide', 20, '#666666')} Current Holdings Distribution", unsafe_allow_html=True)
-                    st.info("This chart shows your net current holdings (BUY + RESTRUCTURE_IN - SELL - RESTRUCTURE_OUT)")
+                    st.markdown(f"### {get_icon('pie-chart', 'lucide', 24
+                    , '#666666')} Current Holdings Distribution", unsafe_allow_html=True)
                     
                     try:
                         # Since holdings_chart_data now comes from net holdings, no need to group by symbol
@@ -2775,7 +2408,7 @@ if not st.session_state.transactions.empty:
                 if len(portfolio_chart_data) > 0:
                         # Portfolio composition chart using totals calculation (excludes ALL restructuring)
                         chart_title = "ORIGINAL HOLDINGS" if not table_search_query else f"Search Results Distribution: '{table_search_query}'"
-                        st.markdown(f"### {get_icon('pie-chart', 'lucide', 20, '#666666')} Original Portfolio Value Distribution", unsafe_allow_html=True)
+                        st.markdown(f"### {get_icon('line-chart', 'lucide', 24, '#666666')} Original Portfolio Value Distribution", unsafe_allow_html=True)
                         st.info("This chart shows your original portfolio (excludes ALL restructuring transactions)")
                         
                         try:
@@ -2909,7 +2542,358 @@ if not st.session_state.transactions.empty:
                 else:
                     st.info("Add some transactions to see analytics!")
         
-        st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            with action_tab2:
+                # Make Quick Transaction Actions collapsible and collapsed by default
+                with st.expander("Review Restructured Transactions", expanded=False):
+                    # Build a dataframe of transactions marked as RESTRUCTURE_OUT or RESTRUCTURE_IN
+                    if 'transactions' in st.session_state and not st.session_state.transactions.empty:
+                        txn_df = st.session_state.transactions.copy()
+                        if 'Transaction_Type' not in txn_df.columns:
+                            txn_df['Transaction_Type'] = txn_df['Quantity'].apply(lambda x: 'RESTRUCTURE_OUT' if False else ('SELL' if x < 0 else 'BUY'))
+
+                        restructured_mask = txn_df['Transaction_Type'].isin(['RESTRUCTURE_OUT', 'RESTRUCTURE_IN'])
+                        restructured_df = txn_df[restructured_mask].copy()
+
+                        if restructured_df.empty:
+                            st.info('No restructured transactions found.')
+                        else:
+                            # Group by Restructure_Group for easier review
+                            if 'Restructure_Group' not in restructured_df.columns:
+                                restructured_df['Restructure_Group'] = None
+
+                            groups = restructured_df['Restructure_Group'].fillna('UNGROUPED').unique()
+                            for group in groups:
+                                with st.expander(f"Group: {group}", expanded=False):
+                                    group_df = restructured_df[restructured_df['Restructure_Group'].fillna('UNGROUPED') == group]
+                                    display_cols = ['ID'] if 'ID' in group_df.columns else group_df.columns.tolist()
+                                    display_cols += [c for c in ['Symbol', 'Quantity', 'Purchase_Price', 'Transaction_Type'] if c in group_df.columns]
+                                    st.dataframe(group_df[display_cols].reset_index(drop=True), use_container_width=True)
+
+                                    # Provide actions for each transaction in the group
+                                    for _, row in group_df.iterrows():
+                                        txn_id = row.get('transaction_id', row.get('ID'))
+                                        col1, col2 = st.columns([6,1])
+                                        with col1:
+                                            st.write(f"{row.get('Symbol','')}: {row.get('Quantity','')} @ ${row.get('Purchase_Price','')}")
+                                        with col2:
+                                            if st.button("✏️ Edit", key=f'review_edit_{txn_id}'):
+                                                st.session_state.edit_transaction_id = txn_id
+                                                st.session_state.scroll_to_edit = True
+                                                st.rerun()
+                    else:
+                        st.info('No transaction data loaded in session.')
+                
+                with st.expander("Quick Transaction Actions", expanded=False):
+                    # Add controls for number of transactions to show
+                    col1, col2 = st.columns([3, 1])
+                    with col1:
+                        if table_search_query and 'portfolio_df_filtered' in locals():
+                            st.info(f"Showing quick actions for search results: '{table_search_query}'")
+                            base_df = portfolio_df_filtered
+                        else:
+                            base_df = portfolio_df
+                    with col2:
+                        max_transactions = st.selectbox(
+                            "Show transactions:",
+                            options=[10, 25, 50, 100, "All"],
+                            index=1,  # Default to 25
+                            key="quick_edit_limit"
+                        )
+                    
+                    # Apply transaction limit
+                    if max_transactions == "All":
+                        action_filtered_df = base_df
+                    else:
+                        action_filtered_df = base_df.head(int(max_transactions))
+                    
+                    # Show transaction count info
+                    total_count = len(base_df)
+                    showing_count = len(action_filtered_df)
+                    if showing_count < total_count:
+                        st.caption(f"Showing {showing_count} of {total_count} transactions")
+                    else:
+                        st.caption(f"Showing all {total_count} transactions")
+                    
+                    if len(action_filtered_df) > 0:
+                        # Display transactions in a more compact format
+                        for idx, (_, row) in enumerate(action_filtered_df.iterrows()):
+                            with st.container():
+                                col1, col2, col3, col4 = st.columns([3, 2, 1, 1])
+                                
+                                with col1: 
+                                    quantity_val = row['Quantity']
+                                    profit_loss_val = row['Profit_Loss']
+                                    percentage_change_val = row['Percentage_Change']
+                                    coin_name_val = row['Coin_Name']
+                                    symbol_val = row['Symbol']
+                                    current_value_val = row['Current_Value']
+                                    id_val = row['ID']
+                                    
+                                    transaction_icon = "[SELL]" if quantity_val < 0 else "[BUY]"
+                                    transaction_type = "SELL" if quantity_val < 0 else "BUY"
+                                    transaction_color = DANGER_COLOR if quantity_val < 0 else SUCCESS_COLOR
+                                    
+                                    st.markdown(f"**{coin_name_val} ({symbol_val})** <span style='color: {transaction_color}; font-size: 1.1em;'>{transaction_icon}</span>", unsafe_allow_html=True)
+                                    
+                                    # Color-coded quantity display with icons
+                                    qty_icon = "[DOWN]" if quantity_val < 0 else "[UP]"
+                                    qty_style = f"color: {DANGER_COLOR}; font-weight: 600; font-style: italic" if quantity_val < 0 else f"color: {SUCCESS_COLOR}; font-weight: 600"
+                                    st.markdown(f"<span style='{qty_style}'>{qty_icon} Qty: {abs(quantity_val):.1f}</span> | P&L: {percentage_change_val:+.1f}%", unsafe_allow_html=True)
+                                
+                                with col2:
+                                    st.write(f"${current_value_val:,.2f}")
+                                    color = "[PROFIT]" if profit_loss_val >= 0 else "[LOSS]"
+                                    st.caption(f"{color} ${profit_loss_val:+,.2f}")
+                                
+                                with col3:
+                                    if st.button("[EDIT]", key=f"edit_quick_{id_val}", help=f"Edit {coin_name_val}"):
+                                        # Clear any existing edit state first to prevent duplicates
+                                        current_edit_id = st.session_state.edit_transaction_id
+                                        if current_edit_id != id_val:
+                                            st.session_state.edit_transaction_id = id_val
+                                            st.session_state.scroll_to_edit = True
+                                            st.rerun()
+                                
+                                with col4:
+                                    if st.button("[DELETE]", key=f"delete_quick_{id_val}", help=f"Delete {coin_name_val}"):
+                                        # Use the unique transaction_id for deleting
+                                        st.session_state.show_delete_confirm = id_val
+                                        st.rerun()
+                                
+                                st.divider()
+                    else:
+                        if table_search_query:
+                            st.info(f"No transactions found matching your search: '{table_search_query}'")
+                        else:
+                            st.info("No transactions available for quick actions.")
+            
+            with action_tab3:
+                st.markdown(display_icon_header('filter', 'Advanced Search & Filtering', 'lucide', 20, '#666666'), unsafe_allow_html=True)
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown(f"### {get_icon('trending-up', 'lucide', 16, '#666666')} Performance Filter", unsafe_allow_html=True)
+                    st.markdown(display_icon_header('arrow-down', 'Min Return (%)', 'lucide', 16, '#666666'), unsafe_allow_html=True)
+                    min_return = st.number_input("", value=-100.0, step=1.0, label_visibility="collapsed")
+                    st.markdown(display_icon_header('arrow-up', 'Max Return (%)', 'lucide', 16, '#666666'), unsafe_allow_html=True)
+                    max_return = st.number_input("", value=1000.0, step=1.0, label_visibility="collapsed")
+                    
+                    if st.button("Apply Performance Filter"):
+                        filtered_perf = portfolio_df.copy()
+                        if min_return is not None:
+                            filtered_perf = filtered_perf[filtered_perf['Percentage_Change'] >= min_return]
+                        if max_return is not None:
+                            filtered_perf = filtered_perf[filtered_perf['Percentage_Change'] <= max_return]
+                        st.session_state.filtered_portfolio = filtered_perf
+                
+                with col2:
+                    st.markdown(f"### {get_icon('bar-chart', 'lucide', 16, '#666666')} Portfolio Statistics", unsafe_allow_html=True)
+                    if not portfolio_df.empty:
+                        stats = {
+                            'total_transactions': len(portfolio_df),
+                            'unique_coins': portfolio_df['Symbol'].nunique(),
+                            'total_investment': (portfolio_df['Quantity'] * portfolio_df['Purchase_Price']).sum(),
+                            'current_value': portfolio_df['Current_Value'].sum(),
+                            'total_pnl': portfolio_df['Profit_Loss'].sum(),
+                            'best_performer': portfolio_df.loc[portfolio_df['Percentage_Change'].idxmax(), 'Symbol'] if not portfolio_df.empty else 'N/A',
+                            'worst_performer': portfolio_df.loc[portfolio_df['Percentage_Change'].idxmin(), 'Symbol'] if not portfolio_df.empty else 'N/A',
+                            'avg_return': portfolio_df['Percentage_Change'].mean(),
+                            'portfolio_diversity': portfolio_df['Symbol'].nunique() / len(portfolio_df) if len(portfolio_df) > 0 else 0
+                        }
+                        stats['total_return_pct'] = (stats['total_pnl'] / stats['total_investment'] * 100) if stats['total_investment'] > 0 else 0
+                    
+                    if stats:
+                        st.markdown("""
+                        <style>
+                        .compact-metrics [data-testid="metric-container"] {
+                            background-color: rgba(28, 131, 225, 0.05);
+                            border: 1px solid rgba(28, 131, 225, 0.1);
+                            padding: 0.5rem;
+                            border-radius: 0.5rem;
+                            margin: 0.25rem 0;
+                        }
+                        .compact-metrics [data-testid="metric-container"] > div {
+                            width: fit-content;
+                            margin: auto;
+                        }
+                        .compact-metrics [data-testid="metric-container"] > div > div {
+                            font-size: 0.8rem;
+                            line-height: 1.2;
+                        }
+                        .compact-metrics [data-testid="metric-container"] label {
+                            font-size: 0.7rem !important;
+                            font-weight: 600 !important;
+                        }
+                        </style>
+                        """, unsafe_allow_html=True)
+                        with st.container():
+                            st.markdown('<div class="compact-metrics">', unsafe_allow_html=True)
+                            metric_row1_col1, metric_row1_col2 = st.columns(2)
+                            with metric_row1_col1:
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("list", "lucide", 16, "#666666")} Transactions</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["total_transactions"]}</div></div>', unsafe_allow_html=True)
+                            with metric_row1_col2:
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("unique", "lucide", 16, "#666666")} Unique Coins</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["unique_coins"]}</div></div>', unsafe_allow_html=True)
+                            metric_row2_col1, metric_row2_col2 = st.columns(2)
+                            with metric_row2_col1:
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("trending-up", "lucide", 16, "#666666")} Best Performer</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["best_performer"]}</div></div>', unsafe_allow_html=True)
+                            with metric_row2_col2:
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("trending-down", "lucide", 16, "#666666")} Worst Performer</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["worst_performer"]}</div></div>', unsafe_allow_html=True)
+                            metric_row3_col1, metric_row3_col2 = st.columns(2)
+                            with metric_row3_col1:
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("lowBattery", "lucide", 18, "#666666")} Average Return</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["avg_return"]:.1f}%</div></div>', unsafe_allow_html=True)
+                            with metric_row3_col2:
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("pie-chart", "lucide", 16, "#666666")} Diversity</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["portfolio_diversity"]:.1%}</div></div>', unsafe_allow_html=True)
+                            
+                            st.markdown('</div>', unsafe_allow_html=True)
+                
+                # Display filtered results
+                if 'filtered_portfolio' in st.session_state and not st.session_state.filtered_portfolio.empty:
+                    st.markdown(f"### {get_icon('filter', 'lucide', 20, '#666666')} Filtered Results", unsafe_allow_html=True)
+                    st.dataframe(st.session_state.filtered_portfolio[display_columns], use_container_width=True, hide_index=True)
+            with action_tab4:
+                st.markdown(display_icon_header('tag', 'Mark Transactions for Restructuring', 'lucide', 18, '#666666'), unsafe_allow_html=True)
+                
+                # Choose restructuring type
+                restructure_type = st.radio(
+                    "Restructuring Type:",
+                    ["RESTRUCTURE_OUT", "RESTRUCTURE_IN"],
+                    format_func=lambda x: f"{x} (Selling/Exiting)" if x == "RESTRUCTURE_OUT" else f"{x} (Buying with proceeds)",
+                    help="Select whether these are assets you're selling (OUT) or buying (IN)",
+                    key="bulk_restructure_type_radio_tab"
+                )
+                
+                # Show all transactions for selection
+                transaction_options = []
+                for _, row in portfolio_df.iterrows():
+                    label = f"{row['Symbol']} - {row['Quantity']:+.2f} @ ${row['Purchase_Price']:.2f} ({row.get('Purchase_Date', 'Unknown Date')})"
+                    transaction_options.append((label, row.get('transaction_id', row.get('ID', f"row_{_}"))))
+                
+                selected_transactions = st.multiselect(
+                    f"Select transactions to mark as {restructure_type}:",
+                    options=[opt[1] for opt in transaction_options],
+                    format_func=lambda x: next(opt[0] for opt in transaction_options if opt[1] == x),
+                    key="restructure_multiselect_tab"
+                )
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button(f"Mark as {restructure_type}", type="primary", key=f"mark_as_{restructure_type.lower()}_tab"):
+                        if selected_transactions:
+                            success_count = 0
+                            error_count = 0
+                            
+                            # Generate a restructure group ID
+                            restructure_group = f"RESTR_BULK_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                            
+                            for txn_id in selected_transactions:
+                                try:
+                                    # Update transaction in database
+                                    updates = {
+                                        'transaction_type': restructure_type,
+                                        'include_in_portfolio': True if restructure_type == 'RESTRUCTURE_IN' else False,
+                                        'restructure_group': restructure_group
+                                    }
+                                    
+                                    result = db.update_transaction(txn_id, st.session_state.user_id, updates)
+                                    if result:
+                                        success_count += 1
+                                    else:
+                                        error_count += 1
+                                except Exception as e:
+                                    st.error(f"Error updating transaction {txn_id}: {e}")
+                                    error_count += 1
+                            
+                            # Show results
+                            if success_count > 0:
+                                st.success(f"[SUCCESS] Successfully marked {success_count} transactions as {restructure_type}")
+                            if error_count > 0:
+                                st.error(f"[ERROR] Failed to update {error_count} transactions")
+                            
+                            # Refresh portfolio data and rerun to show changes immediately
+                            refresh_portfolio_data()
+                            st.rerun()
+                        else:
+                            st.warning("Please select at least one transaction to mark.")
+                
+                with col2:
+                    if st.button("[REFRESH] Refresh View", key="refresh_restructure_tab"):
+                        st.rerun()
+                
+                # Group creator
+                if st.session_state.get('show_group_creator', False):
+                    st.markdown("---")
+                    st.markdown(display_icon_header('users', 'Create Restructuring Group', 'lucide', 18, '#666666'), unsafe_allow_html=True)
+                    
+                    with st.form("restructuring_group_form_tab"):
+                        group_name = st.text_input("Group Name", placeholder="e.g., BTC-to-ETH-2024")
+                        group_description = st.text_area("Description", placeholder="Describe this restructuring...")
+                        
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            if st.form_submit_button(f"✚ Create Group", type="primary"):
+                                if group_name:
+                                    group_id = f"RESTR_{group_name}_{datetime.now().strftime('%Y%m%d')}"
+                                    if 'restructuring_groups' not in st.session_state:
+                                        st.session_state.restructuring_groups = {}
+                                    
+                                    st.session_state.restructuring_groups[group_id] = {
+                                        'name': group_name,
+                                        'description': group_description,
+                                        'created_date': datetime.now(),
+                                        'transactions': []
+                                    }
+                                    st.success(f"Created restructuring group: {group_id}")
+                                    st.session_state.show_group_creator = False
+                                    st.rerun()
+                                else:
+                                    st.error("Please enter a group name")
+                        
+                        with col2:
+                            if st.form_submit_button("✖ Cancel"):
+                                st.session_state.show_group_creator = False
+                                st.rerun()
+                
+                # Show transactions by type
+                st.markdown("---")
+                st.markdown(display_icon_header('list', 'Transactions by Type', 'lucide', 18, '#666666'), unsafe_allow_html=True)
+                
+                if 'Transaction_Type' in portfolio_df.columns:
+                    type_counts = portfolio_df['Transaction_Type'].value_counts()
+                    
+                    for txn_type, count in type_counts.items():
+                        type_emoji = {
+                            'BUY': '[BUY]', 'SELL': '[SELL]', 'RESTRUCTURE_OUT': '[OUT]', 
+                            'RESTRUCTURE_IN': '[IN]'
+                        }.get(str(txn_type), '[TXN]')
+                        
+                        with st.expander(f"{type_emoji} {txn_type} ({count} transactions)"):
+                            type_transactions = portfolio_df[portfolio_df['Transaction_Type'] == txn_type]
+                            display_cols = ['Symbol', 'Quantity', 'Purchase_Price', 'Purchase_Date']
+                            available_cols = [col for col in display_cols if col in type_transactions.columns]
+                            st.dataframe(type_transactions[available_cols], use_container_width=True)
+                else:
+                    st.info("No portfolio data available for restructuring management.")
+
+            with action_tab5:
+                
+                # Quick export button for convenience
+                if not st.session_state.transactions.empty:
+                    st.markdown(display_icon_header('link', 'Quick Export (Convenience)', 'lucide', 18, '#666666'), unsafe_allow_html=True)
+                    portfolio_df = st.session_state.transactions.copy()
+                    csv_data = portfolio_df.to_csv(index=False)
+                    current_date = datetime.now().strftime('%Y%m%d')
+                    
+                    st.download_button(
+                        f"⬇️ Export CSV ({len(portfolio_df)} records)",
+                        csv_data,
+                        file_name=f"crypto_portfolio_quick_{current_date}.csv",
+                        mime="text/csv",
+                        help="Quick export from this tab",
+                        key=f"quick_csv_export_{current_date}"
+                    )
 
     # --- Summary and Balance Sheet ---
     with st.container():
