@@ -2,12 +2,51 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import requests
+import time
 import warnings
 warnings.filterwarnings('ignore')
+
+# Rate limiting globals
+_last_coingecko_call = 0
+_coingecko_call_count = 0
+_rate_limit_window_start = 0
+
+def check_rate_limit():
+    """Check and enforce CoinGecko rate limits (30 calls/minute)"""
+    global _last_coingecko_call, _coingecko_call_count, _rate_limit_window_start
+    
+    current_time = time.time()
+    
+    # Reset counter every minute
+    if current_time - _rate_limit_window_start > 60:
+        _coingecko_call_count = 0
+        _rate_limit_window_start = current_time
+    
+    # Check if we've hit the rate limit
+    if _coingecko_call_count >= 25:  # Conservative limit (25 instead of 30)
+        wait_time = 60 - (current_time - _rate_limit_window_start)
+        if wait_time > 0:
+            print(f"⏳ Rate limit protection: waiting {wait_time:.1f} seconds...")
+            time.sleep(wait_time + 1)  # Add 1 second buffer
+            _coingecko_call_count = 0
+            _rate_limit_window_start = time.time()
+    
+    # Ensure minimum 2 seconds between calls
+    time_since_last = current_time - _last_coingecko_call
+    if time_since_last < 2:
+        sleep_time = 2 - time_since_last
+        print(f"⏳ Spacing API calls: waiting {sleep_time:.1f} seconds...")
+        time.sleep(sleep_time)
+    
+    _last_coingecko_call = time.time()
+    _coingecko_call_count += 1
 
 def fetch_coingecko_history(symbol, days=365):
     """Fetch historical data from CoinGecko API (free, no auth required) - Primary API"""
     try:
+        # Apply rate limiting
+        check_rate_limit()
+        
         # CoinGecko symbol mapping
         coingecko_symbols = {
             'BTC': 'bitcoin',
@@ -136,6 +175,9 @@ def create_minimal_data(symbol, days=90):
 def get_coingecko_current_prices(symbols):
     """Get current prices from CoinGecko API - Primary price source"""
     try:
+        # Apply rate limiting
+        check_rate_limit()
+        
         # CoinGecko symbol mapping (expanded)
         coingecko_symbols = {
             'BTC': 'bitcoin',
