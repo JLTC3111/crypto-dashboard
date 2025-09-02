@@ -24,6 +24,25 @@ symbol = symbol_map[selection]
 with st.spinner(f"Fetching data for {selection}..."):
     history = get_price_history(symbol)
 
+# Check if data was successfully fetched first
+if history is None or history.empty:
+    st.error("❌ **No Data Available**: Unable to fetch price data from Binance API. Please check your internet connection or try again later.")
+    st.stop()
+
+# Only show success indicator if we actually have data
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+if has_binance_api:
+    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
+else:
+    st.info("📊 **Public Data**: Using public Binance API (no authentication required for price data)")
+
+# Use 'close' prices
+
 # Check data source and provide user feedback
 import os
 is_cloud = any([
@@ -34,13 +53,7 @@ is_cloud = any([
     '/mount/src' in os.getcwd()
 ])
 
-has_binance_api = False
-try:
-    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
-except:
-    pass
-
-# Data source indicator
+# Check data source and provide user feedback
 has_binance_api = False
 try:
     has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
