@@ -395,6 +395,7 @@ def check_button_click(button_key: str) -> bool:
     
 st.set_page_config(
         page_title="My Crypto Portfolio", 
+        page_icon="🏆",
         layout="wide"
     )
 # --- Custom CSS for professional styling

@@ -9,7 +9,7 @@ from helpers.export import export_pdf
 from helpers.crypto_config import get_sorted_crypto_list, get_symbol_from_name, get_symbol_map
 
 # Set wide layout for better display
-st.set_page_config(page_title="Crypto Risk Dashboard", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Crypto Risk Dashboard", page_icon="🛝", layout="wide")
 
 st.title("📊 Crypto Risk Management Dashboard")
 
