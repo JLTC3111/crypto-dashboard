@@ -31,6 +31,18 @@ with st.spinner(f"Fetching data for {selection1} and {selection2}..."):
     history1 = get_price_history(symbol1)
     history2 = get_price_history(symbol2)
 
+# Check if we have Binance API credentials
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+if has_binance_api:
+    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
+else:
+    st.info("📊 **Public Data**: Using public Binance API (no authentication required for price data)")
+
 # Check if we're using real API or mock data
 import os
 is_cloud = any([

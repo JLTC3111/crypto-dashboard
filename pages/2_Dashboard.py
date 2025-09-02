@@ -47,14 +47,15 @@ try:
 except:
     pass
 
-if has_binance_api and not is_cloud:
-    st.success("🔑 **Authenticated Local**: Using real-time data from authenticated Binance API")
-elif has_binance_api and is_cloud:
-    st.info("🔑 **Authenticated Cloud**: Using real-time data from authenticated Binance API on Streamlit Cloud")
-elif not is_cloud:
-    st.info("📊 **Public API**: Using public Binance API data")
+if has_binance_api:
+    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
 else:
-    st.warning("⚠️ **Demo Mode**: Using simulated data. Add Binance API credentials to Streamlit Cloud secrets for real data.")
+    st.info("� **Public Data**: Using public Binance API (no authentication required for price data)")
+
+# Show warning if no data is fetched
+if history is None or history.empty:
+    st.error("❌ **No Data Available**: Unable to fetch price data from Binance API. Please check your internet connection or try again later.")
+    st.stop()
 
 if history is None or history.empty:
     st.error("No historical data available.")
