@@ -31,7 +31,7 @@ with st.spinner(f"Fetching data for {selection1} and {selection2}..."):
     history1 = get_price_history(symbol1)
     history2 = get_price_history(symbol2)
 
-# Check if we're using mock data (Streamlit Cloud fallback)
+# Check if we're using real API or mock data
 import os
 is_cloud = any([
     os.getenv('STREAMLIT_SHARING_MODE'),
@@ -41,8 +41,21 @@ is_cloud = any([
     '/mount/src' in os.getcwd()  # New Streamlit Cloud path
 ])
 
-if is_cloud and (history1 is not None and not history1.empty and history2 is not None and not history2.empty):
-    st.warning("⚠️ **Demo Mode**: Using simulated data due to API restrictions on Streamlit Cloud. In production, this would show real-time data from Binance API.")
+# Check if we have Binance API credentials
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+if is_cloud and has_binance_api:
+    st.info("🔑 **Live Data**: Using real-time data from Binance API with authenticated access.")
+elif is_cloud and not has_binance_api:
+    st.warning("⚠️ **Demo Mode**: Using simulated data. Add Binance API credentials to secrets for real-time data.")
+elif has_binance_api:
+    st.success("🔑 **Authenticated**: Using real-time data from Binance API.")
+else:
+    st.info("📊 **Public Data**: Using public Binance API (may have rate limits).")
 
 # Check data availability and provide specific error messages
 data1_available = history1 is not None and not history1.empty
