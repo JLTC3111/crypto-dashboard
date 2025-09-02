@@ -65,6 +65,7 @@ def get_icon(icon_name: str, library: str = "lucide", size: int = 16, color: str
     """
     icons = {
         "lucide": {
+            "lowBattery": f'<svg width="64px" height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.65 17H3C2.72 17 2.5 16.78 2.5 16.5V8.5C2.5 8.22 2.72 8 3 8H17.65C17.93 8 18.15 8.22 18.15 8.5V16.5C18.15 16.78 17.92 17 17.65 17Z" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M20.38 10.81H21C21.28 10.81 21.5 11.03 21.5 11.31V13.69C21.5 13.97 21.28 14.19 21 14.19H20.38" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4.72998 10.25V14.75" stroke="#0F0F0F" stroke-miterlimit="10" stroke-linecap="round"></path> </g></svg>',
             "bullseye": f'<svg width="{size}" height="{size}" viewBox="0 0 73 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>design-and-ux/hit-targets</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="design-and-ux/hit-targets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="container" transform="translate(2.000000, 2.000000)" fill="#FFFFFF" fill-rule="nonzero" stroke="#1F2F3B" stroke-width="2"> <rect id="mask" x="-1" y="-1" width="71" height="71" rx="14"> </rect> </g> <g id="target-(1)" transform="translate(10.000000, 10.000000)" fill-rule="nonzero"> <path d="M48.3750352,23.7374297 L51.7500352,23.7374297 C50.2875,12.4873945 41.3999648,3.59996484 30.2624648,2.13753516 L30.2624648,5.51253516 C39.6000352,6.97507031 47.0249297,14.3999648 48.3750352,23.7374297 Z M30.2625703,48.3750352 L30.2625703,51.7500352 C41.4000703,50.2875 50.4001406,41.3999648 51.7501406,30.2624648 L48.3751406,30.2624648 C47.0249297,39.6000352 39.6000352,47.0249297 30.2625703,48.3750352 Z M5.62496484,30.2625703 L2.24996484,30.2625703 C3.7125,41.5126055 12.6000352,50.4000352 23.7375352,51.7501406 L23.7375352,48.3751406 C14.3999648,47.0249297 6.97507031,39.6000352 5.62496484,30.2625703 Z M2.24996484,23.7374297 L5.62496484,23.7374297 C7.0875,14.3998594 14.3999648,6.97485937 23.7375352,5.62485937 L23.7375352,2.24996484 C12.6000352,3.7125 3.7125,12.6000352 2.24996484,23.7374297 Z" id="Shape" fill="#CDD6E0"> </path> <path d="M39.4875,23.7374297 L42.9750352,23.7374297 C41.6250352,17.4374648 36.5625352,12.3748594 30.2625703,11.1373945 L30.2625703,14.6249297 C34.7625,15.7500703 38.2499297,19.2375 39.4875,23.7374297 Z M30.2625703,39.4875 L30.2625703,42.9750352 C36.5625352,41.6250352 41.6251406,36.5625352 42.8626055,30.2625703 L39.3750703,30.2625703 C38.2499297,34.7625 34.7625,38.2499297 30.2625703,39.4875 Z M14.5125,30.2625703 L11.0249648,30.2625703 C12.3749648,36.5625352 17.4374648,41.6251406 23.7374297,42.8626055 L23.7374297,39.3750703 C19.2375,38.2499297 15.7500703,34.7625 14.5125,30.2625703 Z M11.1375,23.7374297 L14.6250352,23.7374297 C15.7500703,19.2373945 19.3500352,15.7498594 23.8500703,14.5123945 L23.8500703,11.0249648 C17.4374648,12.3750703 12.3750703,17.4374648 11.1375,23.7374297 Z" id="Shape" fill="#F2F2F2"> </path> <polygon id="Shape" fill="#40596B" points="54 25.4250352 28.5749648 25.4250352 28.5749648 0 25.4250352 0 25.4250352 25.4250352 0 25.4250352 0 28.5749648 25.4250352 28.5749648 25.4250352 54 28.5749648 54 28.5749648 28.5749648 54 28.5749648"> </polygon> <circle id="Oval" fill="#FF7058" cx="27.0005273" cy="27.0005273" r="5.7375"> </circle> </g> </g> </g></svg>',
             "money": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11.7255 17.1019C11.6265 16.8844 11.4215 16.7257 11.1734 16.6975C10.9633 16.6735 10.7576 16.6285 10.562 16.5636C10.4743 16.5341 10.392 16.5019 10.3158 16.4674L10.4424 16.1223C10.5318 16.1622 10.6239 16.1987 10.7182 16.2317L10.7221 16.2331L10.7261 16.2344C11.0287 16.3344 11.3265 16.3851 11.611 16.3851C11.8967 16.3851 12.1038 16.3468 12.2629 16.2647L12.2724 16.2598L12.2817 16.2544C12.5227 16.1161 12.661 15.8784 12.661 15.6021C12.661 15.2955 12.4956 15.041 12.2071 14.9035C12.062 14.8329 11.8559 14.7655 11.559 14.6917C11.2545 14.6147 10.9987 14.533 10.8003 14.4493C10.6553 14.3837 10.5295 14.279 10.4161 14.1293C10.3185 13.9957 10.2691 13.7948 10.2691 13.5319C10.2691 13.2147 10.3584 12.9529 10.5422 12.7315C10.7058 12.5375 10.9381 12.4057 11.2499 12.3318C11.4812 12.277 11.6616 12.1119 11.7427 11.8987C11.8344 12.1148 12.0295 12.2755 12.2723 12.3142C12.4751 12.3465 12.6613 12.398 12.8287 12.4677L12.7122 12.8059C12.3961 12.679 12.085 12.6149 11.7841 12.6149C10.7848 12.6149 10.7342 13.3043 10.7342 13.4425C10.7342 13.7421 10.896 13.9933 11.1781 14.1318L11.186 14.1357L11.194 14.1393C11.3365 14.2029 11.5387 14.2642 11.8305 14.3322C12.1322 14.4004 12.3838 14.4785 12.5815 14.5651L12.5856 14.5669L12.5897 14.5686C12.7365 14.6297 12.8624 14.7317 12.9746 14.8805L12.9764 14.8828L12.9782 14.8852C13.0763 15.012 13.1261 15.2081 13.1261 15.4681C13.1261 15.7682 13.0392 16.0222 12.8604 16.2447C12.7053 16.4377 12.4888 16.5713 12.1983 16.6531C11.974 16.7163 11.8 16.8878 11.7255 17.1019Z" fill="#ffffff"></path> <path d="M11.9785 18H11.497C11.3893 18 11.302 17.9105 11.302 17.8V17.3985C11.302 17.2929 11.2219 17.2061 11.1195 17.1944C10.8757 17.1667 10.6399 17.115 10.412 17.0394C10.1906 16.9648 9.99879 16.8764 9.83657 16.7739C9.76202 16.7268 9.7349 16.6312 9.76572 16.5472L10.096 15.6466C10.1405 15.5254 10.284 15.479 10.3945 15.5417C10.5437 15.6262 10.7041 15.6985 10.8755 15.7585C11.131 15.8429 11.3762 15.8851 11.611 15.8851C11.8129 15.8851 11.9572 15.8628 12.0437 15.8181C12.1302 15.7684 12.1735 15.6964 12.1735 15.6021C12.1735 15.4929 12.1158 15.411 12.0004 15.3564C11.8892 15.3018 11.7037 15.2422 11.4442 15.1777C11.1104 15.0933 10.8323 15.0039 10.6098 14.9096C10.3873 14.8103 10.1936 14.6514 10.0288 14.433C9.86396 14.2096 9.78156 13.9092 9.78156 13.5319C9.78156 13.095 9.91136 12.7202 10.1709 12.4074C10.4049 12.13 10.7279 11.9424 11.1401 11.8447C11.2329 11.8227 11.302 11.7401 11.302 11.6425V11.2C11.302 11.0895 11.3893 11 11.497 11H11.9785C12.0862 11 12.1735 11.0895 12.1735 11.2V11.6172C12.1735 11.7194 12.2487 11.8045 12.3471 11.8202C12.7082 11.8777 13.0255 11.9866 13.2989 12.1469C13.3765 12.1924 13.4073 12.2892 13.3775 12.3756L13.0684 13.2725C13.0275 13.3914 12.891 13.4417 12.7812 13.3849C12.433 13.2049 12.1007 13.1149 11.7841 13.1149C11.4091 13.1149 11.2216 13.2241 11.2216 13.4425C11.2216 13.5468 11.2773 13.6262 11.3885 13.6809C11.4998 13.7305 11.6831 13.7851 11.9386 13.8447C12.2682 13.9192 12.5464 14.006 12.773 14.1053C12.9996 14.1996 13.1953 14.356 13.3602 14.5745C13.5291 14.7929 13.6136 15.0908 13.6136 15.4681C13.6136 15.8851 13.4879 16.25 13.2365 16.5628C13.0176 16.8354 12.7145 17.0262 12.3274 17.1353C12.2384 17.1604 12.1735 17.2412 12.1735 17.3358V17.8C12.1735 17.9105 12.0862 18 11.9785 18Z" fill="#ffffff"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M9.59235 5H13.8141C14.8954 5 14.3016 6.664 13.8638 7.679L13.3656 8.843L13.2983 9C13.7702 8.97651 14.2369 9.11054 14.6282 9.382C16.0921 10.7558 17.2802 12.4098 18.1256 14.251C18.455 14.9318 18.5857 15.6958 18.5019 16.451C18.4013 18.3759 16.8956 19.9098 15.0182 20H8.38823C6.51033 19.9125 5.0024 18.3802 4.89968 16.455C4.81587 15.6998 4.94656 14.9358 5.27603 14.255C6.12242 12.412 7.31216 10.7565 8.77823 9.382C9.1696 9.11054 9.63622 8.97651 10.1081 9L10.0301 8.819L9.54263 7.679C9.1068 6.664 8.5101 5 9.59235 5Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M13.2983 9.75C13.7125 9.75 14.0483 9.41421 14.0483 9C14.0483 8.58579 13.7125 8.25 13.2983 8.25V9.75ZM10.1081 8.25C9.69391 8.25 9.35812 8.58579 9.35812 9C9.35812 9.41421 9.69391 9.75 10.1081 9.75V8.25ZM15.9776 8.64988C16.3365 8.44312 16.4599 7.98455 16.2531 7.62563C16.0463 7.26671 15.5878 7.14336 15.2289 7.35012L15.9776 8.64988ZM13.3656 8.843L13.5103 9.57891L13.5125 9.57848L13.3656 8.843ZM10.0301 8.819L10.1854 8.08521L10.1786 8.08383L10.0301 8.819ZM8.166 7.34357C7.80346 7.14322 7.34715 7.27469 7.1468 7.63722C6.94644 7.99976 7.07791 8.45607 7.44045 8.65643L8.166 7.34357ZM13.2983 8.25H10.1081V9.75H13.2983V8.25ZM15.2289 7.35012C14.6019 7.71128 13.9233 7.96683 13.2187 8.10752L13.5125 9.57848C14.3778 9.40568 15.2101 9.09203 15.9776 8.64988L15.2289 7.35012ZM13.2209 8.10709C12.2175 8.30441 11.1861 8.29699 10.1854 8.08525L9.87486 9.55275C11.0732 9.80631 12.3086 9.81521 13.5103 9.57891L13.2209 8.10709ZM10.1786 8.08383C9.47587 7.94196 8.79745 7.69255 8.166 7.34357L7.44045 8.65643C8.20526 9.0791 9.02818 9.38184 9.88169 9.55417L10.1786 8.08383Z" fill="#ffffff"></path> </g></svg>',
             "price": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-signal-icon lucide-signal"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>',
@@ -111,6 +112,14 @@ def get_icon(icon_name: str, library: str = "lucide", size: int = 16, color: str
             "rocket": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>',
             "arrow-down": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19,12 12,19 5,12"/></svg>',
             "check": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>',
+            "arrow-right": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>',
+            "arrow-left": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>',
+            "shuffle": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16,3 21,3 21,8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21,16 21,21 16,21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>',
+            "refresh-cw": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36l2.63 2.63"/></svg>',
+            "plus-circle": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+            "minus-circle": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+            "edit-3": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+            "trash-2": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>',
         },
         "heroicons": {
             "edit": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="{color}"><path fill-rule="evenodd" d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.061 19.652a1.125 1.125 0 01-.398.248l-3.75 1.5a.75.75 0 01-.97-.97l1.5-3.75a1.125 1.125 0 01.248-.398L16.674 3.299z" clip-rule="evenodd" /></svg>',
@@ -1701,12 +1710,10 @@ else:
     # Enhanced transaction type selection with restructuring options
     st.sidebar.markdown(display_icon_header("trending-up", "Transaction Type", "lucide", 18, "#666666"), unsafe_allow_html=True)
     
-    # Basic vs Advanced mode toggle
     use_advanced_mode = st.sidebar.checkbox("Advanced Mode", help="Enable portfolio restructuring features")
 
     if use_advanced_mode:
-        # Add restructuring workflow guide
-        with st.sidebar.expander(f"{get_icon('info', 'lucide', 16, '#666666')} Restructuring Guide", expanded=False):
+        with st.sidebar.expander("Restructuring Guide", expanded=False):
             st.markdown("""
             **Portfolio Restructuring Workflow:**
             
@@ -1737,15 +1744,11 @@ else:
         # Show restructuring options if applicable
         restructure_group = None
         if transaction_type in ['RESTRUCTURE_OUT', 'RESTRUCTURE_IN']:
-            st.sidebar.markdown("#### [REFRESH] Restructuring Options")
-            
-            # Add explanation for restructuring workflow
+            st.sidebar.markdown(f"#### {get_icon('refresh-cw', 'lucide', 16, '#666666')} [REFRESH] Restructuring Options")
             if transaction_type == 'RESTRUCTURE_OUT':
                 st.sidebar.info("[OUT] **Step 1**: Mark assets you're selling/exiting\n\n• These will be excluded from portfolio value\n• Use same Group ID for related transactions")
-            else:  # RESTRUCTURE_IN
+            else:  
                 st.sidebar.success("[IN] **Step 2**: Mark assets you're buying with proceeds\n\n• These will be included in portfolio value\n• Cost basis will be transferred from OUT transactions")
-            
-            # Option to create new group or join existing
             if 'restructuring_groups' not in st.session_state:
                 st.session_state.restructuring_groups = {}
             
@@ -1771,7 +1774,6 @@ else:
                     # Auto-generate group ID if no existing groups
                     restructure_group = f"RESTR_AUTO_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     else:
-        # Simple Buy/Sell mode
         basic_type = st.sidebar.radio("Transaction Type", ["Buy", "Sell"], help="Select Buy to add coins, Sell to reduce holdings")
         transaction_type = "BUY" if basic_type == "Buy" else "SELL"
         restructure_group = None
@@ -2313,9 +2315,8 @@ if not st.session_state.transactions.empty:
             if 'active_tab' not in st.session_state:
                 st.session_state.active_tab = "⚡ Quick Actions"
             
-            # Check if we should switch to Import/Export tab (for downloads)
             if st.session_state.get('switch_to_import_export', False):
-                st.session_state.active_tab = "[IMPORT] Import/Export"
+                st.session_state.active_tab = "Import/Export"
                 st.session_state.switch_to_import_export = False
             
             action_tab1, action_tab2, action_tab3, action_tab4, action_tab5 = st.tabs([
@@ -2457,14 +2458,13 @@ if not st.session_state.transactions.empty:
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown(f"**{get_icon('trending-up', 'lucide', 16, '#666666')} Performance Filter**", unsafe_allow_html=True)
+                    st.markdown(f"### {get_icon('trending-up', 'lucide', 16, '#666666')} Performance Filter", unsafe_allow_html=True)
                     st.markdown(display_icon_header('arrow-down', 'Min Return (%)', 'lucide', 16, '#666666'), unsafe_allow_html=True)
                     min_return = st.number_input("", value=-100.0, step=1.0, label_visibility="collapsed")
                     st.markdown(display_icon_header('arrow-up', 'Max Return (%)', 'lucide', 16, '#666666'), unsafe_allow_html=True)
                     max_return = st.number_input("", value=1000.0, step=1.0, label_visibility="collapsed")
                     
-                    if st.button("[FILTER] Apply Performance Filter"):
-                        # Perform filtering directly on the session state DataFrame
+                    if st.button("Apply Performance Filter"):
                         filtered_perf = portfolio_df.copy()
                         if min_return is not None:
                             filtered_perf = filtered_perf[filtered_perf['Percentage_Change'] >= min_return]
@@ -2473,7 +2473,7 @@ if not st.session_state.transactions.empty:
                         st.session_state.filtered_portfolio = filtered_perf
                 
                 with col2:
-                    st.markdown(f"**{get_icon('bar-chart', 'lucide', 16, '#666666')} Portfolio Statistics**", unsafe_allow_html=True)
+                    st.markdown(f"### {get_icon('bar-chart', 'lucide', 16, '#666666')} Portfolio Statistics", unsafe_allow_html=True)
                     if not portfolio_df.empty:
                         stats = {
                             'total_transactions': len(portfolio_df),
@@ -2489,7 +2489,6 @@ if not st.session_state.transactions.empty:
                         stats['total_return_pct'] = (stats['total_pnl'] / stats['total_investment'] * 100) if stats['total_investment'] > 0 else 0
                     
                     if stats:
-                        # Custom compact styling for metrics
                         st.markdown("""
                         <style>
                         .compact-metrics [data-testid="metric-container"] {
@@ -2513,31 +2512,23 @@ if not st.session_state.transactions.empty:
                         }
                         </style>
                         """, unsafe_allow_html=True)
-                        
-                        # Create compact metrics in a container
                         with st.container():
                             st.markdown('<div class="compact-metrics">', unsafe_allow_html=True)
-                            
-                            # Row 1: Basic counts
                             metric_row1_col1, metric_row1_col2 = st.columns(2)
                             with metric_row1_col1:
-                                st.metric(f"{get_icon('list', 'lucide', 16, '#666666')} Transactions", stats['total_transactions'])
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("list", "lucide", 16, "#666666")} Transactions</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["total_transactions"]}</div></div>', unsafe_allow_html=True)
                             with metric_row1_col2:
-                                st.metric(f"{get_icon('coins', 'lucide', 16, '#666666')} Unique Coins", stats['unique_coins'])
-                            
-                            # Row 2: Performance metrics
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("coins", "lucide", 16, "#666666")} Unique Coins</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["unique_coins"]}</div></div>', unsafe_allow_html=True)
                             metric_row2_col1, metric_row2_col2 = st.columns(2)
                             with metric_row2_col1:
-                                st.metric(f"{get_icon('trending-up', 'lucide', 16, '#22c55e')} Best Performer", stats['best_performer'])
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("trending-up", "lucide", 16, "#22c55e")} Best Performer</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["best_performer"]}</div></div>', unsafe_allow_html=True)
                             with metric_row2_col2:
-                                st.metric(f"{get_icon('trending-down', 'lucide', 16, '#ef4444')} Worst Performer", stats['worst_performer'])
-                            
-                            # Row 3: Returns and diversity
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("trending-down", "lucide", 16, "#ef4444")} Worst Performer</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["worst_performer"]}</div></div>', unsafe_allow_html=True)
                             metric_row3_col1, metric_row3_col2 = st.columns(2)
                             with metric_row3_col1:
-                                st.metric(f"{get_icon('target', 'lucide', 16, '#666666')} Avg Return", f"{stats['avg_return']:.1f}%")
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("lowBattery", "lucide", 16, "#666666")} Average Return</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["avg_return"]:.1f}%</div></div>', unsafe_allow_html=True)
                             with metric_row3_col2:
-                                st.metric(f"{get_icon('pie-chart', 'lucide', 16, '#666666')} Diversity", f"{stats['portfolio_diversity']:.1%}")
+                                st.markdown(f'<div style="background-color: rgba(28, 131, 225, 0.05); border: 1px solid rgba(28, 131, 225, 0.1); padding: 0.5rem; border-radius: 0.5rem; margin: 0.25rem 0; text-align: center;"><div style="font-size: 0.7rem; font-weight: 600; color: #666;">{get_icon("pie-chart", "lucide", 16, "#666666")} Diversity</div><div style="font-size: 1.5rem; font-weight: bold; color: #333;">{stats["portfolio_diversity"]:.1%}</div></div>', unsafe_allow_html=True)
                             
                             st.markdown('</div>', unsafe_allow_html=True)
                 
@@ -2886,7 +2877,6 @@ if not st.session_state.transactions.empty:
                         
                         with col1:
                             try:
-                                # Filter out invalid percentage changes with comprehensive cleaning
                                 perf_data = original_treemap_df[
                                     (original_treemap_df['Percentage_Change'].notna()) & 
                                     (original_treemap_df['Percentage_Change'] != float('inf')) &
@@ -2894,7 +2884,6 @@ if not st.session_state.transactions.empty:
                                     (original_treemap_df['Percentage_Change'].abs() < 10000)  # Remove extreme outliers
                                 ].copy()
                                 
-                                # Additional data cleaning
                                 perf_data['Percentage_Change'] = pd.to_numeric(perf_data['Percentage_Change'], errors='coerce')
                                 perf_data = perf_data[perf_data['Percentage_Change'].notna()]
                                 
@@ -2904,7 +2893,6 @@ if not st.session_state.transactions.empty:
                         
                         with col2:
                             try:
-                                # Filter out invalid current values with comprehensive cleaning
                                 value_data = original_treemap_df[
                                     (original_treemap_df['Current_Value'].notna()) & 
                                     (original_treemap_df['Current_Value'] > 0) &
@@ -2912,7 +2900,6 @@ if not st.session_state.transactions.empty:
                                     (original_treemap_df['Current_Value'] != float('-inf'))
                                 ].copy()
                                 
-                                # Additional data cleaning
                                 value_data['Current_Value'] = pd.to_numeric(value_data['Current_Value'], errors='coerce')
                                 value_data = value_data[value_data['Current_Value'].notna()]
                                 
@@ -3280,13 +3267,13 @@ if 'last_import_results' in st.session_state:
     if results['error_count'] > 0 and results['errors']:
         with st.expander(f"{get_icon('list', 'lucide', 16, '#666666')} View {results['error_count']} Import Errors", expanded=False):
             st.markdown(f"**Import Time:** {results['timestamp']}")
-            st.markdown(f"**{get_icon('alert-triangle', 'lucide', 16, '#720707')} Detailed Error Report:**", unsafe_allow_html=True)
+            st.markdown(f"#### {get_icon('alert-triangle', 'lucide', 16, '#720707')} Detailed Error Report:", unsafe_allow_html=True)
             for i, error in enumerate(results['errors'], 1):
                 st.text(f"{i}. {error}")
             
             # Add suggestions for common errors
             st.markdown("---")
-            st.markdown(f"**{get_icon('lightbulb', 'lucide', 16, '#fbbf24')} Common Solutions:**", unsafe_allow_html=True)
+            st.markdown(f"#### {get_icon('lightbulb', 'lucide', 16, '#fbbf24')} Common Solutions:", unsafe_allow_html=True)
             st.markdown("""
             - **Invalid quantity/price:** Remove text, fix decimal separators (use . not ,)
             - **Missing data:** Fill empty cells or remove incomplete rows
@@ -3750,7 +3737,7 @@ if uploaded_file is not None:
                     if error_count > 0:
                         st.markdown(f'<div style="color: #f59e0b; background-color: #fffbeb; padding: 8px; border-radius: 4px; border: 1px solid #fed7aa;">{get_icon("alert-triangle", "lucide", 16, "#f59e0b")} {error_count} rows failed to import</div>', unsafe_allow_html=True)
                         with st.expander(f"{get_icon('list', 'lucide', 16, '#666666')} View import errors", expanded=True):
-                            st.markdown(f"**{get_icon('alert-triangle', 'lucide', 16, '#710303')} Detailed Error Report:**", unsafe_allow_html=True)
+                            st.markdown(f"#### {get_icon('alert-triangle', 'lucide', 16, '#710303')} Detailed Error Report:", unsafe_allow_html=True)
                             for i, error in enumerate(errors, 1):
                                 st.text(f"{i}. {error}")
                     
