@@ -2,9 +2,6 @@ import pandas as pd
 from binance.client import Client
 from datetime import datetime
 
-# Initialize Binance client
-binance_client = Client()
-
 def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=None):
     """
     Fetch OHLCV historical data from Binance.
@@ -19,9 +16,12 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
         pd.DataFrame: Columns - timestamp, open, high, low, close, volume
     """
     try:
+        # Initialize Binance client only when needed, with error handling
+        binance_client = Client()
         klines = binance_client.get_historical_klines(symbol, interval, start_str, end_str)
     except Exception as e:
-        # Return empty dataframe if symbol doesn't exist
+        # Return empty dataframe if API fails or symbol doesn't exist
+        print(f"Binance API error for {symbol}: {e}")
         return pd.DataFrame()
 
     df = pd.DataFrame(klines, columns=[
@@ -71,6 +71,8 @@ def get_current_prices(symbols: list) -> dict:
     prices = {}
     
     try:
+        # Initialize Binance client only when needed, with error handling
+        binance_client = Client()
         # Get ticker prices from Binance
         tickers = binance_client.get_all_tickers()
         ticker_dict = {ticker['symbol']: float(ticker['price']) for ticker in tickers}
@@ -87,6 +89,7 @@ def get_current_prices(symbols: list) -> dict:
                 
     except Exception as e:
         # Return default prices if API fails
+        print(f"Binance API error for price fetching: {e}")
         for symbol in symbols:
             prices[symbol] = 0.0
     
