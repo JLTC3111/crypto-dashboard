@@ -15,6 +15,20 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
     Returns:
         pd.DataFrame: Columns - timestamp, open, high, low, close, volume
     """
+    # Check if we're in Streamlit Cloud environment first
+    import os
+    is_cloud = any([
+        os.getenv('STREAMLIT_SHARING_MODE'),
+        os.getenv('STREAMLIT_CLOUD'),
+        'streamlit.app' in os.getenv('HOSTNAME', ''),
+        '/app' in os.getcwd(),
+        '/mount/src' in os.getcwd()  # New Streamlit Cloud path
+    ])
+    
+    if is_cloud:
+        print(f"Streamlit Cloud detected, using mock data for {symbol}")
+        return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
+    
     try:
         # Initialize Binance client only when needed, with error handling
         binance_client = Client()
@@ -25,24 +39,13 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
             return pd.DataFrame()
             
     except Exception as e:
-        # Enhanced error handling for Streamlit Cloud deployment
+        # Enhanced error handling for any API failures
         print(f"Binance API error for {symbol}: {e}")
         print(f"Error type: {type(e).__name__}")
         
-        # Check if we're in Streamlit Cloud environment (common indicators)
-        import os
-        is_cloud = any([
-            os.getenv('STREAMLIT_SHARING_MODE'),
-            os.getenv('STREAMLIT_CLOUD'),
-            'streamlit.app' in os.getenv('HOSTNAME', ''),
-            '/app' in os.getcwd()
-        ])
-        
-        if is_cloud:
-            print(f"Detected Streamlit Cloud environment, using fallback for {symbol}")
-            return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
-        
-        return pd.DataFrame()
+        # Return mock data as fallback
+        print(f"Using fallback mock data for {symbol}")
+        return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
 
     try:
         df = pd.DataFrame(klines, columns=[
@@ -61,7 +64,7 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
         
     except Exception as e:
         print(f"Error processing Binance data for {symbol}: {e}")
-        return pd.DataFrame()
+        return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
 
 def generate_mock_data(symbol: str, start_str: str, end_str: str):
     """
@@ -213,6 +216,39 @@ def get_current_prices(symbols: list) -> dict:
     """
     prices = {}
     
+    # Check if we're in Streamlit Cloud environment first
+    import os
+    is_cloud = any([
+        os.getenv('STREAMLIT_SHARING_MODE'),
+        os.getenv('STREAMLIT_CLOUD'),
+        'streamlit.app' in os.getenv('HOSTNAME', ''),
+        '/app' in os.getcwd(),
+        '/mount/src' in os.getcwd()  # New Streamlit Cloud path
+    ])
+    
+    if is_cloud:
+        print("Streamlit Cloud detected, using mock prices")
+        # Mock prices for demo purposes
+        mock_prices = {
+            'BTC': 60000,
+            'ETH': 3000,
+            'SOL': 150,
+            'ADA': 0.5,
+            'DOGE': 0.1,
+            'BNB': 300,
+            'XRP': 0.6,
+            'LTC': 100,
+            'MATIC': 0.8,
+            'DOT': 5,
+            'USDT': 1.0,
+            'USDC': 1.0,
+        }
+        
+        for symbol in symbols:
+            symbol_upper = symbol.upper()
+            prices[symbol] = mock_prices.get(symbol_upper, 100.0)  # Default to $100
+        return prices
+    
     try:
         # Initialize Binance client only when needed, with error handling
         binance_client = Client()
@@ -231,40 +267,28 @@ def get_current_prices(symbols: list) -> dict:
                 prices[symbol] = 0.0
                 
     except Exception as e:
-        # Enhanced error handling for Streamlit Cloud deployment
+        # Enhanced error handling - always use mock data as fallback
         print(f"Binance API error for price fetching: {e}")
+        print("Using mock prices as fallback")
         
-        # Check if we're in Streamlit Cloud environment
-        import os
-        is_cloud = any([
-            os.getenv('STREAMLIT_SHARING_MODE'),
-            os.getenv('STREAMLIT_CLOUD'),
-            'streamlit.app' in os.getenv('HOSTNAME', ''),
-            '/app' in os.getcwd()
-        ])
+        # Mock prices for demo purposes
+        mock_prices = {
+            'BTC': 60000,
+            'ETH': 3000,
+            'SOL': 150,
+            'ADA': 0.5,
+            'DOGE': 0.1,
+            'BNB': 300,
+            'XRP': 0.6,
+            'LTC': 100,
+            'MATIC': 0.8,
+            'DOT': 5,
+            'USDT': 1.0,
+            'USDC': 1.0,
+        }
         
-        if is_cloud:
-            print("Detected Streamlit Cloud environment, using mock prices")
-            # Mock prices for demo purposes
-            mock_prices = {
-                'BTC': 60000,
-                'ETH': 3000,
-                'SOL': 150,
-                'ADA': 0.5,
-                'DOGE': 0.1,
-                'BNB': 300,
-                'XRP': 0.6,
-                'LTC': 100,
-                'MATIC': 0.8,
-                'DOT': 5,
-            }
-            
-            for symbol in symbols:
-                symbol_upper = symbol.upper()
-                prices[symbol] = mock_prices.get(symbol_upper, 100.0)  # Default to $100
-        else:
-            # Return default prices if API fails in local environment
-            for symbol in symbols:
-                prices[symbol] = 0.0
+        for symbol in symbols:
+            symbol_upper = symbol.upper()
+            prices[symbol] = mock_prices.get(symbol_upper, 100.0)  # Default to $100
     
     return prices

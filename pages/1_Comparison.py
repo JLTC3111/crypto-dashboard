@@ -37,7 +37,8 @@ is_cloud = any([
     os.getenv('STREAMLIT_SHARING_MODE'),
     os.getenv('STREAMLIT_CLOUD'),
     'streamlit.app' in os.getenv('HOSTNAME', ''),
-    '/app' in os.getcwd()
+    '/app' in os.getcwd(),
+    '/mount/src' in os.getcwd()  # New Streamlit Cloud path
 ])
 
 if is_cloud and (history1 is not None and not history1.empty and history2 is not None and not history2.empty):
