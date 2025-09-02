@@ -31,9 +31,41 @@ with st.spinner(f"Fetching data for {selection1} and {selection2}..."):
     history1 = get_price_history(symbol1)
     history2 = get_price_history(symbol2)
 
-if history1 is None or history1.empty or history2 is None or history2.empty:
-    st.error("No historical data available for one or both assets.")
+# Check if we're using mock data (Streamlit Cloud fallback)
+import os
+is_cloud = any([
+    os.getenv('STREAMLIT_SHARING_MODE'),
+    os.getenv('STREAMLIT_CLOUD'),
+    'streamlit.app' in os.getenv('HOSTNAME', ''),
+    '/app' in os.getcwd()
+])
+
+if is_cloud and (history1 is not None and not history1.empty and history2 is not None and not history2.empty):
+    st.warning("⚠️ **Demo Mode**: Using simulated data due to API restrictions on Streamlit Cloud. In production, this would show real-time data from Binance API.")
+
+# Check data availability and provide specific error messages
+data1_available = history1 is not None and not history1.empty
+data2_available = history2 is not None and not history2.empty
+
+if not data1_available and not data2_available:
+    st.error(f"❌ No historical data available for {selection1} and {selection2}. Please try different assets.")
+    st.info("💡 Tip: Some assets like USDT or staked tokens may not have trading pairs on Binance.")
     st.stop()
+elif not data1_available:
+    st.error(f"❌ No historical data available for {selection1}. Please select a different asset.")
+    st.info(f"Available data for {selection2}: {len(history2)} days")
+    st.stop()
+elif not data2_available:
+    st.error(f"❌ No historical data available for {selection2}. Please select a different asset.")
+    st.info(f"Available data for {selection1}: {len(history1)} days")
+    st.stop()
+
+# Show data availability info
+col_info1, col_info2 = st.columns(2)
+with col_info1:
+    st.success(f"✅ {selection1}: {len(history1)} days of data")
+with col_info2:
+    st.success(f"✅ {selection2}: {len(history2)} days of data")
 
 # --- Metrics Comparison ---
 price1 = history1['close']
