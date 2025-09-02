@@ -31,7 +31,7 @@ class GlobalLiquidityTracker:
     def __init__(self):
         self.cache_duration = 3600  # 1 hour cache
         self.fred_base_url = "https://api.stlouisfed.org/fred/series/observations"
-        self.fred_api_key = st.secrets.get("apis", {}).get("fred_api_key", "")
+        self.fred_api_key = st.secrets.get("fred_api", {}).get("key", "")
         
         # Metric configurations
         self.metrics_config = {
@@ -176,7 +176,7 @@ class GlobalLiquidityTracker:
     def fetch_crypto_metrics(_self) -> Dict[str, float]:
         """Fetch crypto-related liquidity metrics"""
         try:
-            # Get stablecoin market cap from CoinGecko
+            # Get stablecoin market cap from CoinGecko with retry logic
             stablecoin_url = "https://api.coingecko.com/api/v3/coins/markets"
             stablecoin_params = {
                 'vs_currency': 'usd',
@@ -186,8 +186,27 @@ class GlobalLiquidityTracker:
                 'page': 1
             }
             
-            stablecoin_response = requests.get(stablecoin_url, params=stablecoin_params, timeout=10)
-            stablecoin_response.raise_for_status()  # Raise exception for bad status codes
+            # Retry logic for rate limits
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    stablecoin_response = requests.get(stablecoin_url, params=stablecoin_params, timeout=10)
+                    if stablecoin_response.status_code == 429:  # Too Many Requests
+                        if attempt < max_retries - 1:
+                            wait_time = 2 ** attempt  # Exponential backoff
+                            print(f"Rate limited, waiting {wait_time} seconds before retry...")
+                            time.sleep(wait_time)
+                            continue
+                    stablecoin_response.raise_for_status()  # Raise exception for bad status codes
+                    break  # Success, exit retry loop
+                except requests.exceptions.HTTPError as e:
+                    if e.response.status_code == 429 and attempt < max_retries - 1:
+                        wait_time = 2 ** attempt
+                        print(f"Rate limited, waiting {wait_time} seconds before retry...")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise  # Re-raise if not rate limit or last attempt
             stablecoin_data = stablecoin_response.json()
             
             # Validate response is a list
@@ -236,10 +255,37 @@ class GlobalLiquidityTracker:
             # Week-over-week change for M2 (more responsive than monthly)
             if len(historical_data) >= 7:
                 prev_value = historical_data.iloc[-7]['value']
+                # Convert to scalar if needed
+                if hasattr(prev_value, 'item'):
+                    prev_value = prev_value.item()
                 change = ((current_value - prev_value) / prev_value) * 100
             else:
                 prev_value = historical_data.iloc[-2]['value']
+                # Convert to scalar if needed
+                if hasattr(prev_value, 'item'):
+                    prev_value = prev_value.item()
                 change = ((current_value - prev_value) / prev_value) * 100
+            
+            # Convert change to scalar if needed
+            try:
+                if hasattr(change, 'item'):
+                    change = change.item()
+                elif hasattr(change, 'iloc'):
+                    change = change.iloc[0]
+                elif hasattr(change, 'total_seconds'):  # timedelta object
+                    change = change.total_seconds
+                elif hasattr(change, 'dt') and hasattr(change.dt, 'total_seconds'):  # timedelta series
+                    change = change.dt.total_seconds().iloc[0]
+                else:
+                    change = float(change)  # type: ignore
+            except (ValueError, TypeError, AttributeError):
+                change = 0.0
+            
+            # Ensure change is now a float
+            try:
+                change = float(change) if not isinstance(change, float) else change  # type: ignore
+            except (ValueError, TypeError):
+                change = 0.0
             
             if change >= config['green_threshold']:
                 return 'green', change
@@ -252,10 +298,27 @@ class GlobalLiquidityTracker:
             # Week-over-week absolute change (more responsive than monthly)
             if len(historical_data) >= 7:
                 prev_value = historical_data.iloc[-7]['value']
+                # Convert to scalar if needed
+                if hasattr(prev_value, 'item'):
+                    prev_value = prev_value.item()
                 change = current_value - prev_value
             else:
                 prev_value = historical_data.iloc[-2]['value']
+                # Convert to scalar if needed
+                if hasattr(prev_value, 'item'):
+                    prev_value = prev_value.item()
                 change = current_value - prev_value
+            
+            # Convert change to scalar if needed
+            try:
+                if hasattr(change, 'item'):
+                    change = change.item()
+                elif hasattr(change, 'iloc'):
+                    change = change.iloc[0]  # type: ignore
+                else:
+                    change = float(change)  # type: ignore
+            except (ValueError, TypeError, AttributeError):
+                change = 0.0
             
             if change >= config['green_threshold']:
                 return 'green', change
@@ -333,8 +396,24 @@ class GlobalLiquidityTracker:
                     data = self.fetch_fred_data(config['fred_series'])
                     
                     if not data.empty:
-                        current_value = data.iloc[-1]['value']
-                        status, change = self.calculate_metric_status(metric_key, current_value, data)
+                        # Helper function to extract scalar values from pandas objects
+                        def to_scalar(value):
+                            try:
+                                if hasattr(value, 'item'):
+                                    return value.item()
+                                elif hasattr(value, 'iloc') and len(value) == 1:
+                                    return value.iloc[0]
+                                elif hasattr(value, 'values') and len(value.values) == 1:
+                                    return value.values[0]
+                                elif hasattr(value, 'total_seconds'):  # timedelta
+                                    return value.total_seconds()
+                                else:
+                                    return float(value)
+                            except (ValueError, TypeError, AttributeError):
+                                return 0.0  # fallback value
+                        
+                        current_value = to_scalar(data.iloc[-1]['value'])
+                        status, change = self.calculate_metric_status(metric_key, float(current_value), data)
                         
                         # Convert units for display
                         if config['unit'] == 'Trillions USD':
@@ -344,13 +423,31 @@ class GlobalLiquidityTracker:
                         else:
                             display_value = current_value
                         
+                        display_value = to_scalar(display_value)
+                        
+                        # Get the last updated date as scalar
+                        last_updated_raw = data.iloc[-1]['date']
+                        try:
+                            if hasattr(last_updated_raw, 'to_pydatetime'):
+                                last_updated = last_updated_raw.to_pydatetime()
+                            elif hasattr(last_updated_raw, 'item'):
+                                last_updated = last_updated_raw.item()
+                            else:
+                                last_updated = last_updated_raw
+                            
+                            # If it's still not a datetime, use fetch_time as fallback
+                            if not isinstance(last_updated, datetime):
+                                last_updated = fetch_time
+                        except (ValueError, TypeError, AttributeError):
+                            last_updated = fetch_time  # type: ignore
+                        
                         metrics[metric_key] = LiquidityMetric(
                             name=config['name'],
                             label=metric_key,  # Use the metric key as label
-                            value=display_value,
+                            value=float(display_value),
                             change=change,
                             status=status,
-                            last_updated=data.iloc[-1]['date'],  # Actual data observation date
+                            last_updated=last_updated,  # Actual data observation date
                             fetched_at=fetch_time,  # When we retrieved it
                             source='FRED',
                             unit=config['unit']

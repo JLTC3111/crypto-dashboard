@@ -139,7 +139,7 @@ def get_icon(icon_name: str, library: str = "lucide", size: int = 16, color: str
             "activity": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>',
             "dollar-sign": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
             "calendar": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-            "settings": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="m12 1 1.96 5.61a1 1 0 0 0 .966.69h5.89a1 1 0 0 1 .66 1.75l-4.77 4.18a1 1 0 0 0-.35 1.12L18.4 20a1 1 0 0 1-1.54 1.13L12 17.27l-4.86 3.86A1 1 0 0 1 5.6 20l2.04-5.55a1 1 0 0 0-.35-1.12L2.52 9.15a1 1 0 0 1 .66-1.75h5.89a1 1 0 0 0 .966-.69L12 1z"/></svg>',
+            "settings": f'<svg width="{size}" height="{size}" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#231F20" d="M60,13H48V4c0-2.211-1.789-4-4-4H20c-2.211,0-4,1.789-4,4v9H4c-2.211,0-4,1.789-4,4v43c0,2.211,1.789,4,4,4 h56c2.211,0,4-1.789,4-4V17C64,14.789,62.211,13,60,13z M18,4c0-1.104,0.896-2,2-2h24c1.104,0,2,0.896,2,2v9h-2V5 c0-0.553-0.447-1-1-1H21c-0.553,0-1,0.447-1,1v8h-2V4z M42,6v7H22V6H42z M62,60c0,1.104-0.896,2-2,2H4c-1.104,0-2-0.896-2-2V42h10v5 c0,0.553,0.447,1,1,1h6c0.553,0,1-0.447,1-1v-5h24v5c0,0.553,0.447,1,1,1h6c0.553,0,1-0.447,1-1v-5h10V60z M14,46V36h4v10H14z M46,46V36h4v10H46z M62,40H52v-5c0-0.553-0.447-1-1-1h-6c-0.553,0-1,0.447-1,1v5H20v-5c0-0.553-0.447-1-1-1h-6 c-0.553,0-1,0.447-1,1v5H2V17c0-1.104,0.896-2,2-2h56c1.104,0,2,0.896,2,2V40z"></path> </g></svg>',
             "save": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>',
             "info": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9,9h4v7"/><path d="m13,17h-3"/></svg>',
             "alert-circle": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
@@ -157,21 +157,8 @@ def get_icon(icon_name: str, library: str = "lucide", size: int = 16, color: str
             "filter": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3"/></svg>',
             "shield": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
             "bar-chart": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
-            "line-chart": f'''<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                             <path fill-rule="evenodd" clip-rule="evenodd" 
-                                   d="M12.0494 1.25H11.9506C11.2858 1.24997 10.7129 1.24994 10.2542 1.31161C9.76252 1.37771 9.29126 1.52677 8.90901 1.90901
-                                      C8.52676 2.29126 8.3777 2.76252 8.31161 3.25416C8.24993 3.7129 8.24996 4.28577 8.25 4.95063L8.25 7.37804
-                                      C8.01542 7.29512 7.76298 7.25001 7.5 7.25001H4.5C3.25736 7.25001 2.25 8.25737 2.25 9.50001V21.25H2
-                                      C1.58579 21.25 1.25 21.5858 1.25 22C1.25 22.4142 1.58579 22.75 2 22.75H22C22.4142 22.75 22.75 22.4142 22.75 22" 
-                                   fill="#1C274C"/>
-                             </svg>''',
-            "pie-chart": f'''<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" 
-                                  d="M12.75 3.75H12V12H20.25V11.25C20.25 7.10786 16.8921 3.75 12.75 3.75ZM13.5 10.5V5.29642
-                                     C16.214 5.63486 18.3651 7.78596 18.7036 10.5H13.5ZM4.5 13.5C4.5 10.4403 6.79027 7.91549 9.75 7.54642V14.25H16.4536
-                                     C16.0845 17.2097 13.5597 19.5 10.5 19.5C7.18629 19.5 4.5 16.8137 4.5 13.5Z" 
-                                  fill="#080341"/>
-                            </svg>''',
+            "line-chart": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0494 1.25H11.9506C11.2858 1.24997 10.7129 1.24994 10.2542 1.31161C9.76252 1.37771 9.29126 1.52677 8.90901 1.90901C8.52676 2.29126 8.3777 2.76252 8.31161 3.25416C8.24993 3.7129 8.24996 4.28577 8.25 4.95063L8.25 7.37804C8.01542 7.29512 7.76298 7.25001 7.5 7.25001H4.5C3.25736 7.25001 2.25 8.25737 2.25 9.50001V21.25H2C1.58579 21.25 1.25 21.5858 1.25 22C1.25 22.4142 1.58579 22.75 2 22.75H22C22.4142 22.75 22.75 22.4142 22.75 22C22.75 21.5858 22.4142 21.25 22 21.25H21.75V14.5C21.75 13.2574 20.7426 12.25 19.5 12.25H16.5C16.237 12.25 15.9846 12.2951 15.75 12.378L15.75 4.95064C15.75 4.28577 15.7501 3.71291 15.6884 3.25416C15.6223 2.76252 15.4732 2.29126 15.091 1.90902C14.7087 1.52677 14.2375 1.37771 13.7458 1.31161C13.2871 1.24994 12.7142 1.24997 12.0494 1.25ZM20.25 21.25V14.5C20.25 14.0858 19.9142 13.75 19.5 13.75H16.5C16.0858 13.75 15.75 14.0858 15.75 14.5V21.25H20.25ZM14.25 21.25V5.00001C14.25 4.2717 14.2484 3.80091 14.2018 3.45403C14.158 3.12873 14.0874 3.02677 14.0303 2.96967C13.9732 2.91258 13.8713 2.84197 13.546 2.79823C13.1991 2.7516 12.7283 2.75001 12 2.75001C11.2717 2.75001 10.8009 2.7516 10.454 2.79823C10.1287 2.84197 10.0268 2.91258 9.96967 2.96968C9.91258 3.02677 9.84197 3.12873 9.79823 3.45403C9.75159 3.80091 9.75 4.2717 9.75 5.00001V21.25H14.25ZM8.25 21.25V9.50001C8.25 9.08579 7.91421 8.75001 7.5 8.75001H4.5C4.08579 8.75001 3.75 9.08579 3.75 9.50001V21.25H8.25Z" fill="#1C274C"></path> </g></svg>',
+            "pie-chart": f'<svg fill="#000000" viewBox="0 0 32 32" xml:space="preserve" width="{size}" height="{size}"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="tree--map_1_" d="M30,30.36H2c-0.199,0-0.36-0.161-0.36-0.36V2c0-0.199,0.161-0.36,0.36-0.36h28 c0.199,0,0.36,0.161,0.36,0.36v28C30.36,30.199,30.199,30.36,30,30.36z M16.36,29.64h13.28V13.36H16.36V29.64z M2.36,29.64h13.28 v-7.28H2.36V29.64z M2.36,21.64h13.28V2.36H2.36V21.64z M23.36,12.64h6.279V2.36H23.36V12.64z M16.36,12.64h6.28V2.36h-6.28V12.64z"></path> <rect id="_Transparent_Rectangle" style="fill:none;" width="32" height="32"></rect> </g></svg>',
             "tag": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><circle cx="7" cy="7" r="3"/></svg>',
             "users": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 21-2-2m2-5a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>',
             "list": f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
@@ -618,28 +605,48 @@ def get_live_prices(coin_ids: pd.Series) -> Dict[str, Dict[str, float]]:
     """Fetch current price and market data for coins from CoinGecko."""
     if not coin_ids.any():
         return {}
-    try:
-        return cg.get_price(ids=list(coin_ids), vs_currencies='usd', include_market_cap='true', include_24hr_change='true')
-    except Exception as e:
-        st.error(f"CoinGecko API Error: {str(e)}")
-        return {}
+    
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            return cg.get_price(ids=list(coin_ids), vs_currencies='usd', include_market_cap='true', include_24hr_change='true')
+        except Exception as e:
+            if "429" in str(e) and attempt < max_retries - 1:  # Rate limit error
+                wait_time = 2 ** attempt  # Exponential backoff
+                st.warning(f"Rate limited, retrying in {wait_time} seconds...")
+                time_module.sleep(wait_time)
+                continue
+            st.error(f"CoinGecko API Error: {str(e)}")
+            return {}
+    
+    # Fallback return (should never reach here, but ensures all paths return)
+    return {}
 
 @st.cache_data(ttl=3600) 
 def get_coins_by_market_cap() -> List[tuple]:
     """Get top 250 coins by market cap from CoinGecko with fallback to top 200 list."""
-    try:
-        markets = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc', per_page=250, page=1)
-        return [(coin['name'], coin['symbol'].upper(), coin['id'], coin['market_cap']) for coin in markets]
-    except Exception:
-        # Fallback to our comprehensive top 200 crypto list
-        symbol_map = get_symbol_map()
-        fallback_data = []
-        for display_name, symbol in symbol_map.items():
-            # Extract coin name from display format "Bitcoin (BTC)" -> "Bitcoin"
-            coin_name = display_name.split(' (')[0]
-            coin_id = symbol.lower()  # Use symbol as coin_id for CoinGecko compatibility
-            fallback_data.append((coin_name, symbol, coin_id, 0))  # Market cap set to 0 as fallback
-        return fallback_data
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            markets = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc', per_page=250, page=1)
+            return [(coin['name'], coin['symbol'].upper(), coin['id'], coin['market_cap']) for coin in markets]
+        except Exception as e:
+            if "429" in str(e) and attempt < max_retries - 1:  # Rate limit error
+                wait_time = 2 ** attempt  # Exponential backoff
+                st.warning(f"Rate limited, retrying in {wait_time} seconds...")
+                time_module.sleep(wait_time)
+                continue
+            break  # Exit retry loop on non-rate-limit errors
+    
+    # Fallback to our comprehensive top 200 crypto list
+    symbol_map = get_symbol_map()
+    fallback_data = []
+    for display_name, symbol in symbol_map.items():
+        # Extract coin name from display format "Bitcoin (BTC)" -> "Bitcoin"
+        coin_name = display_name.split(' (')[0]
+        coin_id = symbol.lower()  # Use symbol as coin_id for CoinGecko compatibility
+        fallback_data.append((coin_name, symbol, coin_id, 0))  # Market cap set to 0 as fallback
+    return fallback_data
 
 def format_market_cap(market_cap: float) -> str:
     """Format market cap into a human-readable string (e.g., $1.5T, $250B, $50M)."""
@@ -706,7 +713,7 @@ def prepare_plot_df(df: pd.DataFrame, required_columns: List[str], use_include: 
 
     # Replace infinite values and drop rows where all required columns are NaN
     plot_df = plot_df.replace([float('inf'), float('-inf')], pd.NA)
-    plot_df = plot_df.dropna(subset=required_columns, how='all')
+    plot_df = plot_df.dropna(subset=required_columns, how='all')  # type: ignore
 
     # Ensure common sizing/value columns are finite and non-negative where appropriate
     for col in ['Current_Value', 'Portfolio_Weight', 'Abs_Current_Value', 'Investment_Amount', 'Cost_Basis', 'Total_Current_Value', 'Total_Value']:
@@ -787,7 +794,14 @@ def show_group_analysis(group_data: pd.DataFrame):
     with col4:
         if 'Purchase_Date' in group_data.columns:
             dates = pd.to_datetime(group_data['Purchase_Date'], errors='coerce')
-            date_range = (dates.max() - dates.min()).days if not dates.isna().all() else 0
+            # Check if all dates are NaT (null) before calculating range
+            try:
+                if pd.isna(dates).all():
+                    date_range = 0
+                else:
+                    date_range = (dates.max() - dates.min()).days
+            except (TypeError, AttributeError):
+                date_range = 0
             st.metric(display_icon_text("calendar", "Date Range", "lucide", 16, "#666666"), f"{date_range} days")
         else:
             st.metric(display_icon_text("calendar", "Date Range", "lucide", 16, "#666666"), "N/A")
@@ -798,8 +812,12 @@ def show_group_analysis(group_data: pd.DataFrame):
         if len(txn_data) > 0:
             txn_icon = get_icon('arrow-right' if txn_type == 'RESTRUCTURE_OUT' else 'arrow-left', 'lucide', 16, '#666666')
             st.markdown(f"**{txn_icon} {txn_type} Transactions:**", unsafe_allow_html=True)
-            display_cols = get_restructure_display_columns(txn_data)
-            st.dataframe(txn_data[display_cols], use_container_width=True)
+            # Ensure txn_data is a DataFrame before passing to get_restructure_display_columns
+            if isinstance(txn_data, pd.DataFrame):
+                display_cols = get_restructure_display_columns(txn_data)
+                st.dataframe(txn_data[display_cols], use_container_width=True)
+            else:
+                st.dataframe(txn_data, use_container_width=True)
 
 # ==================================================================================================
 # PORTFOLIO RESTRUCTURING SYSTEM
@@ -2424,8 +2442,7 @@ if not st.session_state.transactions.empty:
                 
                 # Holdings Distribution Chart (uses holdings calculation - includes RESTRUCTURE_IN, excludes RESTRUCTURE_OUT)
                 if len(holdings_chart_data) > 0:
-                    st.markdown(f"### {get_icon('pie-chart', 'lucide', 24
-                    , '#666666')} Current Holdings Distribution", unsafe_allow_html=True)
+                    st.markdown(f"### {get_icon('pie-chart', 'lucide', 24, '#666666')} Current Holdings Distribution", unsafe_allow_html=True)
                     
                     try:
                         # Since holdings_chart_data now comes from net holdings, no need to group by symbol
