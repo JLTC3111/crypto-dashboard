@@ -14,6 +14,34 @@ import math
 
 # NOTE: 3D visualizations removed — no conditional numpy import required
 
+# ============================================================================
+# COLOR SYSTEM - Centralized color constants for consistent theming
+# ============================================================================
+class AppColors:
+    """Centralized color constants for the entire application"""
+    
+    # Core Brand Colors
+    RED_DANGER = "#dc2626"      # Primary red for losses, sells, deletions
+    RED_LIGHT = "#ef4444"       # Lighter red for gradients
+    GREEN_SUCCESS = "#16a34a"   # Primary green for gains, buys, success
+    BLUE_PRIMARY = "#3b82f6"    # Primary blue for neutral actions
+    
+    # Background Colors with Alpha
+    RED_BG_LIGHT = "rgba(239, 68, 68, 0.08)"
+    RED_BG_MEDIUM = "rgba(239, 68, 68, 0.1)"
+    
+    # Neutral Colors
+    GRAY_TEXT = "#666666"
+    
+    # Gradients
+    RED_GRADIENT = f"linear-gradient(135deg, {RED_LIGHT} 0%, {RED_DANGER} 100%)"
+
+# Global color constants for easy access
+DANGER_COLOR = AppColors.RED_DANGER
+SUCCESS_COLOR = AppColors.GREEN_SUCCESS
+PRIMARY_COLOR = AppColors.BLUE_PRIMARY
+NEUTRAL_COLOR = AppColors.GRAY_TEXT
+
 # Import Supabase authentication and database functions
 from supabase_config import (
     SupabaseAuth, PortfolioDatabase, require_auth, 
@@ -181,7 +209,7 @@ def create_clickable_icon_button(icon_name: str, text: str, button_key: str, lib
         bg_gradient = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
         text_color = "white"
     elif button_style == "danger":
-        bg_gradient = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
+        bg_gradient = AppColors.RED_GRADIENT
         text_color = "white"
     elif button_style == "success":
         bg_gradient = "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)"
@@ -331,7 +359,7 @@ st.markdown("""
         font-weight: 600 !important;
     }
     .sell-quantity {
-        color: #dc2626 !important;
+        color: {DANGER_COLOR} !important;
         font-weight: 600 !important;
         font-style: italic !important;
     }
@@ -1577,7 +1605,7 @@ with st.sidebar.expander("ⓘ How Portfolio Updates Work"):
     - Add positive quantities to increase holdings
     - Use current market price as default
     
-    **{get_icon('minus-circle', 'lucide', 16, '#dc2626')} Sell Transactions:**
+    **{get_icon('minus-circle', 'lucide', 16, DANGER_COLOR)} Sell Transactions:**
     - Select "Sell" type to reduce holdings
     - Negative quantities automatically applied
     - Tracks realized gains/losses
@@ -1587,8 +1615,8 @@ with st.sidebar.expander("ⓘ How Portfolio Updates Work"):
     - Change quantities, prices, or dates
     - Portfolio recalculates automatically
     
-    **{get_icon('trash-2', 'lucide', 16, '#dc2626')} Delete Transactions:**
-    - Click {get_icon('trash-2', 'lucide', 16, '#dc2626')} button to remove entries
+    **{get_icon('trash-2', 'lucide', 16, DANGER_COLOR)} Delete Transactions:**
+    - Click {get_icon('trash-2', 'lucide', 16, DANGER_COLOR)} button to remove entries
     - Confirmation dialog prevents accidents
     
     **{get_simple_icon('trending-up')} Auto-Calculations:**
@@ -2241,14 +2269,14 @@ if not st.session_state.transactions.empty:
                     if val > 0:
                         return 'color: #16a34a; font-weight: bold'
                     elif val < 0:
-                        return 'color: #dc2626; font-weight: bold'
+                        return f'color: {DANGER_COLOR}; font-weight: bold'
                 return ''
             
             def style_quantity(val):
                 """Style quantity based on transaction type"""
                 if isinstance(val, (int, float)):
                     if val < 0:
-                        return 'color: #dc2626; font-weight: 600; font-style: italic; background-color: rgba(239, 68, 68, 0.08)'
+                        return f'color: {DANGER_COLOR}; font-weight: 600; font-style: italic; background-color: {AppColors.RED_BG_LIGHT}'
                     else:
                         return 'color: #16a34a; font-weight: 600; background-color: rgba(34, 197, 94, 0.08)'
                 return ''
@@ -2256,7 +2284,7 @@ if not st.session_state.transactions.empty:
             def style_transaction_type(val):
                 """Style transaction type column"""
                 if 'SELL' in str(val):
-                    return 'color: #dc2626; font-weight: bold; background-color: rgba(239, 68, 68, 0.1)'
+                    return f'color: {DANGER_COLOR}; font-weight: bold; background-color: {AppColors.RED_BG_MEDIUM}'
                 else:
                     return 'color: #16a34a; font-weight: bold; background-color: rgba(34, 197, 94, 0.1)'
             
@@ -2387,13 +2415,13 @@ if not st.session_state.transactions.empty:
                                     
                                     transaction_icon = "[SELL]" if quantity_val < 0 else "[BUY]"
                                     transaction_type = "SELL" if quantity_val < 0 else "BUY"
-                                    transaction_color = "#dc2626" if quantity_val < 0 else "#16a34a"
+                                    transaction_color = DANGER_COLOR if quantity_val < 0 else SUCCESS_COLOR
                                     
                                     st.markdown(f"**{coin_name_val} ({symbol_val})** <span style='color: {transaction_color}; font-size: 1.1em;'>{transaction_icon}</span>", unsafe_allow_html=True)
                                     
                                     # Color-coded quantity display with icons
                                     qty_icon = "[DOWN]" if quantity_val < 0 else "[UP]"
-                                    qty_style = "color: #dc2626; font-weight: 600; font-style: italic" if quantity_val < 0 else "color: #16a34a; font-weight: 600"
+                                    qty_style = f"color: {DANGER_COLOR}; font-weight: 600; font-style: italic" if quantity_val < 0 else f"color: {SUCCESS_COLOR}; font-weight: 600"
                                     st.markdown(f"<span style='{qty_style}'>{qty_icon} Qty: {abs(quantity_val):.1f}</span> | P&L: {percentage_change_val:+.1f}%", unsafe_allow_html=True)
                                 
                                 with col2:
@@ -3252,7 +3280,7 @@ if 'last_import_results' in st.session_state:
     if results['error_count'] > 0 and results['errors']:
         with st.expander(f"{get_icon('list', 'lucide', 16, '#666666')} View {results['error_count']} Import Errors", expanded=False):
             st.markdown(f"**Import Time:** {results['timestamp']}")
-            st.markdown(f"**{get_icon('alert-triangle', 'lucide', 16, '#dc2626')} Detailed Error Report:**", unsafe_allow_html=True)
+            st.markdown(f"**{get_icon('alert-triangle', 'lucide', 16, '#720707')} Detailed Error Report:**", unsafe_allow_html=True)
             for i, error in enumerate(results['errors'], 1):
                 st.text(f"{i}. {error}")
             
@@ -3722,17 +3750,17 @@ if uploaded_file is not None:
                     if error_count > 0:
                         st.markdown(f'<div style="color: #f59e0b; background-color: #fffbeb; padding: 8px; border-radius: 4px; border: 1px solid #fed7aa;">{get_icon("alert-triangle", "lucide", 16, "#f59e0b")} {error_count} rows failed to import</div>', unsafe_allow_html=True)
                         with st.expander(f"{get_icon('list', 'lucide', 16, '#666666')} View import errors", expanded=True):
-                            st.markdown(f"**{get_icon('alert-triangle', 'lucide', 16, '#dc2626')} Detailed Error Report:**", unsafe_allow_html=True)
+                            st.markdown(f"**{get_icon('alert-triangle', 'lucide', 16, '#710303')} Detailed Error Report:**", unsafe_allow_html=True)
                             for i, error in enumerate(errors, 1):
                                 st.text(f"{i}. {error}")
                     
                     # If no success and no errors, something went wrong
                     if success_count == 0 and error_count == 0:
-                        st.markdown(f'<div style="color: #dc2626; background-color: #fef2f2; padding: 8px; border-radius: 4px; border: 1px solid #fecaca;">{get_icon("x-circle", "lucide", 16, "#dc2626")} No data was processed. Please check your CSV format and try again.</div>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="color: #710304; background-color: #fef2f2; padding: 8px; border-radius: 4px; border: 1px solid #fecaca;">{get_icon("x-circle", "lucide", 16, "#710306")} No data was processed. Please check your CSV format and try again.</div>', unsafe_allow_html=True)
                         st.markdown(f'<div style="color: #3b82f6; background-color: #eff6ff; padding: 8px; border-radius: 4px; border: 1px solid #bfdbfe;">{get_icon("info", "lucide", 16, "#3b82f6")} Make sure your CSV has the required columns: Coin_Name, Symbol, Quantity, Purchase_Price</div>', unsafe_allow_html=True)
     
     except Exception as e:
-        st.markdown(f'<div style="color: #dc2626; background-color: #fef2f2; padding: 8px; border-radius: 4px; border: 1px solid #fecaca;">{get_icon("x-circle", "lucide", 16, "#dc2626")} Error reading file: {str(e)}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="color: #710305; background-color: #fef2f2; padding: 8px; border-radius: 4px; border: 1px solid #fecaca;">{get_icon("x-circle", "lucide", 16, "#710307")} Error reading file: {str(e)}</div>', unsafe_allow_html=True)
 
 # Download template
 st.markdown("---")
