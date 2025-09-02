@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
-from helpers.pricing import get_price_history
-from helpers.pricing import get_price_history, fetch_binance_history
+from helpers.pricing import get_price_history, get_current_prices
 from helpers.risk import max_drawdown, sharpe_ratio, value_at_risk
 from helpers.export import export_pdf
 from helpers.crypto_config import get_sorted_crypto_list, get_symbol_from_name, get_symbol_map
@@ -20,38 +19,43 @@ crypto_list = get_sorted_crypto_list()
 selection = st.selectbox("Choose an asset:", crypto_list)
 symbol = symbol_map[selection]
 
-# Fetch historical data
+# Fetch historical data and capture status
 with st.spinner(f"Fetching data for {selection}..."):
-    history = get_price_history(symbol)
+    # Redirect stdout to capture API status messages
+    import io
+    import sys
+    old_stdout = sys.stdout
+    sys.stdout = captured_output = io.StringIO()
+    
+    try:
+        history = get_price_history(symbol)
+        output_text = captured_output.getvalue()
+    finally:
+        sys.stdout = old_stdout
 
-# Check if data was successfully fetched first
+# Determine data source from captured output
+data_source = "Unknown"
+if "Binance data fetched" in output_text:
+    data_source = "Binance API"
+elif "CoinGecko data fetched" in output_text:
+    data_source = "CoinGecko API"
+elif "Created minimal data" in output_text:
+    data_source = "Fallback Data"
+
+# Check if data was successfully fetched
 if history is None or history.empty:
-    st.error("❌ **No Data Available**: Unable to fetch price data from Binance API. Please check your internet connection or try again later.")
+    st.error("❌ **No Data Available**: Unable to fetch price data from any API. Please check your internet connection or try again later.")
     st.stop()
 
-# Only show success indicator if we actually have data
-has_binance_api = False
-try:
-    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
-except:
-    pass
-
-if has_binance_api:
-    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
+# Show data source status
+if data_source == "Binance API":
+    st.success(f"🔑 **Live Data**: Using real-time data from {data_source}")
+elif data_source == "CoinGecko API":
+    st.info(f"🦎 **Alternative Data**: Using data from {data_source} (Binance unavailable)")
 else:
-    st.info("📊 **Public Data**: Using public Binance API (no authentication required for price data)")
+    st.warning(f"📊 **Backup Data**: Using {data_source} (APIs temporarily unavailable)")
 
 # Use 'close' prices
-
-# Check data source and provide user feedback
-import os
-is_cloud = any([
-    os.getenv('STREAMLIT_SHARING_MODE'),
-    os.getenv('STREAMLIT_CLOUD'),
-    'streamlit.app' in os.getenv('HOSTNAME', ''),
-    '/app' in os.getcwd(),
-    '/mount/src' in os.getcwd()
-])
 
 # Check data source and provide user feedback
 has_binance_api = False
@@ -133,20 +137,30 @@ with col5:
 st.subheader("Performance Ratios")
 r_col1, r_col2 = st.columns(2)
 
-# Fetch ratio data
-if symbol != 'BTC':
-    with st.spinner(f"Fetching {symbol}/BTC data..."):
-        btc_ratio_history = fetch_binance_history(f"{symbol}BTC")
-    if btc_ratio_history is not None and not btc_ratio_history.empty:
-        latest_btc_ratio = float(btc_ratio_history["close"].iloc[-1])
-        r_col1.metric(f"{symbol}/BTC", f"{latest_btc_ratio:.8f}")
-
-if symbol != 'ETH':
-    with st.spinner(f"Fetching {symbol}/ETH data..."):
-        eth_ratio_history = fetch_binance_history(f"{symbol}ETH")
-    if eth_ratio_history is not None and not eth_ratio_history.empty:
-        latest_eth_ratio = float(eth_ratio_history["close"].iloc[-1])
-        r_col2.metric(f"{symbol}/ETH", f"{latest_eth_ratio:.8f}")
+# Get current prices for ratio calculations
+if symbol not in ['BTC', 'ETH']:
+    try:
+        # Get current prices for ratios
+        ratio_symbols = []
+        if symbol != 'BTC':
+            ratio_symbols.append('BTC')
+        if symbol != 'ETH':
+            ratio_symbols.append('ETH')
+        
+        if ratio_symbols:
+            ratio_symbols.append(symbol)
+            current_prices = get_current_prices(ratio_symbols)
+            
+            if symbol != 'BTC' and current_prices.get('BTC', 0) > 0 and current_prices.get(symbol, 0) > 0:
+                btc_ratio = current_prices[symbol] / current_prices['BTC']
+                r_col1.metric(f"{symbol}/BTC", f"{btc_ratio:.8f}")
+            
+            if symbol != 'ETH' and current_prices.get('ETH', 0) > 0 and current_prices.get(symbol, 0) > 0:
+                eth_ratio = current_prices[symbol] / current_prices['ETH']
+                r_col2.metric(f"{symbol}/ETH", f"{eth_ratio:.8f}")
+    except Exception as e:
+        r_col1.info("Ratio data temporarily unavailable")
+        r_col2.info("Ratio data temporarily unavailable")
 
 
 # --- Price Chart ---
