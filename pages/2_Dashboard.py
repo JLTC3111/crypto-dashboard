@@ -24,6 +24,30 @@ symbol = symbol_map[selection]
 with st.spinner(f"Fetching data for {selection}..."):
     history = get_price_history(symbol)
 
+# Check data source and provide user feedback
+import os
+is_cloud = any([
+    os.getenv('STREAMLIT_SHARING_MODE'),
+    os.getenv('STREAMLIT_CLOUD'),
+    'streamlit.app' in os.getenv('HOSTNAME', ''),
+    '/app' in os.getcwd(),
+    '/mount/src' in os.getcwd()
+])
+
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+# Data source indicator
+if has_binance_api:
+    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
+elif not is_cloud:
+    st.info("📊 **Public API**: Using public Binance API data")
+else:
+    st.warning("⚠️ **Demo Mode**: Using simulated data")
+
 if history is None or history.empty:
     st.error("No historical data available.")
     st.stop()
