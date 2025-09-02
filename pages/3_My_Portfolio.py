@@ -503,7 +503,7 @@ def get_live_prices(coin_ids: pd.Series) -> Dict[str, Dict[str, float]]:
         st.error(f"CoinGecko API Error: {str(e)}")
         return {}
 
-@st.cache_data(ttl=3600)  # Cache for 1 hour
+@st.cache_data(ttl=3600) 
 def get_coins_by_market_cap() -> List[tuple]:
     """Get top 250 coins by market cap from CoinGecko with fallback to top 200 list."""
     try:
@@ -1351,9 +1351,24 @@ if 'show_delete_confirm' not in st.session_state:
 
 # Functions moved above for proper ordering
 
+def reset_transaction_form():
+    """Reset all transaction form fields to default values"""
+    if 'form_quantity' in st.session_state:
+        st.session_state.form_quantity = 1.00
+    if 'form_purchase_price' in st.session_state:
+        st.session_state.form_purchase_price = 0.01
+    if 'form_target_sell_price' in st.session_state:
+        st.session_state.form_target_sell_price = 0.01
+    if 'form_purchase_date' in st.session_state:
+        st.session_state.form_purchase_date = datetime.now().date()
+    if 'form_time_text' in st.session_state:
+        st.session_state.form_time_text = datetime.now().strftime("%H:%M:%S")
+    if 'user_modified_prices' in st.session_state:
+        st.session_state.user_modified_prices = {'purchase': False, 'target': False}
+
 def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purchase_date, purchase_time, target_sell_price=None, transaction_type='BUY', restructure_group=None):
     """Add a new transaction to the portfolio with restructuring support"""
-    global db  # Declare db as global to avoid scope issues
+    global db  # Declare db as global at the beginning of the function
     current_time = datetime.now()
     # Generate transaction_id with date/time for audit purposes only
     transaction_id = f"{coin_id}_{current_time.strftime('%Y%m%d_%H%M%S')}"
@@ -1367,7 +1382,7 @@ def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purcha
         'purchase_price': purchase_price,
         'current_price': 0,  # Will be updated by live data
         'purchase_date': purchase_date.strftime('%Y-%m-%d') if hasattr(purchase_date, 'strftime') else str(purchase_date),
-        'purchase_time': purchase_time.strftime('%H:%M') if hasattr(purchase_time, 'strftime') else str(purchase_time),
+        'purchase_time': purchase_time.strftime('%H:%M:%S') if hasattr(purchase_time, 'strftime') else str(purchase_time),
         'target_sell_price': target_sell_price or 0,
         'current_value': 0,  # Will be calculated
         'profit_loss': 0,  # Will be calculated
@@ -1386,6 +1401,14 @@ def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purcha
     try:
         st.info(f"[ADDING] Adding {transaction_type} transaction for {symbol}...")
         
+        # Validate date and time formatting before proceeding
+        try:
+            formatted_date = purchase_date.strftime('%Y-%m-%d') if hasattr(purchase_date, 'strftime') else str(purchase_date)
+            formatted_time = purchase_time.strftime('%H:%M:%S') if hasattr(purchase_time, 'strftime') else str(purchase_time)
+        except Exception as format_error:
+            st.error(f"[ERROR] Date/time formatting error: {format_error}")
+            return
+        
         # Debug: Log transaction details before submission
         with st.expander("[DEBUG] Pre-submission Debug", expanded=True):
             st.write("**Transaction Details:**")
@@ -1399,63 +1422,55 @@ def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purcha
             st.json(new_row)
         
         # Add small delay to prevent race conditions
-        import time
-        time.sleep(0.5)
+        time_module.sleep(0.5)
         
         st.info("📡 Calling database add_transaction...")
         result = db.add_transaction(st.session_state.user_id, new_row)
         st.info(f"[INFO] Database returned: {result} (type: {type(result)})")
         
-        # Log the result for debugging
-        if result is None:
-            st.error("[ERROR] Database returned None - connection or authentication issue")
-            # Try to reinitialize database connection
-            st.warning("[RETRY] Attempting to reinitialize database connection...")
-            try:
-                # Reinitialize the database instance
-                from supabase_config import PortfolioDatabase
-                db = PortfolioDatabase()
-                st.info("[SUCCESS] Database connection reinitialized. Please try again.")
-            except Exception as reinit_error:
-                st.error(f"[ERROR] Failed to reinitialize: {reinit_error}")
+        # Check for successful insertion - result should be the inserted data record
+        if result is not None and isinstance(result, dict):
+            # Success case - we got the inserted record back
+            st.success(f"[SUCCESS] {transaction_type} transaction for {symbol} added successfully!")
+            st.info(f"[SUCCESS] Transaction ID: {result.get('transaction_id', 'Unknown')}")
             
-            with st.expander("[DEBUG] Debug Info"):
-                st.write("Result:", result)
-                st.write("Transaction data:", new_row)
-                st.write("User ID:", st.session_state.user_id)
-        elif result is False:
-            st.error("[ERROR] Database explicitly returned False - transaction rejected")
-            with st.expander("[DEBUG] Debug Info"):
-                st.write("Result:", result)
-                st.write("Transaction data:", new_row)
-                st.write("User ID:", st.session_state.user_id)
-        elif result:
-            # Success case - clear any cached data that might interfere
+            # Clear any cached data that might interfere
             if 'transactions' in st.session_state:
                 del st.session_state['transactions']
             if 'portfolio_df' in st.session_state:
                 del st.session_state['portfolio_df']
             
-            st.success(f"[SUCCESS] {transaction_type} transaction for {symbol} added successfully!")
             # Refresh data with price update for new transactions
             refresh_portfolio_data(skip_price_update=False)
             
             # Add delay before rerun to ensure database consistency
-            time.sleep(1.0)
+            time_module.sleep(1.0)
             
             # Clear form state to prevent interference with next transaction
             if 'selected_coin_info' in st.session_state:
                 del st.session_state['selected_coin_info']
             
+            # Reset form fields for the next transaction
+            reset_transaction_form()
+            
             st.rerun()
+            
         else:
-            # Unexpected falsy result
-            st.error(f"[ERROR] Unexpected database result: {result}")
-            with st.expander("[DEBUG] Debug Info"):
-                st.write("Result type:", type(result))
-                st.write("Result value:", result)
-                st.write("Transaction data:", new_row)
-                st.write("User ID:", st.session_state.user_id)
+            # Failed to insert - result is None or not a dict
+            st.error("[ERROR] Failed to add transaction to database")
+            with st.expander("[DEBUG] Debug Info", expanded=True):
+                st.write("**Database Result:**", result)
+                st.write("**Result Type:**", type(result))
+                st.write("**Transaction Data:**", new_row)
+                st.write("**User ID:**", st.session_state.user_id)
+                
+            # Try to reinitialize database connection
+            st.warning("[RETRY] Attempting to reinitialize database connection...")
+            try:
+                db = PortfolioDatabase()
+                st.info("[SUCCESS] Database connection reinitialized. Please try again.")
+            except Exception as reinit_error:
+                st.error(f"[ERROR] Failed to reinitialize: {reinit_error}")
                 
     except Exception as e:
         st.error(f"[ERROR] Database exception: {str(e)}")
@@ -1465,21 +1480,18 @@ def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purcha
         if "connection" in str(e).lower() or "timeout" in str(e).lower():
             st.warning("[RECONNECT] Connection issue detected. Attempting to reconnect...")
             try:
-                # Reinitialize the database instance
-                from supabase_config import PortfolioDatabase
                 db = PortfolioDatabase()
                 st.info("[SUCCESS] Reconnected. Please try adding the transaction again.")
             except Exception as reconnect_error:
                 st.error(f"[ERROR] Reconnection failed: {reconnect_error}")
         
         # Debug info for troubleshooting
-        with st.expander("[DEBUG] Debug Info"):
-            st.write("Error details:", str(e))
-            st.write("Error type:", type(e).__name__)
-            st.write("Transaction data:", new_row)
-            st.write("User ID:", st.session_state.user_id)
+        with st.expander("[DEBUG] Error Debug Info", expanded=True):
+            st.write("**Error Details:**", str(e))
+            st.write("**Error Type:**", type(e).__name__)
+            st.write("**Transaction Data:**", new_row)
+            st.write("**User ID:**", st.session_state.user_id)
             # Try to get more detailed error info
-            import traceback
             st.code(traceback.format_exc())
 
 def delete_transaction(transaction_id):
@@ -1585,8 +1597,6 @@ with st.sidebar.expander("ⓘ How Portfolio Updates Work"):
     - Portfolio metrics refresh automatically
     """, unsafe_allow_html=True)
 
-# Only load coin data when needed (for add transaction form)
-# Use session state to cache and avoid unnecessary API calls
 if 'coins_data' not in st.session_state or st.session_state.coins_data is None:
     with st.spinner("Loading coin data..."):
         st.session_state.coins_data = get_coins_by_market_cap()
@@ -1612,10 +1622,19 @@ else:
         filtered_options = coin_options
     
     # Coin selection outside form for dynamic price updates
-    selected_coin_option = st.sidebar.selectbox("Select Coin", options=filtered_options, help="Coins ordered by market cap")
+    selected_coin_option = st.sidebar.selectbox("🔍 Select Coin", options=filtered_options, help="Coins ordered by market cap", key="coin_selector")
 
     default_price = 0.01
     current_coin_price = 0.01
+    
+    # Track coin selection changes for price updates
+    if 'last_selected_coin' not in st.session_state:
+        st.session_state.last_selected_coin = None
+    if 'last_transaction_type' not in st.session_state:
+        st.session_state.last_transaction_type = None
+    
+    coin_changed = st.session_state.last_selected_coin != selected_coin_option
+    
     if selected_coin_option:
         coin_name, symbol, coin_id = coin_map[selected_coin_option]
         current_price_data = get_live_prices(pd.Series([coin_id]))
@@ -1630,11 +1649,24 @@ else:
             'coin_id': coin_id,
             'current_price': current_coin_price
         }
+        
+        # Update last selected coin
+        st.session_state.last_selected_coin = selected_coin_option
     
-    if selected_coin_option and current_coin_price > 0.01:
+    if selected_coin_option and current_coin_price >= 0.01:
+        # Format price based on value - show more decimals for smaller amounts
+        if current_coin_price >= 1000:
+            price_display = f"${current_coin_price:,.0f}"
+        elif current_coin_price >= 1:
+            price_display = f"${current_coin_price:,.2f}" 
+        elif current_coin_price >= 0.01:
+            price_display = f"${current_coin_price:,.4f}"
+        else:
+            price_display = f"${current_coin_price:,.8f}"
+            
         st.sidebar.markdown(f"""
         <div>
-            {get_icon('price', 'lucide', 16, '#17a2b8')} <strong>Current Price:</strong> ${current_coin_price:,.0f}
+            {get_icon('price', 'lucide', 16, '#17a2b8')} <strong>Current Price:</strong> {price_display}
         </div>
         """, unsafe_allow_html=True)
 
@@ -1716,50 +1748,225 @@ else:
         transaction_type = "BUY" if basic_type == "Buy" else "SELL"
         restructure_group = None
     
+    # Track transaction type changes for form persistence
+    transaction_type_changed = st.session_state.last_transaction_type != transaction_type
+    
+    # Update tracking variables
+    if coin_changed:
+        st.session_state.last_selected_coin = selected_coin_option
+    if transaction_type_changed:
+        st.session_state.last_transaction_type = transaction_type
+    
+    # Add JavaScript for local storage before the form
+    st.markdown("""
+    <script>
+    // Local storage functions for form persistence
+    function saveFormData(key, value) {
+        localStorage.setItem('crypto_form_' + key, JSON.stringify(value));
+    }
+    
+    function loadFormData(key, defaultValue) {
+        try {
+            const stored = localStorage.getItem('crypto_form_' + key);
+            return stored ? JSON.parse(stored) : defaultValue;
+        } catch (e) {
+            return defaultValue;
+        }
+    }
+    
+    function clearFormData() {
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('crypto_form_')) {
+                localStorage.removeItem(key);
+            }
+        });
+    }
+    
+    // Save form data when values change
+    function saveCurrentFormState() {
+        const quantityInput = document.querySelector('[data-testid="stNumberInput"] input');
+        const priceInputs = document.querySelectorAll('[data-testid="stNumberInput"] input');
+        const dateInput = document.querySelector('[data-testid="stDateInput"] input');
+        const timeInput = document.querySelector('[data-testid="stTextInput"] input');
+        
+        if (quantityInput) saveFormData('quantity', quantityInput.value);
+        if (priceInputs.length > 1) {
+            saveFormData('purchase_price', priceInputs[1].value);
+            if (priceInputs.length > 2) saveFormData('target_price', priceInputs[2].value);
+        }
+        if (dateInput) saveFormData('date', dateInput.value);
+        if (timeInput) saveFormData('time', timeInput.value);
+    }
+    
+    // Auto-save on input changes
+    setTimeout(() => {
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('change', saveCurrentFormState);
+            input.addEventListener('blur', saveCurrentFormState);
+        });
+    }, 1000);
+    </script>
+    """, unsafe_allow_html=True)
+
     with st.sidebar.form("transaction_form", clear_on_submit=False):
         
-        # Use session state to maintain form values after failed submissions
+        # Initialize session state for form persistence with local storage fallback
+        if 'form_quantity' not in st.session_state:
+            st.session_state.form_quantity = 1.00
+        if 'form_purchase_price' not in st.session_state:
+            st.session_state.form_purchase_price = default_price
+        if 'form_target_sell_price' not in st.session_state:
+            st.session_state.form_target_sell_price = default_price
+        if 'form_purchase_date' not in st.session_state:
+            st.session_state.form_purchase_date = datetime.now().date()
+        if 'form_time_text' not in st.session_state:
+            st.session_state.form_time_text = datetime.now().strftime("%H:%M:%S")
+        if 'user_modified_prices' not in st.session_state:
+            st.session_state.user_modified_prices = {'purchase': False, 'target': False}
+        
+        # Local storage persistence key based on selected coin
+        storage_key = f"form_data_{selected_coin_option}" if selected_coin_option else "form_data_default"
+        
+        # Enhanced form persistence with local storage integration
+        # Use session state to maintain form values after failed submissions or type changes
         if 'selected_coin_info' in st.session_state:
             persistent_price = st.session_state.selected_coin_info['current_price']
+            
+            # If coin changed, load stored values for this coin or reset to current price
+            if coin_changed:
+                # Try to load previously saved values for this specific coin
+                coin_storage_key = f"coin_{selected_coin_option}"
+                if coin_storage_key in st.session_state:
+                    # Restore previous values for this coin
+                    saved_data = st.session_state[coin_storage_key]
+                    st.session_state.form_quantity = saved_data.get('quantity', 1.00)
+                    st.session_state.form_purchase_price = saved_data.get('purchase_price', persistent_price)
+                    st.session_state.form_target_sell_price = saved_data.get('target_price', persistent_price)
+                    st.session_state.user_modified_prices = saved_data.get('user_modified_prices', {'purchase': False, 'target': False})
+                else:
+                    # New coin selection - set to current price
+                    st.session_state.form_purchase_price = persistent_price
+                    st.session_state.form_target_sell_price = persistent_price
+                    st.session_state.user_modified_prices = {'purchase': False, 'target': False}
+            elif not st.session_state.user_modified_prices['purchase']:
+                # Update purchase price only if user hasn't manually modified it
+                st.session_state.form_purchase_price = persistent_price
+            elif not st.session_state.user_modified_prices['target']:
+                # Update target price only if user hasn't manually modified it
+                st.session_state.form_target_sell_price = persistent_price
+        
+        # Handle transaction type changes - preserve form data across type switches
+        if transaction_type_changed:
+            # Save current form state to transaction-type-specific storage
+            old_type_key = f"type_{st.session_state.last_transaction_type}_{selected_coin_option}"
+            if old_type_key not in st.session_state:
+                st.session_state[old_type_key] = {}
+            
+            # Store current form values for the previous transaction type
+            st.session_state[old_type_key] = {
+                'quantity': st.session_state.form_quantity,
+                'purchase_price': st.session_state.form_purchase_price,
+                'target_price': st.session_state.form_target_sell_price,
+                'purchase_date': st.session_state.form_purchase_date,
+                'time_text': st.session_state.form_time_text,
+                'user_modified_prices': st.session_state.user_modified_prices.copy()
+            }
+            
+            # Try to restore values for the new transaction type
+            new_type_key = f"type_{transaction_type}_{selected_coin_option}"
+            if new_type_key in st.session_state:
+                saved_data = st.session_state[new_type_key]
+                st.session_state.form_quantity = saved_data.get('quantity', 1.00)
+                st.session_state.form_purchase_price = saved_data.get('purchase_price', persistent_price)
+                st.session_state.form_target_sell_price = saved_data.get('target_price', persistent_price)
+                st.session_state.form_purchase_date = saved_data.get('purchase_date', datetime.now().date())
+                st.session_state.form_time_text = saved_data.get('time_text', datetime.now().strftime("%H:%M:%S"))
+                st.session_state.user_modified_prices = saved_data.get('user_modified_prices', {'purchase': False, 'target': False})
         else:
             persistent_price = default_price
 
         # Dynamic quantity input based on transaction type
         if transaction_type in ["SELL", "RESTRUCTURE_OUT"]:
             st.markdown(display_icon_header('chart', 'Quantity', 'lucide', 16, '#666666'), unsafe_allow_html=True)
-            quantity = st.number_input("", min_value=0.01, value=1.00, format="%.0f", help="Amount of coins to sell (will reduce your holdings). Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 1.50 or 1,50", label_visibility="collapsed")
+            quantity = st.number_input("", min_value=0.01, value=st.session_state.form_quantity, format="%.2f", help="Amount of coins to sell (will reduce your holdings). Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 1.50 or 1,50", label_visibility="collapsed", key="quantity_input")
             price_help = "Price per coin when selling"
             st.markdown(display_icon_header("dollar-sign", "Sell Price (USD)", "lucide", 16, "#666666"), unsafe_allow_html=True)
         else:
             st.markdown(display_icon_header('chart', 'Quantity', 'lucide', 16, '#666666'), unsafe_allow_html=True)
-            quantity = st.number_input("", min_value=0.01, value=1.00, format="%.0f", help="Amount of coins purchased. Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 2.75 or 2,75", label_visibility="collapsed")
+            quantity = st.number_input("", min_value=0.01, value=st.session_state.form_quantity, format="%.2f", help="Amount of coins purchased. Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 2.75 or 2,75", label_visibility="collapsed", key="quantity_input")
             price_help = "Price per coin when purchased (defaults to current price)"
             st.markdown(display_icon_header("dollar-sign", "Purchase Price (USD)", "lucide", 16, "#666666"), unsafe_allow_html=True)
 
-        purchase_price = st.number_input("", min_value=0.00000001, value=float(persistent_price), format="%.2f", help=f"{price_help} (Current: ${persistent_price:,.2f}). Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 45.67 or 45,67)", label_visibility="collapsed")
+        purchase_price = st.number_input("", min_value=0.00000001, value=float(st.session_state.form_purchase_price), format="%.2f", help=f"{price_help} (Current: ${persistent_price:,.2f}). Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 45.67 or 45,67)", label_visibility="collapsed", key="price_input")
 
         col1, col2 = st.columns(2)
         with col1:
             st.markdown(display_icon_header("calendar", "Transaction Date", "lucide", 16, "#666666"), unsafe_allow_html=True)
-            purchase_date = st.date_input("", datetime.now().date(), label_visibility="collapsed")
+            purchase_date = st.date_input("", value=st.session_state.form_purchase_date, label_visibility="collapsed", key="date_input")
         with col2:
             st.markdown(display_icon_header("clock", "Transaction Time", "lucide", 16, "#666666"), unsafe_allow_html=True)
-            time_text = st.text_input("", value=datetime.now().strftime("%H:%M:%S"), 
+            time_text = st.text_input("", value=st.session_state.form_time_text, 
                                     help="Format: HH:MM:SS (e.g., 14:30:00 or 09:15:30)",
-                                    label_visibility="collapsed")
+                                    label_visibility="collapsed", key="time_input")
+            # Validate time format
+            time_is_valid = True
             try:
                 purchase_time = datetime.strptime(time_text, "%H:%M:%S").time()
             except ValueError:
-                st.error("Invalid time format. Please use HH:MM:SS format (e.g., 14:30:00)")
-                purchase_time = datetime.now().time()
+                time_is_valid = False
+                st.error("❌ Invalid time format. Please use HH:MM:SS format (e.g., 14:30:00)")
+                purchase_time = datetime.now().time()  # Fallback, but don't submit
         
         st.markdown(display_icon_header("bullseye", "Target Sell Price (USD)", "lucide", 16, "#666666"), unsafe_allow_html=True)
-        target_sell_price = st.number_input("", min_value=0.00000001, value=float(persistent_price), format="%.2f", help=f"Target price to sell (Current: ${persistent_price:,.2f}). Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 50.00 or 50,00", label_visibility="collapsed")
+        target_sell_price = st.number_input("", min_value=0.00000001, value=float(st.session_state.form_target_sell_price), format="%.2f", help=f"Target price to sell (Current: ${persistent_price:,.2f}). Note: Your browser's locale determines if you see period (.) or comma (,) as decimal separator, e.g., 50.00 or 50,00", label_visibility="collapsed", key="target_price_input")
+
+        # Update session state with current form values and track manual modifications
+        if st.session_state.form_quantity != quantity:
+            st.session_state.form_quantity = quantity
+        
+        # Track if user manually modified prices and save to coin-specific storage
+        if st.session_state.form_purchase_price != purchase_price:
+            st.session_state.form_purchase_price = purchase_price
+            st.session_state.user_modified_prices['purchase'] = True
+            
+        if st.session_state.form_target_sell_price != target_sell_price:
+            st.session_state.form_target_sell_price = target_sell_price
+            st.session_state.user_modified_prices['target'] = True
+            
+        if st.session_state.form_purchase_date != purchase_date:
+            st.session_state.form_purchase_date = purchase_date
+            
+        if st.session_state.form_time_text != time_text:
+            st.session_state.form_time_text = time_text
+        
+        # Save current form state to coin-specific storage for persistence
+        if selected_coin_option:
+            coin_storage_key = f"coin_{selected_coin_option}"
+            st.session_state[coin_storage_key] = {
+                'quantity': st.session_state.form_quantity,
+                'purchase_price': st.session_state.form_purchase_price,
+                'target_price': st.session_state.form_target_sell_price,
+                'purchase_date': st.session_state.form_purchase_date,
+                'time_text': st.session_state.form_time_text,
+                'user_modified_prices': st.session_state.user_modified_prices.copy()
+            }
+            
+            # Also save to transaction-type-specific storage for better persistence
+            type_storage_key = f"type_{transaction_type}_{selected_coin_option}"
+            st.session_state[type_storage_key] = {
+                'quantity': st.session_state.form_quantity,
+                'purchase_price': st.session_state.form_purchase_price,
+                'target_price': st.session_state.form_target_sell_price,
+                'purchase_date': st.session_state.form_purchase_date,
+                'time_text': st.session_state.form_time_text,
+                'user_modified_prices': st.session_state.user_modified_prices.copy()
+            }
         
         # Adjust quantity for sell transactions (negative quantity)
         final_quantity = -abs(quantity) if transaction_type in ["SELL", "RESTRUCTURE_OUT"] else abs(quantity)
         
-        # Show transaction preview
+        # Show current transaction preview with persistence indicator
         if use_advanced_mode:
             st.markdown(display_icon_header("clipboard", "Transaction Preview", "lucide", 18, "#666666"), unsafe_allow_html=True)
             preview_text = f"**Type:** {transaction_type}\n**Impact:** "
@@ -1774,22 +1981,52 @@ else:
             
             st.info(preview_text)
         
+        # Form persistence indicator with enhanced information
+        persistence_info = []
+        if selected_coin_option and coin_storage_key in st.session_state:
+            persistence_info.append(f"💾 Form data saved for {st.session_state.selected_coin_info['symbol']}")
+        
+        if transaction_type_changed:
+            persistence_info.append(f"🔄 Transaction type changed: {st.session_state.last_transaction_type} → {transaction_type}")
+        
+        if coin_changed and not st.session_state.user_modified_prices['purchase']:
+            persistence_info.append(f"💰 Price auto-updated to current market price")
+        
+        if persistence_info:
+            info_text = " | ".join(persistence_info)
+            st.info(info_text)
+        
         # Submit button with dynamic text - inside form to satisfy Streamlit requirements
-        button_text = f"➕ Add {transaction_type.replace('_', ' ').title()} Transaction"
+        button_text = f"⨁ Add {transaction_type.replace('_', ' ').title()} Transaction"
         submit_clicked = st.form_submit_button(button_text, type="primary")
     
     # Process form submission
     if submit_clicked:
         st.info(f"{get_simple_icon('refresh')} Form submitted, processing...")
         
+        # Debug: Check all required variables
+        st.info(f"🔍 Debug - Selected coin: {selected_coin_option}")
+        st.info(f"🔍 Debug - Quantity: {quantity}")
+        st.info(f"🔍 Debug - Transaction type: {transaction_type}")
+        st.info(f"🔍 Debug - User ID: {st.session_state.get('user_id', 'Not found')}")
+        
         if not selected_coin_option:
             st.error(f"{get_simple_icon('x-circle')} No coin selected. Please select a coin from the dropdown.")
         elif quantity <= 0:
             st.error(f"{get_simple_icon('x-circle')} Invalid quantity. Please enter a positive number.")
+        elif not time_is_valid:
+            st.error(f"{get_simple_icon('x-circle')} Invalid time format. Please use HH:MM:SS format (e.g., 14:30:00) before submitting.")
         else:
             try:
                 coin_name, symbol, coin_id = coin_map[selected_coin_option]
                 st.info(f"{get_simple_icon('check-circle')} Form validation passed for {symbol}")
+                st.info(f"🔍 Debug - Coin details: {coin_name}, {symbol}, {coin_id}")
+                st.info(f"🔍 Debug - Final quantity: {final_quantity}")
+                st.info(f"🔍 Debug - Purchase price: {purchase_price}")
+                st.info(f"🔍 Debug - Target price: {target_sell_price}")
+                st.info(f"🔍 Debug - Restructure group: {restructure_group}")
+                st.info(f"🔍 Debug - Purchase date: {purchase_date} (type: {type(purchase_date)})")
+                st.info(f"🔍 Debug - Purchase time: {purchase_time} (type: {type(purchase_time)})")
                 st.info(f"{get_simple_icon('phone')} Calling add_transaction function...")
                 
                 add_transaction(
@@ -1956,7 +2193,6 @@ if not st.session_state.transactions.empty:
             # Create display dataframe with proper formatting and transaction type indicators
             display_df = display_portfolio_df[display_columns].copy()
             
-            # Add transaction type column with icons for better visibility
             if view_mode == "Net Holdings":
                 display_df['Type'] = '[NET]'  # Net holdings don't have transaction types
             else:
@@ -2140,8 +2376,7 @@ if not st.session_state.transactions.empty:
                             with st.container():
                                 col1, col2, col3, col4 = st.columns([3, 2, 1, 1])
                                 
-                                with col1:
-                                    # Add transaction type icon and styling with proper scalar value extraction
+                                with col1: 
                                     quantity_val = row['Quantity']
                                     profit_loss_val = row['Profit_Loss']
                                     percentage_change_val = row['Percentage_Change']
@@ -2979,7 +3214,7 @@ if not st.session_state.transactions.empty:
         st.markdown('</div>', unsafe_allow_html=True)
 
 else:
-    st.info("🚀 Your portfolio is empty. Start by importing your crypto transactions!")
+    st.info("Your portfolio is empty. Start by importing your crypto transactions!")
 
 # --- Import/Export Section (Always Available) ---
 st.markdown("---")
@@ -3412,7 +3647,7 @@ if uploaded_file is not None:
                                             # Keep default if parsing fails
                                             pass
                                 
-                                # Handle target sell price
+                                
                                 target_sell_price_val = 0.0
                                 if 'Target_Sell_Price' in import_df.columns:
                                     tsp_val = row['Target_Sell_Price']
@@ -3697,7 +3932,7 @@ if st.session_state.edit_transaction_id and st.session_state.edit_transaction_id
                     
                     # Dynamic price label based on transaction type
                     price_label = "Purchase Price" if transaction_type == "Buy" else "Sell Price"
-                    price_help = f"Original: ${original_purchase_price:.8f} ({'purchase' if original_transaction_type == 'Buy' else 'sell'} price)"
+                    price_help = f"Original: ${original_purchase_price:.2f} ({'purchase' if original_transaction_type == 'Buy' else 'sell'} price)"
                     
                     # Price input with contextual labeling
                     icon_color = "#666666"
@@ -3707,7 +3942,7 @@ if st.session_state.edit_transaction_id and st.session_state.edit_transaction_id
                         "", 
                         value=original_purchase_price, 
                         min_value=0.00000001,  # Support very small crypto prices
-                        format="%.8f", 
+                        format=".2f", 
                         help=price_help,
                         label_visibility="collapsed"
                     )
@@ -3719,8 +3954,8 @@ if st.session_state.edit_transaction_id and st.session_state.edit_transaction_id
                         "", 
                         value=original_target_price, 
                         min_value=0.0, 
-                        format="%.8f", 
-                        help=f"Original: ${original_target_price:.8f} (0 if not set)",
+                        format="%.2f", 
+                        help=f"Original: ${original_target_price:.2f} (0 if not set)",
                         label_visibility="collapsed"
                     )
                 with col2:
