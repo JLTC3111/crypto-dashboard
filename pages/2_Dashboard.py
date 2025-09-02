@@ -33,27 +33,23 @@ with st.spinner(f"Fetching data for {selection}..."):
     finally:
         sys.stdout = old_stdout
 
-# Determine data source from captured output
-data_source = "Unknown"
-if "Binance data fetched" in output_text:
-    data_source = "Binance API"
-elif "CoinGecko data fetched" in output_text:
-    data_source = "CoinGecko API"
-elif "Created minimal data" in output_text:
-    data_source = "Fallback Data"
-
 # Check if data was successfully fetched
 if history is None or history.empty:
     st.error("❌ **No Data Available**: Unable to fetch price data from any API. Please check your internet connection or try again later.")
     st.stop()
 
 # Show data source status
-if data_source == "Binance API":
-    st.success(f"🔑 **Live Data**: Using real-time data from {data_source}")
-elif data_source == "CoinGecko API":
-    st.info(f"🦎 **Alternative Data**: Using data from {data_source} (Binance unavailable)")
+if "CoinGecko data fetched" in output_text:
+    st.success("🦎 **Live Data**: Using real-time data from CoinGecko API")
+elif "Coinbase" in output_text:
+    st.info("💰 **Alternative Data**: Using Coinbase API fallback")
+elif "Created minimal data" in output_text:
+    st.warning("📊 **Backup Data**: Using synthetic data (APIs temporarily unavailable)")
 else:
-    st.warning(f"📊 **Backup Data**: Using {data_source} (APIs temporarily unavailable)")
+    st.info("📊 **Data Source**: Cryptocurrency price data")
+
+# Use 'close' prices
+price_series = history["close"]
 
 # Use 'close' prices
 
