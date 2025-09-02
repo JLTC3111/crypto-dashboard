@@ -28,49 +28,20 @@ with col2:
 
 # Fetch historical data
 with st.spinner(f"Fetching data for {selection1} and {selection2}..."):
-    # Redirect stdout to capture API status messages
-    import io
-    import sys
-    old_stdout = sys.stdout
-    sys.stdout = captured_output = io.StringIO()
-    
-    try:
-        history1 = get_price_history(symbol1)
-        history2 = get_price_history(symbol2)
-        output_text = captured_output.getvalue()
-    finally:
-        sys.stdout = old_stdout
+    history1 = get_price_history(symbol1)
+    history2 = get_price_history(symbol2)
 
-# Show data source status
-if "CoinGecko data fetched" in output_text:
-    st.success("🦎 **Live Data**: Using real-time data from CoinGecko API")
-elif "Coinbase" in output_text:
-    st.info("💰 **Alternative Data**: Using Coinbase API fallback")
-elif "Created minimal data" in output_text:
-    st.warning("📊 **Backup Data**: Using synthetic data (APIs temporarily unavailable)")
+# Check if we have Binance API credentials
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+if has_binance_api:
+    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
 else:
-    st.info("📊 **Data Source**: Cryptocurrency price data")
-
-# Check data availability and provide specific error messages
-data1_available = history1 is not None and not history1.empty
-data2_available = history2 is not None and not history2.empty
-
-if not data1_available and not data2_available:
-    st.error(f"❌ No historical data available for {selection1} and {selection2}. Please try different assets.")
-    st.info("💡 Tip: Some cryptocurrencies may not be supported by the data provider.")
-    st.stop()
-elif not data1_available:
-    st.error(f"❌ No historical data available for {selection1}. Please select a different asset.")
-    st.info(f"Available data for {selection2}: {len(history2)} days")
-    st.stop()
-elif not data2_available:
-    st.error(f"❌ No historical data available for {selection2}. Please select a different asset.")
-    st.info(f"Available data for {selection1}: {len(history1)} days")
-    st.stop()
-
-# Check data availability and provide specific error messages
-else:
-    st.info("📊 **Data Source**: Cryptocurrency price data")
+    st.info("📊 **Public Data**: Using public Binance API (no authentication required for price data)")
 
 # Check if we're using real API or mock data
 import os
@@ -104,7 +75,7 @@ data2_available = history2 is not None and not history2.empty
 
 if not data1_available and not data2_available:
     st.error(f"❌ No historical data available for {selection1} and {selection2}. Please try different assets.")
-    st.info("💡 Tip: Some cryptocurrencies may not be supported by the data provider.")
+    st.info("💡 Tip: Some assets like USDT or staked tokens may not have trading pairs on Binance.")
     st.stop()
 elif not data1_available:
     st.error(f"❌ No historical data available for {selection1}. Please select a different asset.")
