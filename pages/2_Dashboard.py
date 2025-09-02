@@ -41,12 +41,20 @@ except:
     pass
 
 # Data source indicator
-if has_binance_api:
-    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+if has_binance_api and not is_cloud:
+    st.success("🔑 **Authenticated Local**: Using real-time data from authenticated Binance API")
+elif has_binance_api and is_cloud:
+    st.info("🔑 **Authenticated Cloud**: Using real-time data from authenticated Binance API on Streamlit Cloud")
 elif not is_cloud:
     st.info("📊 **Public API**: Using public Binance API data")
 else:
-    st.warning("⚠️ **Demo Mode**: Using simulated data")
+    st.warning("⚠️ **Demo Mode**: Using simulated data. Add Binance API credentials to Streamlit Cloud secrets for real data.")
 
 if history is None or history.empty:
     st.error("No historical data available.")

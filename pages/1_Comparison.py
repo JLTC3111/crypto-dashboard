@@ -48,14 +48,14 @@ try:
 except:
     pass
 
-if is_cloud and has_binance_api:
-    st.info("🔑 **Live Data**: Using real-time data from Binance API with authenticated access.")
-elif is_cloud and not has_binance_api:
-    st.warning("⚠️ **Demo Mode**: Using simulated data. Add Binance API credentials to secrets for real-time data.")
-elif has_binance_api:
-    st.success("🔑 **Authenticated**: Using real-time data from Binance API.")
+if has_binance_api and not is_cloud:
+    st.success("🔑 **Authenticated Local**: Using real-time data from authenticated Binance API")
+elif has_binance_api and is_cloud:
+    st.info("🔑 **Authenticated Cloud**: Using real-time data from authenticated Binance API on Streamlit Cloud")
+elif not is_cloud:
+    st.info("� **Public API**: Using public Binance API data")
 else:
-    st.info("📊 **Public Data**: Using public Binance API (may have rate limits).")
+    st.warning("⚠️ **Demo Mode**: Using simulated data. Add Binance API credentials to Streamlit Cloud secrets for real data.")
 
 # Check data availability and provide specific error messages
 data1_available = history1 is not None and not history1.empty

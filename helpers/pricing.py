@@ -41,7 +41,7 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
     Returns:
         pd.DataFrame: Columns - timestamp, open, high, low, close, volume
     """
-    # Check if we're in Streamlit Cloud environment first
+    # Check if we're in Streamlit Cloud environment
     import os
     is_cloud = any([
         os.getenv('STREAMLIT_SHARING_MODE'),
@@ -51,52 +51,48 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
         '/mount/src' in os.getcwd()  # New Streamlit Cloud path
     ])
     
-    # For Streamlit Cloud, try real API first, then fallback to mock data
+    # Check if we have API credentials
+    has_api_credentials = False
     try:
-        # Initialize Binance client with proper credentials
-        binance_client = get_binance_client()
-        klines = binance_client.get_historical_klines(symbol, interval, start_str, end_str)
-        
-        if not klines:
-            print(f"No klines data returned for {symbol}")
-            if is_cloud:
-                print(f"Using mock data fallback for {symbol}")
-                return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
-            return pd.DataFrame()
+        has_api_credentials = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+    except:
+        pass
+    
+    # Always try real API first if we have credentials
+    if has_api_credentials:
+        try:
+            # Initialize Binance client with proper credentials
+            binance_client = get_binance_client()
+            klines = binance_client.get_historical_klines(symbol, interval, start_str, end_str)
             
-    except Exception as e:
-        # Enhanced error handling for any API failures
-        print(f"Binance API error for {symbol}: {e}")
-        print(f"Error type: {type(e).__name__}")
-        
-        if is_cloud:
-            print(f"Using fallback mock data for {symbol}")
-            return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
-        else:
-            return pd.DataFrame()
+            if klines:
+                # Success! Process the real data
+                df = pd.DataFrame(klines, columns=[
+                    "timestamp", "open", "high", "low", "close", "volume",
+                    "close_time", "quote_asset_volume", "trades",
+                    "taker_buy_base_vol", "taker_buy_quote_vol", "ignore"
+                ])
 
-    try:
-        df = pd.DataFrame(klines, columns=[
-            "timestamp", "open", "high", "low", "close", "volume",
-            "close_time", "quote_asset_volume", "trades",
-            "taker_buy_base_vol", "taker_buy_quote_vol", "ignore"
-        ])
-
-        if df.empty:
-            if is_cloud:
-                print(f"Empty dataframe for {symbol}, using mock data")
-                return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
-            return df
-
-        df["timestamp"] = pd.to_datetime(df["timestamp"], unit='ms')
-        df.set_index("timestamp", inplace=True)
-        df[["open", "high", "low", "close", "volume"]] = df[["open", "high", "low", "close", "volume"]].astype(float)
-        return df[["open", "high", "low", "close", "volume"]]
-        
-    except Exception as e:
-        print(f"Error processing Binance data for {symbol}: {e}")
-        if is_cloud:
-            return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
+                if not df.empty:
+                    df["timestamp"] = pd.to_datetime(df["timestamp"], unit='ms')
+                    df.set_index("timestamp", inplace=True)
+                    df[["open", "high", "low", "close", "volume"]] = df[["open", "high", "low", "close", "volume"]].astype(float)
+                    print(f"✅ Real Binance data fetched for {symbol}: {len(df)} rows")
+                    return df[["open", "high", "low", "close", "volume"]]
+            
+            print(f"No klines data returned for {symbol}")
+            
+        except Exception as e:
+            print(f"Binance API error for {symbol}: {e}")
+            print(f"Error type: {type(e).__name__}")
+    
+    # If we get here, either no credentials or API failed
+    # Use mock data only as last resort
+    if is_cloud:
+        print(f"🔄 Using mock data for {symbol} (Cloud environment fallback)")
+        return generate_mock_data(symbol, start_str or "2023-01-01", end_str or "2024-01-01")
+    else:
+        print(f"❌ No data available for {symbol}")
         return pd.DataFrame()
 
 def generate_mock_data(symbol: str, start_str: str, end_str: str):
@@ -259,29 +255,43 @@ def get_current_prices(symbols: list) -> dict:
         '/mount/src' in os.getcwd()  # New Streamlit Cloud path
     ])
     
+    # Check if we have API credentials
+    has_api_credentials = False
     try:
-        # Initialize Binance client with proper credentials
-        binance_client = get_binance_client()
-        # Get ticker prices from Binance
-        tickers = binance_client.get_all_tickers()
-        ticker_dict = {ticker['symbol']: float(ticker['price']) for ticker in tickers}
-        
-        for symbol in symbols:
-            symbol_upper = symbol.upper()
-            usdt_pair = f"{symbol_upper}USDT"
+        has_api_credentials = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+    except:
+        pass
+    
+    # Always try real API first if we have credentials
+    if has_api_credentials:
+        try:
+            # Initialize Binance client with proper credentials
+            binance_client = get_binance_client()
+            # Get ticker prices from Binance
+            tickers = binance_client.get_all_tickers()
+            ticker_dict = {ticker['symbol']: float(ticker['price']) for ticker in tickers}
             
-            if usdt_pair in ticker_dict:
-                prices[symbol] = ticker_dict[usdt_pair]
-            else:
-                # Fallback to a default price if not found
-                prices[symbol] = 0.0
+            for symbol in symbols:
+                symbol_upper = symbol.upper()
+                usdt_pair = f"{symbol_upper}USDT"
                 
-        print(f"Successfully fetched real prices for {len([s for s in symbols if prices.get(s, 0) > 0])} symbols")
-        
-    except Exception as e:
-        # Enhanced error handling - use mock data as fallback
-        print(f"Binance API error for price fetching: {e}")
-        print("Using mock prices as fallback")
+                if usdt_pair in ticker_dict:
+                    prices[symbol] = ticker_dict[usdt_pair]
+                else:
+                    # Fallback to a default price if not found
+                    prices[symbol] = 0.0
+                    
+            successful_prices = len([s for s in symbols if prices.get(s, 0) > 0])
+            print(f"✅ Real prices fetched for {successful_prices}/{len(symbols)} symbols")
+            return prices
+            
+        except Exception as e:
+            print(f"Binance API error for price fetching: {e}")
+    
+    # If we get here, either no credentials or API failed
+    # Use mock data only as last resort
+    if is_cloud or not has_api_credentials:
+        print("🔄 Using mock prices (fallback)")
         
         # Mock prices for demo purposes
         mock_prices = {
@@ -302,5 +312,9 @@ def get_current_prices(symbols: list) -> dict:
         for symbol in symbols:
             symbol_upper = symbol.upper()
             prices[symbol] = mock_prices.get(symbol_upper, 100.0)  # Default to $100
+    else:
+        # Local environment with no credentials - return zeros
+        for symbol in symbols:
+            prices[symbol] = 0.0
     
     return prices

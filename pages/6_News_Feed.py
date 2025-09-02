@@ -24,7 +24,7 @@ def main():
         st.header("⚙️ News Settings")
         
         # Refresh controls
-        if st.button("🔄 Refresh News", type="primary"):
+        if st.button("Refresh News", type="primary"):
             st.cache_data.clear()
             st.rerun()
         
