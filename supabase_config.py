@@ -597,8 +597,6 @@ def show_user_info():
     """Display current user info and logout option"""
     if st.session_state.authenticated and st.session_state.user:
         user_email = st.session_state.user.email
-        
-        # Display user info with SVG icon using HTML component
         user_icon_html = get_svg_icon("user", width=20, height=20)
         st.sidebar.markdown(f"""
         <div style="display: flex; align-items: center; margin-bottom: 10px;">
