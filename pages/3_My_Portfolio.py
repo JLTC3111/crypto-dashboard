@@ -625,12 +625,24 @@ def get_live_prices(coin_ids: pd.Series) -> Dict[str, Dict[str, float]]:
 
 @st.cache_data(ttl=3600) 
 def get_coins_by_market_cap() -> List[tuple]:
-    """Get top 250 coins by market cap from CoinGecko with fallback to top 200 list."""
+    """Get top 500 coins by market cap from CoinGecko with fallback to comprehensive list."""
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            markets = cg.get_coins_markets(vs_currency='usd', order='market_cap_desc', per_page=250, page=1)
-            return [(coin['name'], coin['symbol'].upper(), coin['id'], coin['market_cap']) for coin in markets]
+            # Fetch top 500 coins in 5 pages of 100 each for better API reliability
+            all_markets = []
+            for page_num in range(1, 6):  # Pages 1-5 for 500 coins
+                markets = cg.get_coins_markets(
+                    vs_currency='usd', 
+                    order='market_cap_desc', 
+                    per_page=100, 
+                    page=page_num
+                )
+                all_markets.extend(markets)
+                # Small delay between requests to avoid rate limiting
+                time_module.sleep(0.1)
+            
+            return [(coin['name'], coin['symbol'].upper(), coin['id'], coin['market_cap']) for coin in all_markets]
         except Exception as e:
             if "429" in str(e) and attempt < max_retries - 1:  # Rate limit error
                 wait_time = 2 ** attempt  # Exponential backoff
@@ -1441,8 +1453,8 @@ def check_for_updates():
             st.session_state.portfolio_changed = False
             return True
     
-    # Fallback to polling every 30 seconds if real-time is not active
-    elif (current_time - last_check).seconds > 30:
+    # Fallback to polling every 15 minutes if real-time is not active
+    elif (current_time - last_check).seconds > 900:  # 15 minutes = 900 seconds
         refresh_portfolio_data(skip_price_update=True)  # Use cached prices for polling
         st.session_state.last_realtime_check = current_time
         return True
@@ -1493,6 +1505,7 @@ if 'show_delete_confirm' not in st.session_state:
 
 def reset_transaction_form():
     """Reset all transaction form fields to default values"""
+    # Reset form session state variables
     if 'form_quantity' in st.session_state:
         st.session_state.form_quantity = 1.00
     if 'form_purchase_price' in st.session_state:
@@ -1505,6 +1518,18 @@ def reset_transaction_form():
         st.session_state.form_time_text = datetime.now().strftime("%H:%M:%S")
     if 'user_modified_prices' in st.session_state:
         st.session_state.user_modified_prices = {'purchase': False, 'target': False}
+    
+    # Delete widget keys to allow them to reset to default values on next render
+    widget_keys = ['coin_selector', 'quantity_input', 'price_input', 'date_input', 'time_input', 'target_price_input']
+    for key in widget_keys:
+        if key in st.session_state:
+            del st.session_state[key]
+    
+    # Clear any related cached data
+    if 'selected_coin_info' in st.session_state:
+        del st.session_state.selected_coin_info
+    if 'persistent_price' in st.session_state:
+        del st.session_state.persistent_price
 
 def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purchase_date, purchase_time, target_sell_price=None, transaction_type='BUY', restructure_group=None):
     """Add a new transaction to the portfolio with restructuring support"""
@@ -1580,8 +1605,8 @@ def add_transaction(coin_name, symbol, coin_id, quantity, purchase_price, purcha
             if 'portfolio_df' in st.session_state:
                 del st.session_state['portfolio_df']
             
-            # Refresh data with price update for new transactions
-            refresh_portfolio_data(skip_price_update=False)
+            # Refresh data without price update for new transactions (prices are cached for 30 minutes)
+            refresh_portfolio_data(skip_price_update=True)
             
             # Add delay before rerun to ensure database consistency
             time_module.sleep(1.0)

@@ -43,14 +43,14 @@ def style_dataframe(df):
 
 def get_top_coins_data():
     """
-    Fetch top 200 coins market data from CoinGecko in pages.
+    Fetch top 500 coins market data from CoinGecko in pages.
     """
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # Fetch market data for top 200 coins in two pages
+            # Fetch market data for top 500 coins in five pages
             all_markets = []
-            for page_num in [1, 2]:
+            for page_num in range(1, 6):  # Pages 1-5 for 500 coins
                 markets = cg.get_coins_markets(
                     vs_currency='usd',
                     order='market_cap_desc',
@@ -60,6 +60,8 @@ def get_top_coins_data():
                     price_change_percentage='7d'
                 )
                 all_markets.extend(markets)
+                # Small delay between requests to avoid rate limiting
+                time.sleep(0.1)
             
             # Process the data into a DataFrame
             coins_data = []
@@ -98,7 +100,7 @@ st.markdown("""
 Welcome to the Crypto Risk Management Dashboard. Use the navigation on the left to access the **Dashboard** and **Comparison** tools.
 """)
 
-st.subheader("Live Market Data (Top 200 Coins)")
+st.subheader("Live Market Data (Top 500 Coins)")
 
 height_slider = st.slider("Adjust Table Height", min_value=200, max_value=1000, value=500, step=50)
 
