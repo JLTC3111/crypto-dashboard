@@ -334,6 +334,65 @@ class PortfolioDatabase:
         except Exception as e:
             st.error(f"Failed to add transaction: {e}")
             return None
+
+    def add_convert_transaction(self, user_id: str, from_coin_data: dict, to_coin_data: dict, convert_date, convert_time):
+        """Add convert/swap transaction as two linked entries"""
+        try:
+            current_time = datetime.now()
+            convert_id = f"convert_{current_time.strftime('%Y%m%d_%H%M%S')}"
+            
+            # FROM transaction (what user is converting from)
+            from_transaction = {
+                'user_id': user_id,
+                'transaction_id': f"{convert_id}_from",
+                'coin_name': from_coin_data['coin_name'],
+                'symbol': from_coin_data['symbol'],
+                'coin_id': from_coin_data['coin_id'],
+                'quantity': -abs(float(from_coin_data['quantity'])),  # Negative for outgoing
+                'purchase_price': 0.0,  # No price for conversions
+                'purchase_date': convert_date.isoformat(),
+                'purchase_time': convert_time,
+                'target_sell_price': 0.0,
+                'transaction_type': from_coin_data['transaction_type'],
+                'restructure_group': convert_id,  # Link the pair
+                'include_in_portfolio': True,
+                'created_at': current_time.isoformat(),
+                'updated_at': current_time.isoformat()
+            }
+            
+            # TO transaction (what user is converting to)
+            to_transaction = {
+                'user_id': user_id,
+                'transaction_id': f"{convert_id}_to",
+                'coin_name': to_coin_data['coin_name'],
+                'symbol': to_coin_data['symbol'],
+                'coin_id': to_coin_data['coin_id'],
+                'quantity': abs(float(to_coin_data['quantity'])),  # Positive for incoming
+                'purchase_price': 0.0,  # No price for conversions
+                'purchase_date': convert_date.isoformat(),
+                'purchase_time': convert_time,
+                'target_sell_price': 0.0,
+                'transaction_type': to_coin_data['transaction_type'],
+                'restructure_group': convert_id,  # Link the pair
+                'include_in_portfolio': True,
+                'created_at': current_time.isoformat(),
+                'updated_at': current_time.isoformat()
+            }
+            
+            # Insert both transactions
+            from_response = cast(Any, cast(Any, self.supabase).table('portfolio_transactions').insert(from_transaction).execute())
+            to_response = cast(Any, cast(Any, self.supabase).table('portfolio_transactions').insert(to_transaction).execute())
+            
+            if getattr(from_response, 'data', None) and getattr(to_response, 'data', None):
+                return {
+                    'convert_id': convert_id,
+                    'from_transaction': from_response.data[0],
+                    'to_transaction': to_response.data[0]
+                }
+            return None
+        except Exception as e:
+            st.error(f"Failed to add convert transaction: {e}")
+            return None
     
     def update_transaction(self, transaction_id: str, user_id: str, updates: dict):
         """Update existing transaction using its unique transaction_id"""

@@ -2201,6 +2201,117 @@ else:
                 import traceback
                 st.code(traceback.format_exc())
 
+# --- Convert/Swap Transaction Form ---
+with st.sidebar.expander("🔄 Convert/Swap Transactions", expanded=False):
+    st.markdown("**Convert between cryptocurrencies (no price needed)**")
+    
+    with st.form("convert_form"):
+        # FROM Coin Section
+        st.markdown("**FROM Coin:**")
+        col1, col2 = st.columns([3, 2])
+        with col1:
+            from_coin_option = st.selectbox("From Coin", options=coin_options, help="Coin you're converting from", key="from_coin_selector")
+        with col2:
+            from_quantity = st.number_input("Quantity", min_value=0.01, value=1.00, format="%.4f", key="from_quantity_input")
+        
+        from_transaction_type = st.selectbox("From Transaction Type", 
+            options=["RESTRUCTURE_OUT"], 
+            help="Type of outgoing transaction", key="from_type_selector")
+        
+        st.markdown("---")
+        
+        # TO Coin Section  
+        st.markdown("**TO Coin:**")
+        col3, col4 = st.columns([3, 2])
+        with col3:
+            to_coin_option = st.selectbox("To Coin", options=coin_options, help="Coin you're converting to", key="to_coin_selector")
+        with col4:
+            to_quantity = st.number_input("Quantity", min_value=0.01, value=1.00, format="%.4f", key="to_quantity_input")
+            
+        to_transaction_type = st.selectbox("To Transaction Type", 
+            options=["RESTRUCTURE_IN"], 
+            help="Type of incoming transaction", key="to_type_selector")
+        
+        st.markdown("---")
+        
+        # Date and Time
+        col5, col6 = st.columns(2)
+        with col5:
+            convert_date = st.date_input("Convert Date", value=datetime.now().date(), key="convert_date_input")
+        with col6:
+            convert_time_text = st.text_input("Convert Time", value=datetime.now().strftime("%H:%M:%S"), 
+                                            help="Format: HH:MM:SS", key="convert_time_input")
+        
+        # Submit button
+        convert_submit = st.form_submit_button("🔄 Add Convert Transaction", type="primary")
+    
+    # Process convert form submission
+    if convert_submit:
+        # Validate inputs
+        if not from_coin_option or not to_coin_option:
+            st.error("Please select both FROM and TO coins")
+        elif from_coin_option == to_coin_option:
+            st.error("FROM and TO coins must be different")
+        elif from_quantity <= 0 or to_quantity <= 0:
+            st.error("Quantities must be greater than 0")
+        else:
+            try:
+                # Parse time
+                convert_time = datetime.strptime(convert_time_text, "%H:%M:%S").time()
+                
+                # Get coin details
+                from_coin_name, from_symbol, from_coin_id = coin_map[from_coin_option]
+                to_coin_name, to_symbol, to_coin_id = coin_map[to_coin_option]
+                
+                # Prepare data for database
+                from_coin_data = {
+                    'coin_name': from_coin_name,
+                    'symbol': from_symbol,
+                    'coin_id': from_coin_id,
+                    'quantity': from_quantity,
+                    'transaction_type': from_transaction_type
+                }
+                
+                to_coin_data = {
+                    'coin_name': to_coin_name,
+                    'symbol': to_symbol,
+                    'coin_id': to_coin_id,
+                    'quantity': to_quantity,
+                    'transaction_type': to_transaction_type
+                }
+                
+                # Add convert transaction
+                result = db.add_convert_transaction(
+                    st.session_state.user_id, 
+                    from_coin_data, 
+                    to_coin_data, 
+                    convert_date, 
+                    convert_time.strftime("%H:%M:%S")
+                )
+                
+                if result:
+                    st.success(f"Convert transaction added: {from_symbol} → {to_symbol}")
+                    
+                    # Clear convert form
+                    convert_keys = ['from_coin_selector', 'to_coin_selector', 'from_quantity_input', 
+                                  'to_quantity_input', 'from_type_selector', 'to_type_selector',
+                                  'convert_date_input', 'convert_time_input']
+                    for key in convert_keys:
+                        if key in st.session_state:
+                            del st.session_state[key]
+                    
+                    # Refresh portfolio data
+                    refresh_portfolio_data(skip_price_update=True)
+                    time_module.sleep(0.5)
+                    st.rerun()
+                else:
+                    st.error("Failed to add convert transaction")
+                    
+            except ValueError:
+                st.error("Invalid time format. Use HH:MM:SS (e.g., 14:30:00)")
+            except Exception as e:
+                st.error(f"Error processing convert transaction: {e}")
+
 # --- Main Portfolio Display ---
 if not st.session_state.transactions.empty:
     # Create a clean display dataframe without duplicate columns
