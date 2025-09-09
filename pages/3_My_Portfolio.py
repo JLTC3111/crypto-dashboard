@@ -2202,7 +2202,7 @@ else:
                 st.code(traceback.format_exc())
 
 # --- Convert/Swap Transaction Form ---
-with st.sidebar.expander("🔄 Convert/Swap Transactions", expanded=False):
+with st.sidebar.expander("™️ Convert/Swap Transactions", expanded=False):
     st.markdown("**Convert between cryptocurrencies (no price needed)**")
     
     with st.form("convert_form"):
@@ -2243,7 +2243,7 @@ with st.sidebar.expander("🔄 Convert/Swap Transactions", expanded=False):
                                             help="Format: HH:MM:SS", key="convert_time_input")
         
         # Submit button
-        convert_submit = st.form_submit_button("🔄 Add Convert Transaction", type="primary")
+        convert_submit = st.form_submit_button("⨭ Add Convert Transaction", type="primary")
     
     # Process convert form submission
     if convert_submit:
