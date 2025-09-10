@@ -2240,7 +2240,7 @@ with st.sidebar.expander("™️ Convert/Swap Transactions", expanded=False):
                                             help="Format: HH:MM:SS", key="convert_time_input")
         
         # Submit button
-        convert_submit = st.form_submit_button("⨭ Add Convert Transaction", type="primary")
+        convert_submit = st.form_submit_button("+ Convert Trnx", type="primary")
     
     # Process convert form submission
     if convert_submit:
