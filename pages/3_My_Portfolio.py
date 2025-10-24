@@ -1715,6 +1715,71 @@ st.markdown(f'''
 </div>
 ''', unsafe_allow_html=True)
 
+# --- EMERGENCY DIAGNOSTIC SECTION ---
+# Check if portfolio is showing as empty despite database having data
+if st.session_state.transactions.empty:
+    st.error("⚠️ **Portfolio appears empty but database may contain data**")
+    
+    with st.expander("🔧 Emergency Diagnostics & Fix", expanded=True):
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("### Quick Info")
+            st.write(f"**Your User ID:**")
+            st.code(st.session_state.user_id, language="text")
+            st.write(f"**Session Transactions:** {len(st.session_state.transactions)}")
+        
+        with col2:
+            st.markdown("### Database Check")
+            # Direct database query
+            try:
+                from supabase_config import init_supabase
+                from typing import Any, cast
+                supabase = init_supabase()
+                response = cast(Any, cast(Any, supabase).table("portfolio_transactions").select("id").eq("user_id", st.session_state.user_id).execute())
+                db_count = len(response.data) if response.data else 0
+                
+                if db_count > 0:
+                    st.success(f"✅ Database has {db_count} transactions")
+                    st.error("❌ But session_state is empty!")
+                    st.warning("This is a cache/loading issue")
+                else:
+                    st.error(f"❌ No transactions in database")
+                    st.info("You need to import data")
+            except Exception as e:
+                st.error(f"Database check failed: {e}")
+        
+        with col3:
+            st.markdown("### Actions")
+            if st.button("🔄 FORCE RELOAD DATA", type="primary", use_container_width=True):
+                # Clear all caches
+                st.cache_data.clear()
+                st.cache_resource.clear()
+                
+                # Clear session transactions
+                if 'transactions' in st.session_state:
+                    del st.session_state['transactions']
+                if 'portfolio_df' in st.session_state:
+                    del st.session_state['portfolio_df']
+                
+                # Force reload
+                st.info("Clearing caches and reloading...")
+                load_and_process_portfolio(skip_price_update=False)
+                st.success("Data reloaded! Refreshing page...")
+                st.rerun()
+            
+            if st.button("🔍 Open Full Diagnostic", use_container_width=True):
+                st.info("Navigate to 'Full Diagnostic' page in sidebar")
+        
+        st.markdown("---")
+        st.markdown("**Common Causes:**")
+        st.markdown("""
+        1. **Cached empty data** - Click "FORCE RELOAD DATA" above
+        2. **Wrong user_id** - Check if your User ID matches database records
+        3. **Need to re-authenticate** - Try signing out and back in
+        4. **Database migration incomplete** - Check Full Diagnostic page
+        """)
+
 # --- Auto-refresh indicator ---
 time_since_update = (datetime.now() - st.session_state.last_update).total_seconds() / 60
 if time_since_update >= 30:
