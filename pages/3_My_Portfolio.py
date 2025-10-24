@@ -1261,10 +1261,9 @@ db = PortfolioDatabase()
 
 def refresh_portfolio_data(skip_price_update=False):
     """Helper function to refresh portfolio data from Supabase with consistent mapping"""
+    # Always clear cache to ensure fresh data from database (especially after mutations)
+    st.cache_data.clear()
     load_and_process_portfolio(skip_price_update=skip_price_update)
-    # Only clear price cache if we're updating prices
-    if not skip_price_update:
-        st.cache_data.clear()
     # Update last refresh timestamp
     st.session_state.last_update = datetime.now()
 
@@ -1460,6 +1459,8 @@ def check_for_updates():
 
 # Initialize session state for transactions if it doesn't exist
 if 'transactions' not in st.session_state:
+    # Clear any stale cache on initial load to ensure fresh data
+    st.cache_data.clear()
     load_and_process_portfolio()
 
 # Setup real-time subscription
