@@ -3,6 +3,8 @@ import pandas as pd
 from pycoingecko import CoinGeckoAPI
 import time
 from datetime import datetime
+from helpers.theme_config import Theme, create_theme_toggle, create_gradient_header
+from helpers.i18n import I18n, t, create_language_selector
 
 # Page configuration - MUST be the first Streamlit command
 st.set_page_config(
@@ -11,6 +13,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Apply theme
+theme = Theme.apply_theme()
 
 # Initialize CoinGecko API client
 cg = CoinGeckoAPI()
@@ -93,13 +98,18 @@ def get_top_coins_data():
             st.error(f"Failed to fetch data from CoinGecko: {e}")
             return pd.DataFrame()
 
-# Duplicate page config removed - already set at the top of the file
+# Sidebar settings
+with st.sidebar:
+    st.header("⚙️ " + t('settings'))
+    create_language_selector()
+    st.markdown("---")
+    create_theme_toggle()
 
-st.title("Crypto Risk Management Dashboard")
-
-st.markdown("""
-Welcome to the Crypto Risk Management Dashboard. Use the navigation on the left to access the **Dashboard** and **Comparison** tools.
-""")
+# Header with gradient
+create_gradient_header(
+    t('welcome_message'),
+    "Use the navigation to access Dashboard, Comparison, and Portfolio tools"
+)
 
 st.subheader("Live Market Data")
 
@@ -113,7 +123,7 @@ with col3:
     auto_refresh = st.checkbox("Auto-refresh (20 min)", value=False)
 
 # Add manual refresh button
-if st.button("🔄 Refresh Data", type="primary"):
+if st.button("🔄 " + t('refresh'), type="primary"):
     st.cache_data.clear()
     st.rerun()
 
@@ -121,7 +131,7 @@ if st.button("🔄 Refresh Data", type="primary"):
 if 'last_update' not in st.session_state:
     st.session_state.last_update = datetime.now()
 
-st.caption(f"Last updated: {st.session_state.last_update.strftime('%Y-%m-%d %H:%M:%S')}")
+st.caption(f"{t('last_updated')}: {st.session_state.last_update.strftime('%Y-%m-%d %H:%M:%S')}")
 
 # Fetch and display data
 with st.spinner("Fetching live market data from CoinGecko..."):

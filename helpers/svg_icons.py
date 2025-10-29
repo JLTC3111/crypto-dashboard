@@ -1,20 +1,71 @@
 """
 SVG Icon System for Streamlit Dashboard
 Replace emoji usage with proper SVG icons for better performance and consistency
+Supports theme-aware colors for dark/light mode
 """
 
-def get_svg_icon(icon_name: str, size: int = 24, color: str = "#000000") -> str:
+import streamlit as st
+
+
+def get_theme_color(color_type: str = 'primary') -> str:
+    """
+    Get color from current theme
+    
+    Args:
+        color_type: Type of color (primary, secondary, success, warning, error, info)
+    
+    Returns:
+        Hex color code
+    """
+    # Import here to avoid circular dependency
+    try:
+        from helpers.theme_config import get_theme_colors
+        theme = get_theme_colors()
+        
+        color_map = {
+            'primary': theme.get('text_primary', '#000000'),
+            'secondary': theme.get('text_secondary', '#666666'),
+            'accent': theme.get('accent_primary', '#4A9EFF'),
+            'success': theme.get('success', '#00C853'),
+            'warning': theme.get('warning', '#FFB300'),
+            'error': theme.get('error', '#FF5252'),
+            'info': theme.get('info', '#29B6F6'),
+        }
+        
+        return color_map.get(color_type, theme.get('text_primary', '#000000'))
+    except:
+        # Fallback colors if theme not available
+        fallback = {
+            'primary': '#000000',
+            'secondary': '#666666',
+            'accent': '#4A9EFF',
+            'success': '#00C853',
+            'warning': '#FFB300',
+            'error': '#FF5252',
+            'info': '#29B6F6',
+        }
+        return fallback.get(color_type, '#000000')
+
+
+def get_svg_icon(icon_name: str, size: int = 24, color: str = None, use_theme: bool = True) -> str:
     """
     Get SVG icon as HTML string for Streamlit
     
     Args:
         icon_name: Name of the icon
         size: Icon size in pixels
-        color: Icon color in hex format
+        color: Icon color in hex format (if None and use_theme=True, uses theme color)
+        use_theme: Whether to use theme colors automatically
     
     Returns:
         HTML string with inline SVG icon
     """
+    
+    # Determine color to use
+    if color is None and use_theme:
+        color = get_theme_color('primary')
+    elif color is None:
+        color = "#000000"
     
     icons = {
         # Dashboard & Analytics Icons
