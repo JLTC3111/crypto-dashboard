@@ -20,12 +20,21 @@ from helpers.liquidity_tracker import (
 )
 from supabase_config import require_auth
 
+try:
+    from helpers.modern_ui import apply_light_mode_fix
+except ImportError:
+    apply_light_mode_fix = None
+
 # Page configuration
 st.set_page_config(
     page_title="Global Liquidity Tracker",
     page_icon="🌊",
     layout="wide"
 )
+
+# Apply light mode text fix
+if apply_light_mode_fix:
+    apply_light_mode_fix()
 
 # Custom CSS
 st.markdown("""

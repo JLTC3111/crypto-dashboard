@@ -14,6 +14,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 @dataclass
 class NewsArticle:
+    """News article data class - pickle-serializable for caching"""
     title: str
     summary: str
     url: str
@@ -23,6 +24,10 @@ class NewsArticle:
     short_term_impact: str
     long_term_impact: str
     keywords: List[str]
+    
+    def __hash__(self):
+        """Make the class hashable for caching"""
+        return hash((self.title, self.url, self.source))
 
 class CryptoNewsFeed:
     def __init__(self):
@@ -76,14 +81,21 @@ class CryptoNewsFeed:
             'guide', 'review', 'comparison', 'announcement'
         ]
 
-    @st.cache_data(ttl=300)  # Cache for 5 minutes
-    def fetch_news(_self, max_articles: int = 50) -> List[NewsArticle]:
+    def fetch_news(self, max_articles: int = 50) -> List[NewsArticle]:
         """Fetch news from all configured sources"""
+        return self._fetch_news_cached(max_articles)
+    
+    @staticmethod
+    @st.cache_data(ttl=300)  # Cache for 5 minutes
+    def _fetch_news_cached(max_articles: int = 50) -> List[NewsArticle]:
+        """Internal cached method for fetching news"""
+        # Create a temporary instance just for fetching
+        temp_feed = CryptoNewsFeed()
         all_articles = []
         
-        for source_id, source_config in _self.sources.items():
+        for source_id, source_config in temp_feed.sources.items():
             try:
-                articles = _self._fetch_from_rss(source_config, max_articles // len(_self.sources))
+                articles = temp_feed._fetch_from_rss(source_config, max_articles // len(temp_feed.sources))
                 all_articles.extend(articles)
             except Exception as e:
                 st.warning(f"Failed to fetch from {source_config['name']}: {str(e)}")

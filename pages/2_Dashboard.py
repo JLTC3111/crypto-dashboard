@@ -8,7 +8,8 @@ from helpers.modern_ui import (
     create_modern_sidebar,
     create_modern_header,
     create_glass_card,
-    create_modern_metric_card
+    create_modern_metric_card,
+    apply_light_mode_fix
 )
 from helpers.i18n import t
 from helpers.svg_icons import get_svg_icon
@@ -26,6 +27,9 @@ st.set_page_config(
 
 # Apply modern theme
 ModernUI.apply_modern_theme()
+
+# Apply light mode text fix
+apply_light_mode_fix()
 
 # Create modern sidebar
 create_modern_sidebar()
@@ -55,20 +59,14 @@ st.markdown(asset_selection_html, unsafe_allow_html=True)
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    from helpers.crypto_config import CRYPTO_ASSETS
-    
-    # Extract symbols and names
-    asset_options = {f"{coin['symbol']} - {coin['name']}": coin['symbol'] 
-                    for coin in CRYPTO_ASSETS}
-    
-    # Asset selection
+    # Asset selection using the crypto list
     selection = st.selectbox(
         "🪙 Select Cryptocurrency",
-        options=list(asset_options.keys()),
+        options=crypto_list,
         index=0
     )
     
-    selected_symbol = asset_options[selection]
+    selected_symbol = symbol_map[selection]
 
 with col2:
     # Time period selection
@@ -89,6 +87,8 @@ with col2:
     )
     
     days = period_options[period_label]
+    # Convert days to years for the API call
+    years = max(1, days // 365)  # At least 1 year
 
 # Fetch historical data and capture status
 with st.spinner(f"Fetching data for {selection}..."):
@@ -99,7 +99,7 @@ with st.spinner(f"Fetching data for {selection}..."):
     sys.stdout = captured_output = io.StringIO()
     
     try:
-        history = get_price_history(selected_symbol, days=days)
+        history = get_price_history(selected_symbol, years=years)
         output_text = captured_output.getvalue()
     finally:
         sys.stdout = old_stdout
@@ -212,7 +212,7 @@ if selected_symbol not in ['BTC', 'ETH']:
 
 # --- Price Chart ---
 fig = go.Figure()
-fig.add_trace(go.Scatter(x=timestamps, y=price_series, mode='lines', name=symbol, line=dict(color='blue')))
+fig.add_trace(go.Scatter(x=timestamps, y=price_series, mode='lines', name=selected_symbol, line=dict(color='blue')))
 
 # Add SMAs to chart
 for sma in sma_options:
@@ -224,7 +224,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 # --- Export CSV ---
 csv = history.to_csv(index=True)
-st.download_button("Download CSV", csv, file_name=f"{symbol}_history.csv", mime='text/csv')
+st.download_button("Download CSV", csv, file_name=f"{selected_symbol}_history.csv", mime='text/csv')
 
 # --- Export PDF ---
 pdf_metrics = {

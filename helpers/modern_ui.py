@@ -51,6 +51,7 @@ class ModernUI:
             .stApp {{
                 background: var(--primary-bg);
                 position: relative;
+                isolation: isolate; /* Create new stacking context */
             }}
             
             .stApp::before {{
@@ -64,25 +65,38 @@ class ModernUI:
                     radial-gradient(circle at 20% 80%, {theme['accent_primary']}15 0%, transparent 50%),
                     radial-gradient(circle at 80% 20%, {theme['accent_secondary']}15 0%, transparent 50%);
                 pointer-events: none;
-                z-index: -1;  /* Changed from 0 to -1 to stay behind content */
+                z-index: -999; /* Way behind everything */
                 will-change: opacity;
             }}
             
             /* Ensure main content stays above background */
             .main .block-container {{
                 position: relative;
-                z-index: 1;
+                z-index: 10; /* Higher z-index for content */
             }}
             
-            /* Ensure all streamlit elements are visible */
+            /* Ensure all streamlit elements are visible and above background */
             section.main > div {{
                 position: relative;
-                z-index: 1;
+                z-index: 10;
             }}
             
             [data-testid="stAppViewContainer"] {{
                 position: relative;
-                z-index: 1;
+                z-index: 10;
+            }}
+            
+            /* Force all interactive elements above background */
+            [data-testid="stAppViewContainer"] > div {{
+                position: relative;
+                z-index: 10;
+            }}
+            
+            /* Ensure all streamlit widgets are clickable */
+            .stButton, .stSelectbox, .stSlider, .stCheckbox, 
+            .stTextInput, .stNumberInput, .stDataFrame {{
+                position: relative;
+                z-index: 100; /* Widgets on top */
             }}
             
             /* Modern Sidebar Design - Optimized */
@@ -93,7 +107,13 @@ class ModernUI:
                 border-right: 1px solid {theme['border']}44;
                 box-shadow: 4px 0 24px {theme['shadow']};
                 position: relative;
-                z-index: 2;
+                z-index: 999; /* Sidebar should be on top */
+            }}
+            
+            /* Ensure sidebar content is interactive */
+            [data-testid="stSidebar"] > div {{
+                position: relative;
+                z-index: 1000;
             }}
             
             [data-testid="stSidebar"] .element-container {{
@@ -137,7 +157,8 @@ class ModernUI:
                 box-shadow: 0 4px 12px {theme['accent_primary']}44;
                 position: relative;
                 overflow: hidden;
-                z-index: 1;
+                z-index: 100; /* Ensure buttons are clickable */
+                isolation: isolate; /* Create new stacking context for pseudo-elements */
             }}
             
             .stButton > button::before {{
@@ -150,7 +171,7 @@ class ModernUI:
                 background: linear-gradient(135deg, var(--accent-hover), var(--accent));
                 opacity: 0;
                 transition: opacity 0.3s ease;
-                z-index: -1;
+                z-index: -1; /* Behind button content but within button context */
             }}
             
             .stButton > button:hover::before {{
@@ -238,6 +259,8 @@ class ModernUI:
                 box-shadow: 0 8px 32px {theme['shadow']};
                 position: relative;
                 overflow: hidden;
+                z-index: 10; /* Above background */
+                isolation: isolate; /* Create stacking context */
             }}
             
             .glass-card::before {{
@@ -249,6 +272,7 @@ class ModernUI:
                 bottom: 0;
                 background: linear-gradient(45deg, transparent 30%, {theme['accent_primary']}11 100%);
                 pointer-events: none;
+                z-index: -1; /* Behind card content but within card */
             }}
             
             /* Modern Gradient Header */
@@ -260,6 +284,8 @@ class ModernUI:
                 position: relative;
                 overflow: hidden;
                 box-shadow: 0 12px 40px {theme['shadow']};
+                z-index: 10; /* Above background */
+                isolation: isolate; /* Create stacking context */
             }}
             
             .modern-header::before {{
@@ -271,6 +297,8 @@ class ModernUI:
                 height: 200%;
                 background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
                 animation: shimmer 3s linear infinite;
+                pointer-events: none;
+                z-index: -1; /* Behind header content but within header */
             }}
             
             @keyframes shimmer {{
@@ -379,6 +407,8 @@ class ModernUI:
                 border: 1px solid {theme['border']}33 !important;
                 border-radius: 12px;
                 overflow: hidden;
+                position: relative;
+                z-index: 10; /* Above background */
             }}
             
             .dataframe th {{
@@ -402,6 +432,33 @@ class ModernUI:
             .dataframe tr:hover td {{
                 background: {theme['secondary_background']}66 !important;
             }}
+            
+            /* Additional z-index fixes for all content containers */
+            [data-testid="stVerticalBlock"] {{
+                position: relative;
+                z-index: 10;
+            }}
+            
+            [data-testid="stHorizontalBlock"] {{
+                position: relative;
+                z-index: 10;
+            }}
+            
+            [data-testid="column"] {{
+                position: relative;
+                z-index: 10;
+            }}
+            
+            /* Ensure markdown content is visible */
+            [data-testid="stMarkdownContainer"] {{
+                position: relative;
+                z-index: 10;
+            }}
+            
+            /* Fix for any absolute/fixed positioned elements */
+            [data-testid="stHeader"] {{
+                z-index: 1000;
+            }}
         </style>
         """
         
@@ -409,7 +466,7 @@ class ModernUI:
 
 
 def create_modern_sidebar():
-    """Create a redesigned modern sidebar with better UX"""
+    """Create a simplified modern sidebar without settings (settings moved to main content)"""
     with st.sidebar:
         # Logo/Brand Section
         st.markdown("""
@@ -428,44 +485,15 @@ def create_modern_sidebar():
         
         st.markdown("---")
         
-        # Settings Section with Modern Design
-        settings_header = f"""
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-            {get_svg_icon('settings', size=20)}
-            <span style="font-weight: 600; font-size: 1.1rem;">{t('settings')}</span>
+        # Navigation info or additional content can go here
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem; opacity: 0.6;">
+            <p style="font-size: 0.8rem; margin: 0;">
+                Navigate using the pages on the left.<br>
+                Settings are available on the right side.
+            </p>
         </div>
-        """
-        st.markdown(settings_header, unsafe_allow_html=True)
-        
-        # Settings Card
-        st.markdown('<div class="settings-card">', unsafe_allow_html=True)
-        
-        # Language Section
-        lang_header = f"""
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-            {get_svg_icon('language', size=18)}
-            <span style="font-weight: 500;">{t('language')}</span>
-        </div>
-        """
-        st.markdown(lang_header, unsafe_allow_html=True)
-        
-        from helpers.i18n import create_language_selector
-        create_language_selector()
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # Theme Section
-        theme_header = f"""
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-            {get_svg_icon('sun' if st.session_state.get('theme', 'dark') == 'light' else 'moon', size=18)}
-            <span style="font-weight: 500;">{t('theme')}</span>
-        </div>
-        """
-        st.markdown(theme_header, unsafe_allow_html=True)
-        
-        create_modern_theme_toggle()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
 
 def create_modern_theme_toggle():
@@ -660,6 +688,328 @@ def create_modern_metric_card(
     st.markdown(html, unsafe_allow_html=True)
 
 
+def create_settings_panel():
+    """Create a modern settings panel for the right side of the page"""
+    theme = get_theme_colors()
+    
+    # Settings Panel Header
+    settings_header = f"""
+    <div class="glass-card" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+            {get_svg_icon('settings', size=24)}
+            <h2 style="margin: 0; font-weight: 600; font-size: 1.5rem;">{t('settings')}</h2>
+        </div>
+    """
+    st.markdown(settings_header, unsafe_allow_html=True)
+    
+    # Language Section (without duplicate label)
+    lang_section = f"""
+        <div style="margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                {get_svg_icon('language', size=20)}
+                <span style="font-weight: 500; font-size: 1rem;">{t('language')}</span>
+            </div>
+        </div>
+    """
+    st.markdown(lang_section, unsafe_allow_html=True)
+    
+    # Language selector without label (to avoid duplication)
+    from helpers.i18n import I18n
+    languages = I18n.get_available_languages()
+    current_lang = I18n.get_current_language()
+    
+    lang_codes = list(languages.keys())
+    current_index = lang_codes.index(current_lang) if current_lang in lang_codes else 0
+    
+    selected_lang = st.selectbox(
+        "Select language",  # Hidden label
+        options=lang_codes,
+        format_func=lambda x: f"{languages[x]} ({x.upper()})",
+        index=current_index,
+        key='settings_panel_language',
+        label_visibility="collapsed"  # Hide the label
+    )
+    
+    if selected_lang != current_lang:
+        I18n.set_language(selected_lang)
+        st.rerun()
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Theme Section (without duplicate label)
+    current_theme = st.session_state.get('theme', 'dark')
+    theme_section = f"""
+        <div style="margin-bottom: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                {get_svg_icon('sun' if current_theme == 'light' else 'moon', size=20)}
+                <span style="font-weight: 500; font-size: 1rem;">{t('theme')}</span>
+            </div>
+        </div>
+    """
+    st.markdown(theme_section, unsafe_allow_html=True)
+    
+    # Theme toggle buttons
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button(
+            "☀️ Light",
+            use_container_width=True,
+            key="theme_light_panel",
+            type="primary" if current_theme == 'light' else "secondary"
+        ):
+            from helpers.theme_config import Theme
+            if current_theme != 'light':
+                Theme.toggle_theme()
+                st.rerun()
+    
+    with col2:
+        if st.button(
+            "🌙 Dark",
+            use_container_width=True,
+            key="theme_dark_panel",
+            type="primary" if current_theme == 'dark' else "secondary"
+        ):
+            from helpers.theme_config import Theme
+            if current_theme != 'dark':
+                Theme.toggle_theme()
+                st.rerun()
+    
+    # Close the glass card
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+def apply_light_mode_fix():
+    """Apply CSS fix for text visibility in light mode"""
+    current_theme = st.session_state.get('theme', 'dark')
+    
+    if current_theme == 'light':
+        st.markdown("""
+        <style>
+            /* Force dark text for light mode visibility */
+            .stMarkdown, .stMarkdown *,
+            p, span, div,
+            label, label *,
+            .glass-card, .glass-card *,
+            div[data-baseweb="select"], 
+            div[data-baseweb="select"] *,
+            label[data-baseweb="checkbox"],
+            .stSelectbox label, 
+            .stCheckbox label,
+            h1, h2, h3, h4, h5, h6 {
+                color: #1a1a1a !important;
+            }
+            
+            /* Override any gradient text effects in light mode */
+            h1[style*="background-clip"],
+            h2[style*="background-clip"],
+            h3[style*="background-clip"],
+            span[style*="background-clip"] {
+                -webkit-text-fill-color: #1a1a1a !important;
+                background: none !important;
+            }
+            
+            /* Make selectboxes taller and more readable with light background */
+            div[data-baseweb="select"] > div {
+                min-height: 50px !important;
+                font-size: 1.1rem !important;
+                padding: 0.75rem 1rem !important;
+                background-color: #ffffff !important;
+                border: 1px solid #d0d0d0 !important;
+                color: #1a1a1a !important;
+            }
+            
+            /* Style the selectbox text - dark text on light background */
+            div[data-baseweb="select"] > div > div {
+                font-size: 1.1rem !important;
+                font-weight: 500 !important;
+                line-height: 1.5 !important;
+                color: #1a1a1a !important;
+            }
+            
+            /* Target all nested text elements within selectbox */
+            div[data-baseweb="select"] > div > div > div,
+            div[data-baseweb="select"] span,
+            div[data-baseweb="select"] p {
+                color: #1a1a1a !important;
+            }
+            
+            /* ===== NUCLEAR OPTION: POPOVER DROPDOWN MENU ===== */
+            
+            /* Target the popover container that holds the dropdown */
+            [data-baseweb="popover"],
+            div[data-baseweb="popover"] {
+                background-color: #ffffff !important;
+                border: 1px solid #d0d0d0 !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            }
+            
+            /* Force all children of popover to have dark text */
+            [data-baseweb="popover"] *,
+            div[data-baseweb="popover"] * {
+                color: #000000 !important;
+            }
+            
+            /* Style the dropdown listbox container - AGGRESSIVE TARGETING */
+            div[role="listbox"],
+            ul[role="listbox"],
+            div[data-baseweb="popover"] div[role="listbox"],
+            div[data-baseweb="menu"] {
+                background-color: #ffffff !important;
+                border: 1px solid #d0d0d0 !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            }
+            
+            /* Target ALL possible dropdown option selectors - INCLUDING BARE li[role="option"] */
+            li[role="option"],
+            div[role="listbox"] div[role="option"],
+            div[role="listbox"] li[role="option"],
+            ul[role="listbox"] li[role="option"],
+            div[data-baseweb="menu"] li,
+            div[data-baseweb="menu"] div[role="option"],
+            li[data-baseweb="list-item"],
+            [data-baseweb="popover"] li[role="option"] {
+                min-height: 48px !important;
+                font-size: 1.05rem !important;
+                padding: 0.75rem 1rem !important;
+                display: flex !important;
+                align-items: center !important;
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            
+            /* Target ALL text elements within dropdown options - NUCLEAR */
+            li[role="option"] *,
+            div[role="listbox"] div[role="option"] *,
+            div[role="listbox"] li[role="option"] *,
+            ul[role="listbox"] li[role="option"] *,
+            div[data-baseweb="menu"] li *,
+            div[data-baseweb="menu"] div[role="option"] *,
+            li[data-baseweb="list-item"] *,
+            [data-baseweb="popover"] li[role="option"] *,
+            div[role="listbox"] span,
+            div[role="listbox"] div,
+            div[role="listbox"] p {
+                color: #000000 !important;
+                background-color: transparent !important;
+            }
+            
+            /* Hover state for dropdown options - ALL variants INCLUDING BARE */
+            li[role="option"]:hover,
+            div[role="listbox"] div[role="option"]:hover,
+            div[role="listbox"] li[role="option"]:hover,
+            ul[role="listbox"] li[role="option"]:hover,
+            div[data-baseweb="menu"] li:hover,
+            div[data-baseweb="menu"] div[role="option"]:hover,
+            li[data-baseweb="list-item"]:hover,
+            [data-baseweb="popover"] li[role="option"]:hover {
+                background-color: #f5f5f5 !important;
+                color: #000000 !important;
+            }
+            
+            /* Hover state text */
+            li[role="option"]:hover *,
+            div[role="listbox"] div[role="option"]:hover *,
+            div[role="listbox"] li[role="option"]:hover *,
+            ul[role="listbox"] li[role="option"]:hover *,
+            div[data-baseweb="menu"] li:hover *,
+            div[data-baseweb="menu"] div[role="option"]:hover *,
+            li[data-baseweb="list-item"]:hover *,
+            [data-baseweb="popover"] li[role="option"]:hover * {
+                color: #000000 !important;
+            }
+            
+            /* Selected/highlighted option - ALL variants INCLUDING BARE */
+            li[role="option"][aria-selected="true"],
+            div[role="listbox"] div[role="option"][aria-selected="true"],
+            div[role="listbox"] li[role="option"][aria-selected="true"],
+            ul[role="listbox"] li[role="option"][aria-selected="true"],
+            div[data-baseweb="menu"] li[aria-selected="true"],
+            div[data-baseweb="menu"] div[role="option"][aria-selected="true"],
+            li[data-baseweb="list-item"][aria-selected="true"],
+            [data-baseweb="popover"] li[role="option"][aria-selected="true"] {
+                background-color: #e3f2fd !important;
+                color: #000000 !important;
+            }
+            
+            /* Selected option text */
+            li[role="option"][aria-selected="true"] *,
+            div[role="listbox"] div[role="option"][aria-selected="true"] *,
+            div[role="listbox"] li[role="option"][aria-selected="true"] *,
+            ul[role="listbox"] li[role="option"][aria-selected="true"] *,
+            div[data-baseweb="menu"] li[aria-selected="true"] *,
+            div[data-baseweb="menu"] div[role="option"][aria-selected="true"] *,
+            li[data-baseweb="list-item"][aria-selected="true"] *,
+            [data-baseweb="popover"] li[role="option"][aria-selected="true"] * {
+                color: #000000 !important;
+            }
+            
+            /* Make checkbox labels bigger */
+            label[data-baseweb="checkbox"] {
+                font-size: 1.05rem !important;
+                font-weight: 500 !important;
+            }
+            
+            /* Style checkbox container */
+            div[data-testid="stCheckbox"] {
+                padding: 0.5rem 0 !important;
+            }
+            
+            /* Make label text more visible */
+            .stSelectbox label, .stCheckbox label {
+                font-size: 1rem !important;
+                font-weight: 600 !important;
+                margin-bottom: 0.5rem !important;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <style>
+            /* Make selectboxes taller and more readable */
+            div[data-baseweb="select"] > div {
+                min-height: 50px !important;
+                font-size: 1.1rem !important;
+                padding: 0.75rem 1rem !important;
+            }
+            
+            /* Style the selectbox text */
+            div[data-baseweb="select"] > div > div {
+                font-size: 1.1rem !important;
+                font-weight: 500 !important;
+                line-height: 1.5 !important;
+            }
+            
+            /* Style the dropdown options */
+            div[role="listbox"] div[role="option"] {
+                min-height: 48px !important;
+                font-size: 1.05rem !important;
+                padding: 0.75rem 1rem !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            /* Make checkbox labels bigger */
+            label[data-baseweb="checkbox"] {
+                font-size: 1.05rem !important;
+                font-weight: 500 !important;
+            }
+            
+            /* Style checkbox container */
+            div[data-testid="stCheckbox"] {
+                padding: 0.5rem 0 !important;
+            }
+            
+            /* Make label text more visible */
+            .stSelectbox label, .stCheckbox label {
+                font-size: 1rem !important;
+                font-weight: 600 !important;
+                margin-bottom: 0.5rem !important;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+
+
 # Export main components
 __all__ = [
     'ModernUI',
@@ -668,5 +1018,7 @@ __all__ = [
     'create_modern_header',
     'create_glass_card',
     'create_modern_button',
-    'create_modern_metric_card'
+    'create_modern_metric_card',
+    'create_settings_panel',
+    'apply_light_mode_fix'
 ]

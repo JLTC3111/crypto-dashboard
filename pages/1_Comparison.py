@@ -7,7 +7,8 @@ from helpers.modern_ui import (
     create_modern_sidebar,
     create_modern_header,
     create_glass_card,
-    create_modern_metric_card
+    create_modern_metric_card,
+    apply_light_mode_fix
 )
 from helpers.i18n import t
 from helpers.svg_icons import get_svg_icon
@@ -24,6 +25,9 @@ st.set_page_config(
 
 # Apply modern theme
 ModernUI.apply_modern_theme()
+
+# Apply light mode text fix
+apply_light_mode_fix()
 
 # Create modern sidebar
 create_modern_sidebar()

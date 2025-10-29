@@ -42,12 +42,14 @@ try:
         create_modern_sidebar, 
         create_modern_header,
         create_glass_card,
-        create_modern_metric_card
+        create_modern_metric_card,
+        apply_light_mode_fix
     )
 except ImportError as e:
     ModernUI = None
     create_modern_sidebar = None
     create_modern_header = None
+    apply_light_mode_fix = None
     st.warning(f"Modern UI not available: {e}")
 
 try:
@@ -67,6 +69,13 @@ else:
     # Apply basic theme as fallback
     if Theme:
         Theme.apply_theme()
+
+# Apply light mode text fix
+if apply_light_mode_fix:
+    try:
+        apply_light_mode_fix()
+    except Exception as e:
+        st.error(f"Error applying light mode fix: {e}")
 
 # Initialize CoinGecko API client
 cg = CoinGeckoAPI()

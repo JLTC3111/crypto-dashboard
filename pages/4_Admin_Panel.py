@@ -6,12 +6,21 @@ Handles password resets and user management for non-existent email addresses
 import streamlit as st
 from supabase_config import SupabaseAdmin, require_auth, show_admin_panel
 
+try:
+    from helpers.modern_ui import apply_light_mode_fix
+except ImportError:
+    apply_light_mode_fix = None
+
 # Page configuration
 st.set_page_config(
     page_title="Admin Panel",
     page_icon="🔧",
     layout="wide"
 )
+
+# Apply light mode text fix
+if apply_light_mode_fix:
+    apply_light_mode_fix()
 
 # Custom CSS for admin styling
 st.markdown("""
