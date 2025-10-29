@@ -84,16 +84,26 @@ def style_dataframe(df):
     """
     Apply custom styling to the dataframe.
     - Format numbers with commas and decimals.
-    - Color '7d Change (%)' based on value.
+    - Color '7d Change (%)' based on value (only in dark mode).
     - Center align all content.
     """
+    # Check current theme
+    current_theme = st.session_state.get('theme', 'dark')
+    
     def color_change(val):
         """
         Colors positive values green and negative values red.
+        Only applies in dark mode for visibility.
         """
-        color = 'green' if val > 0 else 'red' if val < 0 else 'white'
-        return f'color: {color}'
+        if current_theme == 'light':
+            # In light mode, use black text for all values
+            return 'color: #000000'
+        else:
+            # In dark mode, use colored text
+            color = 'green' if val > 0 else 'red' if val < 0 else 'white'
+            return f'color: {color}'
 
+    # Format numbers first
     styler = df.style.format({
         'Price (USD)': '$ {:,.2f}',
         'Market Cap (USD)': '$ {:,}',
@@ -103,7 +113,18 @@ def style_dataframe(df):
         'Max Supply': '{:,.0f}',
         'ATH (USD)': '$ {:,.2f}',
         'ATH Change (%)': '{:,.2f}%'
-    }).map(color_change, subset=['7d Change (%)', 'ATH Change (%)']).set_properties(**{'text-align': 'center'})
+    })
+    
+    # Only apply color mapping in dark mode
+    if current_theme == 'dark':
+        styler = styler.map(color_change, subset=['7d Change (%)', 'ATH Change (%)'])
+    
+    # Set text alignment for all cells
+    styler = styler.set_properties(**{'text-align': 'center'})
+    
+    # In light mode, force all text to be black
+    if current_theme == 'light':
+        styler = styler.set_properties(**{'color': '#000000', 'background-color': '#ffffff'})
     
     return styler
 

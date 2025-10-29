@@ -800,13 +800,36 @@ def apply_light_mode_fix():
                 color: #1a1a1a !important;
             }
             
-            /* Override any gradient text effects in light mode */
+            /* Override any gradient text effects in light mode - AGGRESSIVE */
             h1[style*="background-clip"],
             h2[style*="background-clip"],
             h3[style*="background-clip"],
-            span[style*="background-clip"] {
-                -webkit-text-fill-color: #1a1a1a !important;
+            h4[style*="background-clip"],
+            h5[style*="background-clip"],
+            h6[style*="background-clip"],
+            span[style*="background-clip"],
+            div[style*="background-clip"],
+            p[style*="background-clip"],
+            h1[style*="webkit-background-clip"],
+            h2[style*="webkit-background-clip"],
+            h3[style*="webkit-background-clip"],
+            span[style*="webkit-background-clip"],
+            div[style*="webkit-background-clip"] {
+                -webkit-text-fill-color: #000000 !important;
+                -webkit-background-clip: unset !important;
+                background-clip: unset !important;
                 background: none !important;
+                color: #000000 !important;
+            }
+            
+            /* Target gradient text wrappers */
+            .gradient-text,
+            [class*="gradient"] {
+                -webkit-text-fill-color: #000000 !important;
+                -webkit-background-clip: unset !important;
+                background-clip: unset !important;
+                background: none !important;
+                color: #000000 !important;
             }
             
             /* Make selectboxes taller and more readable with light background */
@@ -960,6 +983,256 @@ def apply_light_mode_fix():
                 font-size: 1rem !important;
                 font-weight: 600 !important;
                 margin-bottom: 0.5rem !important;
+            }
+            
+            /* ===== COMPREHENSIVE TABLE/DATAFRAME STYLING FOR LIGHT MODE - NUCLEAR OPTION ===== */
+            
+            /* CSS ANIMATION HACK - Force recalculation to override inline styles */
+            @keyframes forceBlackText {
+                from { color: #000000; }
+                to { color: #000000; }
+            }
+            
+            /* ABSOLUTE NUCLEAR: Use filter to invert colors if needed */
+            div[data-testid="stDataFrame"],
+            div[data-testid="stTable"] {
+                /* Uncomment below if all else fails - will invert the entire table */
+                /* filter: invert(1) hue-rotate(180deg); */
+            }
+            
+            /* MAXIMUM SPECIFICITY: Force ALL text to black */
+            html body div[data-testid="stDataFrame"] *,
+            html body div[data-testid="stDataFrame"] td,
+            html body div[data-testid="stDataFrame"] th,
+            html body div[data-testid="stDataFrame"] div,
+            html body div[data-testid="stDataFrame"] span,
+            html body div[data-testid="stDataFrame"] p,
+            html body div[data-testid="stTable"] *,
+            html body div[data-testid="stTable"] td,
+            html body div[data-testid="stTable"] th,
+            html body div[data-testid="stTable"] div,
+            html body div[data-testid="stTable"] span,
+            html body div[data-testid="stTable"] p {
+                color: #000000 !important;
+                -webkit-text-fill-color: #000000 !important;
+                text-shadow: none !important;
+                animation: forceBlackText 0.01s infinite;
+            }
+            
+            /* Target styled elements specifically */
+            html body [data-testid="stDataFrame"] [style*="color"],
+            html body [data-testid="stTable"] [style*="color"] {
+                color: #000000 !important;
+                -webkit-text-fill-color: #000000 !important;
+            }
+            
+            /* Override Streamlit's dataframe container completely */
+            div[data-testid="stDataFrame"],
+            div[data-testid="stDataFrame"] > div,
+            div[data-testid="stDataFrame"] > div > div,
+            div[data-testid="stTable"],
+            div[data-testid="stTable"] > div,
+            div[data-testid="stTable"] > div > div,
+            .stDataFrame,
+            .stDataFrame > div,
+            .stDataFrame > div > div {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+            }
+            
+            /* Target all table elements with maximum specificity */
+            table,
+            table[data-testid],
+            .dataframe,
+            .stDataFrame table,
+            div[data-testid="stDataFrame"] table,
+            div[data-testid="stTable"] table {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                border: 1px solid #d0d0d0 !important;
+            }
+            
+            /* Table body background */
+            tbody,
+            table tbody,
+            .dataframe tbody,
+            .stDataFrame tbody,
+            div[data-testid="stDataFrame"] tbody,
+            div[data-testid="stTable"] tbody {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            
+            /* Table headers - light gray background with dark text */
+            th,
+            table th,
+            thead th,
+            .dataframe th,
+            .dataframe thead th,
+            .stDataFrame th,
+            div[data-testid="stDataFrame"] th,
+            div[data-testid="stTable"] th,
+            table thead th,
+            tbody th {
+                background-color: #f8f9fa !important;
+                background: #f8f9fa !important;
+                color: #000000 !important;
+                font-weight: 600 !important;
+                border-bottom: 2px solid #d0d0d0 !important;
+            }
+            
+            /* Force all text in headers to be dark */
+            th *,
+            table th *,
+            thead th *,
+            .dataframe th *,
+            .dataframe thead th *,
+            .stDataFrame th *,
+            div[data-testid="stDataFrame"] th *,
+            div[data-testid="stTable"] th * {
+                color: #000000 !important;
+            }
+            
+            /* Table cells - white background with dark text - MAXIMUM SPECIFICITY */
+            td,
+            td[style],
+            table td,
+            table td[style],
+            tbody td,
+            tbody td[style],
+            .dataframe td,
+            .dataframe tbody td,
+            .stDataFrame td,
+            div[data-testid="stDataFrame"] td,
+            div[data-testid="stTable"] td,
+            table tbody td,
+            table tbody td[style] {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                border-bottom: 1px solid #e0e0e0 !important;
+            }
+            
+            /* Override ANY styled td with inline color */
+            td[style*="color: green"],
+            td[style*="color: red"],
+            td[style*="color: white"],
+            td[style*="color:green"],
+            td[style*="color:red"],
+            td[style*="color:white"] {
+                color: #000000 !important;
+            }
+            
+            /* Force all text in cells to be dark - OVERRIDE INLINE STYLES */
+            td *,
+            table td *,
+            tbody td *,
+            .dataframe td *,
+            .dataframe tbody td *,
+            .stDataFrame td *,
+            div[data-testid="stDataFrame"] td *,
+            div[data-testid="stTable"] td *,
+            td[style],
+            table td[style],
+            tbody td[style] {
+                color: #000000 !important;
+            }
+            
+            /* Override styled cells with inline styles */
+            td[style*="color"],
+            table td[style*="color"],
+            tbody td[style*="color"],
+            .dataframe td[style*="color"],
+            .stDataFrame td[style*="color"],
+            div[data-testid="stDataFrame"] td[style*="color"],
+            td div,
+            td span,
+            td p,
+            table td div,
+            table td span,
+            table td p,
+            tbody td div,
+            tbody td span,
+            tbody td p {
+                color: #000000 !important;
+            }
+            
+            /* Target all child elements with ANY inline style */
+            td > *[style],
+            table td > *[style],
+            tbody td > *[style] {
+                color: #000000 !important;
+            }
+            
+            /* Table rows - white background */
+            tr,
+            table tr,
+            tbody tr,
+            .dataframe tr,
+            .dataframe tbody tr,
+            .stDataFrame tr,
+            div[data-testid="stDataFrame"] tr,
+            div[data-testid="stTable"] tr {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                    color: #000000 !important;
+            }
+            
+            /* Hover state for table rows */
+            tr:hover,
+            tr:hover td,
+            table tr:hover,
+            table tr:hover td,
+            tbody tr:hover,
+            tbody tr:hover td,
+            .dataframe tr:hover,
+            .dataframe tr:hover td,
+            .dataframe tbody tr:hover td,
+            .stDataFrame tr:hover,
+            .stDataFrame tr:hover td,
+            div[data-testid="stDataFrame"] tr:hover,
+            div[data-testid="stDataFrame"] tr:hover td,
+            div[data-testid="stTable"] tr:hover,
+            div[data-testid="stTable"] tr:hover td {
+                background-color: #f5f5f5 !important;
+                background: #f5f5f5 !important;
+                color: #000000 !important;
+            }
+            
+            /* Hover state text */
+            tr:hover td *,
+            table tr:hover td *,
+            tbody tr:hover td *,
+            .dataframe tr:hover td *,
+            .dataframe tbody tr:hover td *,
+            .stDataFrame tr:hover td *,
+            div[data-testid="stDataFrame"] tr:hover td *,
+            div[data-testid="stTable"] tr:hover td * {
+                color: #000000 !important;
+            }
+            
+            /* Alternate row colors for better readability */
+            tr:nth-child(even),
+            tr:nth-child(even) td,
+            table tr:nth-child(even),
+            table tr:nth-child(even) td,
+            tbody tr:nth-child(even),
+            tbody tr:nth-child(even) td,
+            .dataframe tr:nth-child(even),
+            .dataframe tr:nth-child(even) td,
+            .dataframe tbody tr:nth-child(even) td,
+            .stDataFrame tr:nth-child(even),
+            .stDataFrame tr:nth-child(even) td {
+                background-color: #fafafa !important;
+                background: #fafafa !important;
+            }
+            
+            /* Override any styled components */
+            [data-testid="stDataFrame"] [style],
+            [data-testid="stTable"] [style] {
+                background-color: #ffffff !important;
+                background: #ffffff !important;
             }
         </style>
         """, unsafe_allow_html=True)
