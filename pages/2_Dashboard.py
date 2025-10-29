@@ -56,29 +56,6 @@ else:
     st.warning(f"📊 **Backup Data**: Using {data_source} (APIs temporarily unavailable)")
 
 # Use 'close' prices
-
-# Check data source and provide user feedback
-has_binance_api = False
-try:
-    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
-except:
-    pass
-
-if has_binance_api:
-    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
-else:
-    st.info("� **Public Data**: Using public Binance API (no authentication required for price data)")
-
-# Show warning if no data is fetched
-if history is None or history.empty:
-    st.error("❌ **No Data Available**: Unable to fetch price data from Binance API. Please check your internet connection or try again later.")
-    st.stop()
-
-if history is None or history.empty:
-    st.error("No historical data available.")
-    st.stop()
-
-# Use 'close' prices
 price_series = history["close"]
 timestamps = history.index
 latest_price = float(price_series.iloc[-1])

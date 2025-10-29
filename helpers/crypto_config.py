@@ -115,7 +115,6 @@ TOP_200_CRYPTOS = {
     "MonaCoin (MONA)": "MONA",
     
     # 101-120
-    "Dogecoin (DOGE)": "DOGE",
     "Shiba Inu (SHIB)": "SHIB",
     "Pepe (PEPE)": "PEPE",
     "Floki (FLOKI)": "FLOKI",
@@ -159,7 +158,6 @@ TOP_200_CRYPTOS = {
     "SIDUS (SIDUS)": "SIDUS",
     
     # 141-160
-    "Chainlink (LINK)": "LINK",
     "Band Protocol (BAND)": "BAND",
     "API3 (API3)": "API3",
     "Tellor (TRB)": "TRB",
@@ -181,17 +179,7 @@ TOP_200_CRYPTOS = {
     "Witnet (WIT)": "WIT",
     
     # 161-180
-    "Compound (COMP)": "COMP",
-    "Aave (AAVE)": "AAVE",
-    "MakerDAO (MKR)": "MKR",
-    "Yearn.finance (YFI)": "YFI",
-    "Curve DAO Token (CRV)": "CRV",
     "Balancer (BAL)": "BAL",
-    "SushiSwap (SUSHI)": "SUSHI",
-    "1inch Network (1INCH)": "1INCH",
-    "Bancor (BNT)": "BNT",
-    "Kyber Network Crystal v2 (KNC)": "KNC",
-    "Synthetix (SNX)": "SNX",
     "UMA (UMA)": "UMA",
     "Badger DAO (BADGER)": "BADGER",
     "Harvest Finance (FARM)": "FARM",
@@ -203,7 +191,6 @@ TOP_200_CRYPTOS = {
     "Liquity (LQTY)": "LQTY",
     
     # 181-200
-    "Polygon (MATIC)": "MATIC",
     "Arbitrum (ARB)": "ARB",
     "Optimism (OP)": "OP",
     "Immutable X (IMX)": "IMX",
