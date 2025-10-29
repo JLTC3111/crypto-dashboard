@@ -1,15 +1,39 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-
+from plotly.subplots import make_subplots
+from helpers.modern_ui import (
+    ModernUI,
+    create_modern_sidebar,
+    create_modern_header,
+    create_glass_card,
+    create_modern_metric_card
+)
+from helpers.i18n import t
+from helpers.svg_icons import get_svg_icon
 from helpers.pricing import get_price_history
 from helpers.risk import max_drawdown, sharpe_ratio, value_at_risk
 from helpers.crypto_config import get_sorted_crypto_list, get_symbol_from_name, get_symbol_map
 
 # Set wide layout for better display
-st.set_page_config(page_title="Asset Comparison", page_icon="⚖️", layout="wide")
+st.set_page_config(
+    page_title="Crypto Comparison",
+    page_icon="⚖️",
+    layout="wide"
+)
 
-st.title("⚖️ Asset Comparison")
+# Apply modern theme
+ModernUI.apply_modern_theme()
+
+# Create modern sidebar
+create_modern_sidebar()
+
+# Modern header
+create_modern_header(
+    "Cryptocurrency Comparison",
+    "Compare risk profiles and performance of different crypto assets side by side",
+    icon="scale"
+)
 
 # Use comprehensive top 200 crypto list
 symbol_map = get_symbol_map()

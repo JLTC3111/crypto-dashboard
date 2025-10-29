@@ -1,10 +1,4 @@
 import streamlit as st
-import pandas as pd
-from pycoingecko import CoinGeckoAPI
-import time
-from datetime import datetime
-from helpers.theme_config import Theme, create_theme_toggle, create_gradient_header
-from helpers.i18n import I18n, t, create_language_selector
 
 # Page configuration - MUST be the first Streamlit command
 st.set_page_config(
@@ -14,8 +8,65 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Apply theme
-theme = Theme.apply_theme()
+import pandas as pd
+from pycoingecko import CoinGeckoAPI
+import time
+from datetime import datetime
+
+# Import helpers with error handling
+try:
+    from helpers.theme_config import Theme
+except ImportError:
+    Theme = None
+    st.warning("Theme configuration not available")
+
+try:
+    from helpers.i18n import I18n, t
+except ImportError:
+    # Fallback function if i18n not available
+    def t(key):
+        translations = {
+            'welcome_message': 'Welcome to Crypto Risk Dashboard',
+            'settings': 'Settings',
+            'language': 'Language',
+            'theme': 'Theme',
+            'refresh': 'Refresh',
+            'last_updated': 'Last updated'
+        }
+        return translations.get(key, key)
+    st.warning("Internationalization not available, using English")
+
+try:
+    from helpers.modern_ui import (
+        ModernUI, 
+        create_modern_sidebar, 
+        create_modern_header,
+        create_glass_card,
+        create_modern_metric_card
+    )
+except ImportError as e:
+    ModernUI = None
+    create_modern_sidebar = None
+    create_modern_header = None
+    st.warning(f"Modern UI not available: {e}")
+
+try:
+    from helpers.svg_icons import get_svg_icon
+except ImportError as e:
+    def get_svg_icon(name, size=24, color=None):
+        return ""
+    st.warning(f"SVG icons not available: {e}")
+
+# Apply modern theme if available
+if ModernUI:
+    try:
+        ModernUI.apply_modern_theme()
+    except Exception as e:
+        st.error(f"Error applying theme: {e}")
+else:
+    # Apply basic theme as fallback
+    if Theme:
+        Theme.apply_theme()
 
 # Initialize CoinGecko API client
 cg = CoinGeckoAPI()
@@ -98,34 +149,92 @@ def get_top_coins_data():
             st.error(f"Failed to fetch data from CoinGecko: {e}")
             return pd.DataFrame()
 
-# Sidebar settings
-with st.sidebar:
-    st.header("⚙️ " + t('settings'))
-    create_language_selector()
-    st.markdown("---")
-    create_theme_toggle()
+# Create sidebar with fallback
+if create_modern_sidebar:
+    try:
+        create_modern_sidebar()
+    except Exception as e:
+        st.sidebar.error(f"Error creating sidebar: {e}")
+        # Fallback sidebar
+        with st.sidebar:
+            st.header("⚙️ Settings")
+else:
+    # Fallback sidebar
+    with st.sidebar:
+        st.header("⚙️ Settings")
 
-# Header with gradient
-create_gradient_header(
-    t('welcome_message'),
-    "Use the navigation to access Dashboard, Comparison, and Portfolio tools"
-)
+# Create header with fallback
+if create_modern_header:
+    try:
+        create_modern_header(
+            t('welcome_message'),
+            "Professional cryptocurrency risk management and analytics platform",
+            icon="chart"
+        )
+    except Exception as e:
+        st.error(f"Error creating header: {e}")
+        # Fallback header
+        st.title("📊 Crypto Risk Dashboard")
+        st.markdown("Professional cryptocurrency risk management and analytics platform")
+else:
+    # Fallback header
+    st.title("📊 Crypto Risk Dashboard")
+    st.markdown("Professional cryptocurrency risk management and analytics platform")
 
-st.subheader("Live Market Data")
+# Live Market Data Section
+market_header = f"""
+<div style="display: flex; align-items: center; gap: 0.75rem; margin: 2rem 0 1rem 0;">
+    {get_svg_icon('analytics', size=24)}
+    <h2 style="margin: 0; font-weight: 600;">Live Market Data</h2>
+</div>
+"""
+st.markdown(market_header, unsafe_allow_html=True)
 
-# Add controls for data refresh and display
-col1, col2, col3 = st.columns(3)
+# Controls in a glass card
+controls_html = f"""
+<div class="glass-card" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        {get_svg_icon('settings', size=20)}
+        <h3 style="margin: 0; font-weight: 600;">Display Controls</h3>
+    </div>
+</div>
+"""
+st.markdown(controls_html, unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns([2, 2, 2, 1])
 with col1:
-    height_slider = st.slider("Adjust Table Height", min_value=200, max_value=1000, value=500, step=50)
+    height_slider = st.slider(
+        "📏 Table Height", 
+        min_value=200, 
+        max_value=1000, 
+        value=500, 
+        step=50,
+        help="Adjust the height of the market data table"
+    )
 with col2:
-    num_coins = st.selectbox("Number of Coins", [50, 100, 200, 300, 500], index=1)
+    num_coins = st.selectbox(
+        "🪙 Number of Coins", 
+        [50, 100, 200, 300, 500], 
+        index=1,
+        help="Select how many cryptocurrencies to display"
+    )
 with col3:
-    auto_refresh = st.checkbox("Auto-refresh (20 min)", value=False)
+    auto_refresh = st.checkbox(
+        "🔄 Auto-refresh (20 min)", 
+        value=False,
+        help="Automatically refresh data every 20 minutes"
+    )
+with col4:
+    # Modern refresh button
+    if st.button(
+        "↻ " + t('refresh'), 
+        type="primary", 
+        use_container_width=True,
+        help="Manually refresh market data"
+    ):
+        st.cache_data.clear()
+        st.rerun()
 
-# Add manual refresh button
-if st.button("🔄 " + t('refresh'), type="primary"):
-    st.cache_data.clear()
-    st.rerun()
 
 # Display last update time
 if 'last_update' not in st.session_state:

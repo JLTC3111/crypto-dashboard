@@ -296,17 +296,46 @@ class Theme:
 
 
 def create_theme_toggle():
-    """Create a theme toggle button"""
-    theme = Theme.get_current_theme()
+    """Create a modern theme toggle button with SVG icons"""
+    from helpers.svg_icons import get_svg_icon
     
-    # Theme toggle icon (sun for light mode, moon for dark mode)
-    icon = "🌙" if st.session_state.get('theme', 'dark') == 'light' else "☀️"
+    current_theme = st.session_state.get('theme', 'dark')
+    is_dark = current_theme == 'dark'
     
-    col1, col2, col3 = st.columns([6, 1, 1])
-    with col2:
-        if st.button(icon, key="theme_toggle", help="Toggle theme"):
-            Theme.toggle_theme()
-            st.rerun()
+    # Create modern toggle button with SVG icons
+    button_html = f"""
+    <div style="display: flex; gap: 0.5rem;">
+        <button onclick="document.getElementById('theme_toggle_hidden').click()" 
+                style="
+                    background: linear-gradient(135deg, 
+                        {'#1976D2' if not is_dark else '#4A9EFF'}, 
+                        {'#5E35B1' if not is_dark else '#7B61FF'});
+                    color: white;
+                    border: none;
+                    border-radius: 50px;
+                    padding: 0.5rem 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                "
+                onmouseover="this.style.transform='scale(1.05)'"
+                onmouseout="this.style.transform='scale(1)'">
+            {get_svg_icon('sun' if is_dark else 'moon', size=18, color='white')}
+            <span>{('Light' if is_dark else 'Dark') + ' Mode'}</span>
+        </button>
+    </div>
+    """
+    
+    st.markdown(button_html, unsafe_allow_html=True)
+    
+    # Hidden button for actual theme toggle
+    if st.button("", key="theme_toggle_hidden", help="Toggle theme", disabled=False, label_visibility="hidden"):
+        Theme.toggle_theme()
+        st.rerun()
 
 
 def get_theme_colors() -> Dict[str, str]:
