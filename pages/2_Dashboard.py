@@ -1,94 +1,23 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import numpy as np
-from helpers.modern_ui import (
-    ModernUI, 
-    create_modern_sidebar,
-    create_modern_header,
-    create_glass_card,
-    create_modern_metric_card,
-    apply_light_mode_fix
-)
-from helpers.i18n import t
-from helpers.svg_icons import get_svg_icon
+
 from helpers.pricing import get_price_history, get_current_prices
 from helpers.risk import max_drawdown, sharpe_ratio, value_at_risk
 from helpers.export import export_pdf
 from helpers.crypto_config import get_sorted_crypto_list, get_symbol_from_name, get_symbol_map
 
-# Page Configuration
-st.set_page_config(
-    page_title="Crypto Risk Dashboard",
-    page_icon="📊",
-    layout="wide"
-)
+# Set wide layout for better display
+st.set_page_config(page_title="Crypto Risk Dashboard", page_icon="🛝", layout="wide")
 
-# Apply modern theme
-ModernUI.apply_modern_theme()
-
-# Apply light mode text fix
-apply_light_mode_fix()
-
-# Create modern sidebar
-create_modern_sidebar()
-
-# Modern header
-create_modern_header(
-    "Asset Risk Dashboard",
-    "Analyze cryptocurrency risk profiles with advanced metrics and visualizations",
-    icon="chart"
-)
+st.title("📊 Crypto Risk Management Dashboard")
 
 # Use comprehensive top 200 crypto list
 symbol_map = get_symbol_map()
 crypto_list = get_sorted_crypto_list()
 
-# Asset selection in a modern card
-asset_selection_html = f"""
-<div class="glass-card" style="margin-bottom: 1.5rem;">
-    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-        {get_svg_icon('settings', size=20)}
-        <h3 style="margin: 0; font-weight: 600;">Configuration</h3>
-    </div>
-</div>
-"""
-st.markdown(asset_selection_html, unsafe_allow_html=True)
-
-col1, col2 = st.columns([2, 1])
-
-with col1:
-    # Asset selection using the crypto list
-    selection = st.selectbox(
-        "🪙 Select Cryptocurrency",
-        options=crypto_list,
-        index=0
-    )
-    
-    selected_symbol = symbol_map[selection]
-
-with col2:
-    # Time period selection
-    period_options = {
-        "1 Week": 7,
-        "1 Month": 30,
-        "3 Months": 90,
-        "6 Months": 180,
-        "1 Year": 365,
-        "3 Years": 1095,
-        "5 Years": 1825
-    }
-    
-    period_label = st.selectbox(
-        "📅 Time Period",
-        options=list(period_options.keys()),
-        index=4  # Default to 1 Year
-    )
-    
-    days = period_options[period_label]
-    # Convert days to years for the API call
-    years = max(1, days // 365)  # At least 1 year
+selection = st.selectbox("Choose an asset:", crypto_list)
+symbol = symbol_map[selection]
 
 # Fetch historical data and capture status
 with st.spinner(f"Fetching data for {selection}..."):
@@ -99,7 +28,7 @@ with st.spinner(f"Fetching data for {selection}..."):
     sys.stdout = captured_output = io.StringIO()
     
     try:
-        history = get_price_history(selected_symbol, years=years)
+        history = get_price_history(symbol)
         output_text = captured_output.getvalue()
     finally:
         sys.stdout = old_stdout
@@ -125,6 +54,29 @@ elif data_source == "CoinGecko API":
     st.info(f"🦎 **Alternative Data**: Using data from {data_source} (Binance unavailable)")
 else:
     st.warning(f"📊 **Backup Data**: Using {data_source} (APIs temporarily unavailable)")
+
+# Use 'close' prices
+
+# Check data source and provide user feedback
+has_binance_api = False
+try:
+    has_binance_api = bool(st.secrets.get("binance_api", {}).get("api_key", ""))
+except:
+    pass
+
+if has_binance_api:
+    st.success("🔑 **Live Data**: Using real-time data from authenticated Binance API")
+else:
+    st.info("� **Public Data**: Using public Binance API (no authentication required for price data)")
+
+# Show warning if no data is fetched
+if history is None or history.empty:
+    st.error("❌ **No Data Available**: Unable to fetch price data from Binance API. Please check your internet connection or try again later.")
+    st.stop()
+
+if history is None or history.empty:
+    st.error("No historical data available.")
+    st.stop()
 
 # Use 'close' prices
 price_series = history["close"]
@@ -166,6 +118,7 @@ if high_alert > 0 and latest_price > high_alert:
 if low_alert > 0 and latest_price < low_alert:
     st.success(f"✅ BUY ALERT: {selection} has dropped below your low threshold of ${low_alert:,.2f}!")
 
+
 # --- Display Metrics ---
 col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -185,26 +138,26 @@ st.subheader("Performance Ratios")
 r_col1, r_col2 = st.columns(2)
 
 # Get current prices for ratio calculations
-if selected_symbol not in ['BTC', 'ETH']:
+if symbol not in ['BTC', 'ETH']:
     try:
         # Get current prices for ratios
         ratio_symbols = []
-        if selected_symbol != 'BTC':
+        if symbol != 'BTC':
             ratio_symbols.append('BTC')
-        if selected_symbol != 'ETH':
+        if symbol != 'ETH':
             ratio_symbols.append('ETH')
         
         if ratio_symbols:
-            ratio_symbols.append(selected_symbol)
+            ratio_symbols.append(symbol)
             current_prices = get_current_prices(ratio_symbols)
             
-            if selected_symbol != 'BTC' and current_prices.get('BTC', 0) > 0 and current_prices.get(selected_symbol, 0) > 0:
-                btc_ratio = current_prices[selected_symbol] / current_prices['BTC']
-                r_col1.metric(f"{selected_symbol}/BTC", f"{btc_ratio:.8f}")
+            if symbol != 'BTC' and current_prices.get('BTC', 0) > 0 and current_prices.get(symbol, 0) > 0:
+                btc_ratio = current_prices[symbol] / current_prices['BTC']
+                r_col1.metric(f"{symbol}/BTC", f"{btc_ratio:.8f}")
             
-            if selected_symbol != 'ETH' and current_prices.get('ETH', 0) > 0 and current_prices.get(selected_symbol, 0) > 0:
-                eth_ratio = current_prices[selected_symbol] / current_prices['ETH']
-                r_col2.metric(f"{selected_symbol}/ETH", f"{eth_ratio:.8f}")
+            if symbol != 'ETH' and current_prices.get('ETH', 0) > 0 and current_prices.get(symbol, 0) > 0:
+                eth_ratio = current_prices[symbol] / current_prices['ETH']
+                r_col2.metric(f"{symbol}/ETH", f"{eth_ratio:.8f}")
     except Exception as e:
         r_col1.info("Ratio data temporarily unavailable")
         r_col2.info("Ratio data temporarily unavailable")
@@ -212,7 +165,7 @@ if selected_symbol not in ['BTC', 'ETH']:
 
 # --- Price Chart ---
 fig = go.Figure()
-fig.add_trace(go.Scatter(x=timestamps, y=price_series, mode='lines', name=selected_symbol, line=dict(color='blue')))
+fig.add_trace(go.Scatter(x=timestamps, y=price_series, mode='lines', name=symbol, line=dict(color='blue')))
 
 # Add SMAs to chart
 for sma in sma_options:
@@ -224,7 +177,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 # --- Export CSV ---
 csv = history.to_csv(index=True)
-st.download_button("Download CSV", csv, file_name=f"{selected_symbol}_history.csv", mime='text/csv')
+st.download_button("Download CSV", csv, file_name=f"{symbol}_history.csv", mime='text/csv')
 
 # --- Export PDF ---
 pdf_metrics = {

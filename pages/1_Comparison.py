@@ -1,43 +1,15 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from helpers.modern_ui import (
-    ModernUI,
-    create_modern_sidebar,
-    create_modern_header,
-    create_glass_card,
-    create_modern_metric_card,
-    apply_light_mode_fix
-)
-from helpers.i18n import t
-from helpers.svg_icons import get_svg_icon
+
 from helpers.pricing import get_price_history
 from helpers.risk import max_drawdown, sharpe_ratio, value_at_risk
 from helpers.crypto_config import get_sorted_crypto_list, get_symbol_from_name, get_symbol_map
 
 # Set wide layout for better display
-st.set_page_config(
-    page_title="Crypto Comparison",
-    page_icon="⚖️",
-    layout="wide"
-)
+st.set_page_config(page_title="Asset Comparison", page_icon="⚖️", layout="wide")
 
-# Apply modern theme
-ModernUI.apply_modern_theme()
-
-# Apply light mode text fix
-apply_light_mode_fix()
-
-# Create modern sidebar
-create_modern_sidebar()
-
-# Modern header
-create_modern_header(
-    "Cryptocurrency Comparison",
-    "Compare risk profiles and performance of different crypto assets side by side",
-    icon="scale"
-)
+st.title("⚖️ Asset Comparison")
 
 # Use comprehensive top 200 crypto list
 symbol_map = get_symbol_map()
@@ -89,13 +61,13 @@ except:
     pass
 
 if has_binance_api and not is_cloud:
-    st.success("\u2691 **Authenticated Local**: Using real-time data from authenticated Binance API")
+    st.success("🔑 **Authenticated Local**: Using real-time data from authenticated Binance API")
 elif has_binance_api and is_cloud:
-    st.info("\u2691 **Authenticated Cloud**: Using real-time data from authenticated Binance API on Streamlit Cloud")
+    st.info("🔑 **Authenticated Cloud**: Using real-time data from authenticated Binance API on Streamlit Cloud")
 elif not is_cloud:
-    st.info("\u2705 **Public API**: Using public Binance API data")
+    st.info("� **Public API**: Using public Binance API data")
 else:
-    st.warning("\u26A0 **Demo Mode**: Using simulated data. Add Binance API credentials to Streamlit Cloud secrets for real data.")
+    st.warning("⚠️ **Demo Mode**: Using simulated data. Add Binance API credentials to Streamlit Cloud secrets for real data.")
 
 # Check data availability and provide specific error messages
 data1_available = history1 is not None and not history1.empty

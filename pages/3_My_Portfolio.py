@@ -11,16 +11,6 @@ from pycoingecko import CoinGeckoAPI
 # Online-only mode - no local portfolio manager needed
 import time as time_module
 import math
-from helpers.modern_ui import (
-    ModernUI,
-    create_modern_sidebar,
-    create_modern_header,
-    create_glass_card,
-    create_modern_metric_card,
-    apply_light_mode_fix
-)
-from helpers.i18n import t
-from helpers.svg_icons import get_svg_icon
 
 # NOTE: 3D visualizations removed — no conditional numpy import required
 
@@ -401,21 +391,10 @@ def check_button_click(button_key: str) -> bool:
         return False
     
 st.set_page_config(
-    page_title="My Portfolio - Crypto Dashboard",
-    page_icon="💼",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-# Apply modern theme
-ModernUI.apply_modern_theme()
-
-# Apply light mode text fix
-apply_light_mode_fix()
-
-# Create modern sidebar
-create_modern_sidebar()
-
+        page_title="My Crypto Portfolio", 
+        page_icon="🏆",
+        layout="wide"
+    )
 # --- Custom CSS for professional styling
 st.markdown("""
 <style>

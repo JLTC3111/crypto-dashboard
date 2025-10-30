@@ -6,27 +6,26 @@ from binance.client import Client
 from binance.exceptions import BinanceAPIException
 import requests
 import warnings
-from functools import lru_cache
-from typing import Optional, Dict, List
 warnings.filterwarnings('ignore')
 
-@st.cache_resource
 def get_binance_client():
-    """Get authenticated Binance client (cached)"""
+    """Get authenticated Binance client"""
     try:
         api_key = st.secrets.get("binance_api_key")
         api_secret = st.secrets.get("binance_api_secret")
         
         if not api_key or not api_secret:
+            print("⚠️ Binance API credentials not found in secrets")
             return None
             
+        print("Using authenticated Binance client")
         return Client(api_key, api_secret)
     except Exception as e:
+        print(f"❌ Failed to create Binance client: {e}")
         return None
 
-@st.cache_data(ttl=3600)
-def fetch_coingecko_history(symbol: str, days: int = 365) -> pd.DataFrame:
-    """Fetch historical data from CoinGecko API (cached for 1 hour)"""
+def fetch_coingecko_history(symbol, days=365):
+    """Fetch historical data from CoinGecko API (free, no auth required)"""
     try:
         # CoinGecko symbol mapping
         coingecko_symbols = {
@@ -149,9 +148,8 @@ def create_minimal_data(symbol, days=90):
         print(f"❌ Failed to create minimal data for {symbol}: {e}")
         return pd.DataFrame()
 
-@st.cache_data(ttl=300)
-def get_coingecko_current_prices(symbols: List[str]) -> Dict[str, float]:
-    """Get current prices from CoinGecko API (cached for 5 minutes)"""
+def get_coingecko_current_prices(symbols):
+    """Get current prices from CoinGecko API"""
     try:
         # CoinGecko symbol mapping
         coingecko_symbols = {
@@ -297,17 +295,16 @@ def fetch_binance_history(symbol: str, interval="1d", start_str=None, end_str=No
         else:
             return pd.DataFrame()
 
-@st.cache_data(ttl=1800)
-def get_price_history(symbol: str, years: int = 5) -> pd.DataFrame:
+def get_price_history(symbol: str, years=5):
     """
-    Main wrapper to get historical OHLCV data (cached for 30 minutes)
+    Main wrapper used by the app to get historical OHLCV data.
 
     Parameters:
-        symbol: Crypto asset symbol (e.g., 'BTC', 'SOL')
-        years: Number of years of historical data to fetch
+        symbol (str): Crypto asset symbol (e.g., 'BTC', 'SOL')
+        years (int): Number of years of historical data to fetch
 
     Returns:
-        Historical OHLCV DataFrame
+        pd.DataFrame: Historical OHLCV
     """
     end_date = datetime.utcnow()
     start_date = end_date - pd.DateOffset(years=years)
@@ -357,16 +354,15 @@ def get_price_history(symbol: str, years: int = 5) -> pd.DataFrame:
     
     return result
 
-@st.cache_data(ttl=60)
-def get_current_prices(symbols: List[str]) -> Dict[str, float]:
+def get_current_prices(symbols: list) -> dict:
     """
-    Get current prices for symbols with CoinGecko fallback (cached for 1 minute)
+    Get current prices for a list of symbols with CoinGecko fallback.
     
     Parameters:
-        symbols: List of crypto symbols (e.g., ['BTC', 'ETH', 'SOL'])
+        symbols (list): List of crypto symbols (e.g., ['BTC', 'ETH', 'SOL'])
     
     Returns:
-        Dictionary mapping symbols to current prices
+        dict: Dictionary mapping symbols to current prices
     """
     prices = {}
     

@@ -5,15 +5,15 @@ import streamlit as st
 from supabase_config import require_auth, PortfolioDatabase
 
 try:
-    from helpers.modern_ui import apply_light_mode_fix
+    from helpers.modern_ui import apply_dropdown_fix
 except ImportError:
-    apply_light_mode_fix = None
+    apply_dropdown_fix = None
 
 st.set_page_config(page_title="Debug User Info", page_icon="🔍")
 
 # Apply light mode text fix
-if apply_light_mode_fix:
-    apply_light_mode_fix()
+if apply_dropdown_fix:
+    apply_dropdown_fix()
 
 if not require_auth():
     st.stop()

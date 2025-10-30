@@ -6,9 +6,9 @@ import pandas as pd
 from helpers.news_feed import CryptoNewsFeed, PremiumNewsSources
 
 try:
-    from helpers.modern_ui import apply_light_mode_fix
+    from helpers.modern_ui import apply_dropdown_fix
 except ImportError:
-    apply_light_mode_fix = None
+    apply_dropdown_fix = None
 
 st.set_page_config(
     page_title="Crypto News Feed",
@@ -17,8 +17,8 @@ st.set_page_config(
 )
 
 # Apply light mode text fix
-if apply_light_mode_fix:
-    apply_light_mode_fix()
+if apply_dropdown_fix:
+    apply_dropdown_fix()
 
 def main():
     st.title("📰 Crypto News Feed & Impact Analysis")
