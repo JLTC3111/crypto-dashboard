@@ -115,16 +115,16 @@ def style_dataframe(df):
         'ATH Change (%)': '{:,.2f}%'
     })
     
-    # Only apply color mapping in dark mode
-    if current_theme == 'dark':
+    # Apply styling based on theme
+    if current_theme == 'light':
+        # Light mode: black text on white background for ALL cells
+        styler = styler.applymap(lambda x: 'color: #000000; background-color: #ffffff')
+    else:
+        # Dark mode: colored text for percentage changes
         styler = styler.map(color_change, subset=['7d Change (%)', 'ATH Change (%)'])
     
     # Set text alignment for all cells
     styler = styler.set_properties(**{'text-align': 'center'})
-    
-    # In light mode, force all text to be black
-    if current_theme == 'light':
-        styler = styler.set_properties(**{'color': '#000000', 'background-color': '#ffffff'})
     
     return styler
 
