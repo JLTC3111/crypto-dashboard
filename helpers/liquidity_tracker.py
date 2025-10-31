@@ -186,23 +186,26 @@ class GlobalLiquidityTracker:
                 'page': 1
             }
             
-            # Retry logic for rate limits
+            # Retry logic for rate limits with longer backoff
             max_retries = 3
             for attempt in range(max_retries):
                 try:
                     stablecoin_response = requests.get(stablecoin_url, params=stablecoin_params, timeout=10)
                     if stablecoin_response.status_code == 429:  # Too Many Requests
                         if attempt < max_retries - 1:
-                            wait_time = 2 ** attempt  # Exponential backoff
-                            print(f"Rate limited, waiting {wait_time} seconds before retry...")
+                            wait_time = 5 * (2 ** attempt)  # Exponential backoff starting at 5s
+                            print(f"⚠️ CoinGecko rate limited, waiting {wait_time} seconds before retry...")
                             time.sleep(wait_time)
                             continue
+                        else:
+                            # Last attempt failed, raise to trigger fallback
+                            stablecoin_response.raise_for_status()
                     stablecoin_response.raise_for_status()  # Raise exception for bad status codes
                     break  # Success, exit retry loop
                 except requests.exceptions.HTTPError as e:
                     if e.response.status_code == 429 and attempt < max_retries - 1:
-                        wait_time = 2 ** attempt
-                        print(f"Rate limited, waiting {wait_time} seconds before retry...")
+                        wait_time = 5 * (2 ** attempt)  # Exponential backoff starting at 5s
+                        print(f"⚠️ CoinGecko rate limited, waiting {wait_time} seconds before retry...")
                         time.sleep(wait_time)
                         continue
                     else:

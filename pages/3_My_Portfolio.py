@@ -610,8 +610,8 @@ def get_live_prices(coin_ids: pd.Series) -> Dict[str, Dict[str, float]]:
             return cg.get_price(ids=list(coin_ids), vs_currencies='usd', include_market_cap='true', include_24hr_change='true')
         except Exception as e:
             if "429" in str(e) and attempt < max_retries - 1:  # Rate limit error
-                wait_time = 2 ** attempt  # Exponential backoff
-                st.warning(f"Rate limited, retrying in {wait_time} seconds...")
+                wait_time = 5 * (2 ** attempt)  # Exponential backoff starting at 5s
+                st.warning(f"⚠️ CoinGecko rate limit reached. Retrying in {wait_time} seconds...")
                 time_module.sleep(wait_time)
                 continue
             st.error(f"CoinGecko API Error: {str(e)}")
@@ -622,13 +622,13 @@ def get_live_prices(coin_ids: pd.Series) -> Dict[str, Dict[str, float]]:
 
 @st.cache_data(ttl=3600) 
 def get_coins_by_market_cap() -> List[tuple]:
-    """Get top 500 coins by market cap from CoinGecko with fallback to comprehensive list."""
+    """Get top 300 coins by market cap from CoinGecko with fallback to comprehensive list."""
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # Fetch top 500 coins in 5 pages of 100 each for better API reliability
+            # Fetch top 300 coins in 3 pages of 100 each to reduce API calls
             all_markets = []
-            for page_num in range(1, 6):  # Pages 1-5 for 500 coins
+            for page_num in range(1, 4):  # Pages 1-3 for 300 coins (reduced from 500)
                 markets = cg.get_coins_markets(
                     vs_currency='usd', 
                     order='market_cap_desc', 
@@ -636,19 +636,22 @@ def get_coins_by_market_cap() -> List[tuple]:
                     page=page_num
                 )
                 all_markets.extend(markets)
-                # Small delay between requests to avoid rate limiting
-                time_module.sleep(0.1)
+                # Increased delay between requests to avoid rate limiting (2s instead of 0.1s)
+                if page_num < 3:  # Don't wait after the last page
+                    time_module.sleep(2.0)
             
             return [(coin['name'], coin['symbol'].upper(), coin['id'], coin['market_cap']) for coin in all_markets]
         except Exception as e:
             if "429" in str(e) and attempt < max_retries - 1:  # Rate limit error
-                wait_time = 2 ** attempt  # Exponential backoff
-                st.warning(f"Rate limited, retrying in {wait_time} seconds...")
+                wait_time = 10 * (2 ** attempt)  # Exponential backoff starting at 10s
+                st.warning(f"⚠️ CoinGecko rate limit reached. Retrying in {wait_time} seconds...")
                 time_module.sleep(wait_time)
                 continue
+            st.warning(f"⚠️ Could not fetch live coin data: {str(e)}. Using fallback list.")
             break  # Exit retry loop on non-rate-limit errors
     
     # Fallback to our comprehensive top 200 crypto list
+    st.info("ℹ️ Using offline coin list due to API limitations.")
     symbol_map = get_symbol_map()
     fallback_data = []
     for display_name, symbol in symbol_map.items():

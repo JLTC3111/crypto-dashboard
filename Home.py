@@ -43,14 +43,14 @@ def style_dataframe(df):
 
 def get_top_coins_data():
     """
-    Fetch top 500 coins market data from CoinGecko in pages.
+    Fetch top 300 coins market data from CoinGecko in pages.
     """
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # Fetch market data for top 500 coins in five pages
+            # Fetch market data for top 300 coins in three pages (reduced from 500 to avoid rate limits)
             all_markets = []
-            for page_num in range(1, 6):  # Pages 1-5 for 500 coins
+            for page_num in range(1, 4):  # Pages 1-3 for 300 coins
                 markets = cg.get_coins_markets(
                     vs_currency='usd',
                     order='market_cap_desc',
@@ -60,8 +60,9 @@ def get_top_coins_data():
                     price_change_percentage='7d'
                 )
                 all_markets.extend(markets)
-                # Small delay between requests to avoid rate limiting
-                time.sleep(0.1)
+                # Increased delay between requests to avoid rate limiting (2s instead of 0.1s)
+                if page_num < 3:  # Don't wait after the last page
+                    time.sleep(2.0)
             
             # Process the data into a DataFrame
             coins_data = []
@@ -85,11 +86,11 @@ def get_top_coins_data():
             return df
         except Exception as e:
             if "429" in str(e) and attempt < max_retries - 1:  # Rate limit error
-                wait_time = 2 ** attempt  # Exponential backoff
-                st.warning(f"Rate limited, retrying in {wait_time} seconds...")
+                wait_time = 10 * (2 ** attempt)  # Exponential backoff starting at 10s
+                st.warning(f"⚠️ CoinGecko rate limit reached. Retrying in {wait_time} seconds...")
                 time.sleep(wait_time)
                 continue
-            st.error(f"Failed to fetch data from CoinGecko: {e}")
+            st.error(f"❌ Failed to fetch data from CoinGecko: {e}")
             return pd.DataFrame()
 
 # Duplicate page config removed - already set at the top of the file
